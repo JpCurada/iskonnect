@@ -5,9 +5,7 @@ import java.sql.SQLException;
 import java.net.InetAddress;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:postgresql://db.nhepnvpgxzfexwuswyyw.supabase.co:5432/postgres?sslmode=require";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "55Oj5Y4Z6mH9hmhC";
+    private static final String URL = "jdbc:postgresql://db.nhepnvpgxzfexwuswyyw.supabase.co:5432/postgres?sslmode=require&user=postgres&password=55Oj5Y4Z6mH9hmhC";
     private static Connection connection;
 
     public static Connection getConnection() {
@@ -23,12 +21,13 @@ public class DatabaseConnection {
                 Class.forName("org.postgresql.Driver");
                 
                 System.out.println("Connecting to database...");
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                connection = DriverManager.getConnection(URL);  // No need for user and password here
                 System.out.println("Database connected!");
             }
             return connection;
         } catch (java.net.UnknownHostException e) {
             System.out.println("Cannot resolve database hostname. DNS issue detected.");
+            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
             return null;
         } catch (ClassNotFoundException e) {
