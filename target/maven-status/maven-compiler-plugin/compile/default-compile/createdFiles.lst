@@ -1,1 +1,5 @@
+com\iskonnect\controllers\RegisterController.class
 com\iskonnect\application\Main.class
+com\iskonnect\models\User.class
+com\iskonnect\controllers\LoginController.class
+com\iskonnect\utils\DatabaseConnection.class

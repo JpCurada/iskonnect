@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20" 
+      xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.iskonnect.controllers.LoginController">
+    
+    <padding>
+        <Insets top="20" right="40" bottom="20" left="40"/>
+    </padding>
+
+    <Label text="Welcome to ISKOnnect" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    
+    <TextField fx:id="emailField" promptText="Email"/>
+    <PasswordField fx:id="passwordField" promptText="Password"/>
+    
+    <Button fx:id="loginButton" text="Login" onAction="#handleLogin"/>
+    <Hyperlink text="Create Account" onAction="#switchToRegister"/>
+</VBox>

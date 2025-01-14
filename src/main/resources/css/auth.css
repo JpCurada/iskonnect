@@ -1,0 +1,111 @@
+/* auth.css */
+
+/* Root styles (variables) */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: white;
+    /* PUP Colors */
+    -fx-primary: #800000;    /* Maroon */
+    -fx-secondary: #FFD700;  /* Gold */
+}
+
+/* Title label style */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #800000;  /* Maroon */
+    -fx-padding: 0 0 20 0;
+}
+
+/* Text fields and password fields */
+.text-field, .password-field, .combo-box {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #800000;  /* Maroon */
+    -fx-border-width: 2px;
+}
+
+/* Primary button (Login, Register) */
+.primary-button {
+    -fx-background-color: #800000;  /* Maroon */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #600000;  /* Darker maroon */
+}
+
+.primary-button:pressed {
+    -fx-background-color: #400000;  /* Even darker maroon */
+}
+
+.primary-button:disabled {
+    -fx-background-color: #CCCCCC;
+    -fx-opacity: 0.7;
+}
+
+/* Hyperlink style */
+.hyperlink {
+    -fx-text-fill: #800000;  /* Maroon */
+    -fx-border-color: transparent;
+    -fx-padding: 4 0 4 0;
+    -fx-cursor: hand;
+}
+
+.hyperlink:hover {
+    -fx-underline: true;
+}
+
+/* Error text */
+.error-text {
+    -fx-text-fill: #FF0000;
+    -fx-font-size: 12px;
+}
+
+/* Grid layout spacing */
+.grid-pane {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+}
+
+/* ComboBox specific styles */
+.combo-box {
+    -fx-background-color: white;
+}
+
+.combo-box:hover {
+    -fx-border-color: #800000;  /* Maroon */
+}
+
+.combo-box .list-cell {
+    -fx-padding: 4 8 4 8;
+}
+
+/* Alert dialog styling */
+.dialog-pane {
+    -fx-background-color: white;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #800000;  /* Maroon */
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+}
