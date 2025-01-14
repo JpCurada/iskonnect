@@ -1,35 +1,35 @@
 package com.iskonnect.utils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.net.InetAddress;
+import java.util.Properties;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:postgresql://db.nhepnvpgxzfexwuswyyw.supabase.co:5432/postgres?sslmode=require&user=postgres&password=55Oj5Y4Z6mH9hmhC";
+
     private static Connection connection;
 
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                // First check if we can reach the host
-                System.out.println("Trying to reach database host...");
-                InetAddress address = InetAddress.getByName("db.nhepnvpgxzfexwuswyyw.supabase.co");
-                System.out.println("Host IP: " + address.getHostAddress());
+                // Set up connection properties
+                Properties props = new Properties();
+                props.setProperty("user", "postgres.nhepnvpgxzfexwuswyyw");
+                props.setProperty("password", "55Oj5Y4Z6mH9hmhC");
+                props.setProperty("ssl", "true");
+                props.setProperty("sslmode", "require");
 
-                // Then try database connection
-                System.out.println("Loading PostgreSQL driver...");
+                // Load driver and connect
                 Class.forName("org.postgresql.Driver");
+                System.out.println("PostgreSQL JDBC Driver loaded.");
+
+                String url = "jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres";
+                System.out.println("Attempting to connect to database...");
                 
-                System.out.println("Connecting to database...");
-                connection = DriverManager.getConnection(URL);  // No need for user and password here
-                System.out.println("Database connected!");
+                connection = DriverManager.getConnection(url, props);
+                System.out.println("Database connected successfully!");
             }
             return connection;
-        } catch (java.net.UnknownHostException e) {
-            System.out.println("Cannot resolve database hostname. DNS issue detected.");
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
-            return null;
         } catch (ClassNotFoundException e) {
             System.out.println("PostgreSQL JDBC Driver not found.");
             e.printStackTrace();
@@ -41,6 +41,17 @@ public class DatabaseConnection {
             System.out.println("Message: " + e.getMessage());
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("Database connection closed.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error closing connection: " + e.getMessage());
         }
     }
 }
