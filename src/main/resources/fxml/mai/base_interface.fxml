@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.BottomNavigationButton?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: A31D1D;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <HBox prefHeight="34.0" prefWidth="780.0" BorderPane.alignment="CENTER" />
+   </top>
+   <left>
+      <VBox prefHeight="426.0" prefWidth="189.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="54.0" prefWidth="170.0" style="-fx-alignment: center;">
+               <children>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <StackPane prefHeight="34.0" prefWidth="34.0" style="-fx-alignment: center;">
+                           <children>
+                              <ImageView fitHeight="39.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../iskonnect/src/main/resources/images/pup_auth.png" />
+                                 </image>
+                              </ImageView>
+                              <Circle fill="#1fc4ff" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+                           </children>
+                        </StackPane>
+                        <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#fef9e1" height="43.0" stroke="TRANSPARENT" strokeLineCap="ROUND" strokeLineJoin="ROUND" width="159.0" />
+                     </children>
+                  </StackPane>
+               </children>
+            </HBox>
+            <ButtonBar prefHeight="300.0" prefWidth="190.0">
+              <buttons>
+                  <VBox prefHeight="300.0" prefWidth="190.0">
+                     <children>
+                        <BottomNavigationButton prefHeight="26.0" prefWidth="163.0" />
+                        <BottomNavigationButton alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="163.0" />
+                     </children>
+                  </VBox>
+              </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </left>
+   <right>
+      <VBox prefHeight="426.0" prefWidth="610.0" style="-fx-background-color: FEF9E1; -fx-border-image-insets: 5; -fx-border-radius: 50 0 0 0; -fx-border-width: 2; -fx-border-style: solid inside; -fx-padding: 10; -fx-border-color: FEF9E1; -fx-background-radius: 50 0 0 0;" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>
