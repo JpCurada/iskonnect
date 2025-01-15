@@ -36,13 +36,32 @@ public class RegisterController {
     }
 
     private boolean validateInputs() {
+        // Check for empty fields
+        if (studentNumberField.getText().isEmpty() || 
+            firstNameField.getText().isEmpty() ||
+            lastNameField.getText().isEmpty() ||
+            emailField.getText().isEmpty() ||
+            passwordField.getText().isEmpty() ||
+            confirmPasswordField.getText().isEmpty()) {
+            showError("All fields are required");
+            return false;
+        }
+
+        // Validate password match
         if (!passwordField.getText().equals(confirmPasswordField.getText())) {
             showError("Passwords do not match");
             return false;
         }
 
+        // Validate student number format (2024-00000-MN-0)
         if (!studentNumberField.getText().matches("\\d{4}-\\d{5}-[A-Z]{2}-\\d")) {
-            showError("Invalid student number format");
+            showError("Invalid student number format. Must be like: 2024-00000-MN-0");
+            return false;
+        }
+
+        // Validate email format
+        if (!emailField.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            showError("Invalid email format");
             return false;
         }
 

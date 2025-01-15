@@ -15,26 +15,27 @@ public class Main extends Application {
         stage = primaryStage;
         stage.setTitle("ISKOnnect");
         
-        // Start with login
         setLoginRoot("auth/login");
         stage.show();
     }
 
-    // For login/register screens
     public static void setLoginRoot(String fxml) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml), 780, 460); // Login screen size
+        Scene scene = new Scene(loadFXML(fxml), 780, 460);
         stage.setScene(scene);
     }
 
-    // For main application screens
     public static void setMainRoot(String fxml) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml), 921, 575); // Main app size
+        Scene scene = new Scene(loadFXML(fxml), 921, 575);
         stage.setScene(scene);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/" + fxml + ".fxml"));
         return fxmlLoader.load();
+    }
+
+    public static Stage getStage() {
+        return stage;
     }
 
     public static void main(String[] args) {

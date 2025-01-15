@@ -1,8 +1,8 @@
 package com.iskonnect.controllers;
 
 import com.iskonnect.models.User;
-import com.iskonnect.models.Student;
 import com.iskonnect.services.UserService;
+import com.iskonnect.utils.UserSession;
 import com.iskonnect.application.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,10 +21,19 @@ public class LoginController {
 
         User user = userService.authenticate(email, password);
         if (user != null) {
-            if (user instanceof Student) {
-                switchToStudentDashboard();
-            } else {
+            // Start user session
+            UserSession.getInstance().startSession(
+                user.getUserId(),
+                user.getUserType(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail()
+            );
+
+            if (user.getUserType().equals("ADMIN")) {
                 switchToAdminDashboard();
+            } else {
+                switchToStudentDashboard();
             }
         } else {
             showError("Invalid credentials");
@@ -49,7 +58,7 @@ public class LoginController {
 
     private void switchToStudentDashboard() {
         try {
-            Main.setMainRoot("base_layout");
+            Main.setMainRoot("student/base_layout");
         } catch (Exception e) {
             showError("Could not load dashboard");
         }
