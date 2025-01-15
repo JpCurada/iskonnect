@@ -6,7 +6,8 @@
 <VBox alignment="CENTER" spacing="20" 
       xmlns="http://javafx.com/javafx" 
       xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="com.iskonnect.controllers.LoginController">
+      fx:controller="com.iskonnect.controllers.LoginController"
+      stylesheets="@../styles/auth.css">
     
     <padding>
         <Insets top="20" right="40" bottom="20" left="40"/>
@@ -14,9 +15,20 @@
 
     <Label text="Welcome to ISKOnnect" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
     
-    <TextField fx:id="emailField" promptText="Email"/>
-    <PasswordField fx:id="passwordField" promptText="Password"/>
+    <TextField fx:id="emailField" 
+              promptText="Email" 
+              styleClass="input-field"/>
+              
+    <PasswordField fx:id="passwordField" 
+                  promptText="Password" 
+                  styleClass="input-field"/>
     
-    <Button fx:id="loginButton" text="Login" onAction="#handleLogin"/>
-    <Hyperlink text="Create Account" onAction="#switchToRegister"/>
+    <Button fx:id="loginButton" 
+            text="Login" 
+            onAction="#handleLogin" 
+            styleClass="auth-button"/>
+            
+    <Hyperlink text="Create Account" 
+               onAction="#switchToRegister" 
+               styleClass="auth-link"/>
 </VBox>

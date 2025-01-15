@@ -1,26 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" spacing="15"
-      xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.iskonnect.controllers.RegisterController">
-    
-    <padding>
-        <Insets top="20" right="40" bottom="20" left="40"/>
-    </padding>
-
-    <Label text="Create Account" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    
-    <TextField fx:id="studentNumberField" promptText="Student Number"/>
-    <TextField fx:id="nameField" promptText="Full Name"/>
-    <TextField fx:id="emailField" promptText="Email"/>
-    <PasswordField fx:id="passwordField" promptText="Password"/>
-    <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"/>
-    <ComboBox fx:id="courseComboBox" promptText="Select Course"/>
-    
-    <Button fx:id="registerButton" text="Register" onAction="#handleRegister"/>
-    <Hyperlink text="Already have an account? Login" onAction="#switchToLogin"/>
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.iskonnect.controllers.RegisterController" stylesheets="@../styles/auth.css">
+   <right>
+      <AnchorPane prefHeight="460.0" prefWidth="780.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text fill="#801818" layoutX="59.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Get Started" wrappingWidth="220.64871978759766">
+               <font>
+                  <Font name="Segoe UI Bold" size="25.0" />
+               </font>
+            </Text>
+            <Text accessibleRole="HYPERLINK" fill="#909090" layoutX="113.0" layoutY="389.0" onMouseClicked="#switchToLogin" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an account? Login">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="9.0" />
+               </font>
+            </Text>
+            <TextField fx:id="firstNameField" layoutX="62.0" layoutY="142.0" prefHeight="25.0" prefWidth="100.0" promptText="First Name" style="-fx-background-color: TRANSPARENT; -fx-border-radius: 7; -fx-border-color: #AAA7AD; -fx-background-radius: 7; -fx-border-width: 1;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="lastNameField" layoutX="183.0" layoutY="143.4" prefHeight="25.0" prefWidth="100.0" promptText="Last Name" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="emailField" layoutX="62.0" layoutY="181.0" prefHeight="25.0" prefWidth="220.0" promptText="Email" style="-fx-background-color: transparent; -fx-background-radius: 10; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="passwordField" layoutX="62.0" layoutY="218.0" prefHeight="25.0" prefWidth="220.0" promptText="Enter your password" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </PasswordField>
+            <PasswordField fx:id="confirmPasswordField" layoutX="62.0" layoutY="255.0" prefHeight="25.0" prefWidth="220.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </PasswordField>
+            <TextField fx:id="studentNumberField" layoutX="62.0" layoutY="292.0" prefHeight="25.0" prefWidth="220.0" promptText="Student Number (2024-00000-MN-0)" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <CheckBox layoutX="66.0" layoutY="329.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="220.0" text="I agree to the Terms &amp; Conditions" textFill="#909090">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </CheckBox>
+            <Button fx:id="registerButton" layoutX="59.0" layoutY="371.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="220.0" onAction="#handleRegister" style="-fx-background-color: #801818; -fx-background-radius: 7;" text="Create account" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Text fill="#801818" layoutX="218.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ISKOnnect" textAlignment="RIGHT" wrappingWidth="111.04874420166016">
+               <font>
+                  <Font name="Segoe UI Bold" size="12.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="34.0" fitWidth="33.0" layoutX="235.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@src\main\resources\images\pup_auth.png" />
+               </image>
+            </ImageView>
+            <Text accessibleRole="HYPERLINK" fill="#909090" layoutX="61.0" layoutY="119.0" onMouseClicked="#switchToLogin" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to ISKOnnect - Let's create your account ">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </right>
+   <effect>
+      <ColorAdjust />
+   </effect>
+   <left>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="462.0" fitWidth="440.0" layoutX="-4.0" pickOnBounds="true">
+               <image>
+                  <Image url="@src\main\resources\images\pup_auth.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </left>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</BorderPane>

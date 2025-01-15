@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="575.0" prefWidth="731.0" style="-fx-background-color: #FFFFFF;" 
+      xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iskonnect.controllers.ContributionsController">
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" 
+          style="-fx-background-color: #A31D1D; -fx-background-radius: 40px 0px 0px 0px;">
+        <VBox.margin>
+            <Insets left="20.0" top="40.0" />
+        </VBox.margin>
+        <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+        </padding>
+
+        <Label text="My Contributions" style="-fx-font-size: 24px; -fx-text-fill: white;"/>
+        
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox fx:id="contributionsContainer" spacing="10">
+                <!-- Contributions will be added here dynamically -->
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</VBox>

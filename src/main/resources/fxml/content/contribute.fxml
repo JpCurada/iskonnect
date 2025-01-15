@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="575.0" prefWidth="731.0" style="-fx-background-color: #FFFFFF;" 
+      xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iskonnect.controllers.ContributeController">
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" 
+          style="-fx-background-color: #A31D1D; -fx-background-radius: 40px 0px 0px 0px;">
+        <VBox.margin>
+            <Insets left="20.0" top="40.0" />
+        </VBox.margin>
+        <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+        </padding>
+
+        <Label text="Share Your Reviewer" style="-fx-font-size: 24px; -fx-text-fill: white;"/>
+        
+        <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10;">
+            <padding>
+                <Insets all="20"/>
+            </padding>
+            
+            <TextField fx:id="titleField" promptText="Title"/>
+            <TextArea fx:id="descriptionField" promptText="Description" prefRowCount="3"/>
+            <TextField fx:id="subjectField" promptText="Subject"/>
+            
+            <Button text="Choose File" onAction="#handleFileChoose"
+                    style="-fx-background-color: #6D2323; -fx-text-fill: white;"/>
+            
+            <Label fx:id="selectedFileLabel" text="No file selected"/>
+            
+            <Button text="Upload" onAction="#handleUpload"
+                    style="-fx-background-color: #6D2323; -fx-text-fill: white;"/>
+        </VBox>
+    </VBox>
+</VBox>

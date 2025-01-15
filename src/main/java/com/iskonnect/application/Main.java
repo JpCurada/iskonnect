@@ -14,12 +14,21 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         stage.setTitle("ISKOnnect");
-        setRoot("auth/login");
+        
+        // Start with login
+        setLoginRoot("auth/login");
         stage.show();
     }
 
-    public static void setRoot(String fxml) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml));
+    // For login/register screens
+    public static void setLoginRoot(String fxml) throws IOException {
+        Scene scene = new Scene(loadFXML(fxml), 600, 400); // Login screen size
+        stage.setScene(scene);
+    }
+
+    // For main application screens
+    public static void setMainRoot(String fxml) throws IOException {
+        Scene scene = new Scene(loadFXML(fxml), 921, 575); // Main app size
         stage.setScene(scene);
     }
 

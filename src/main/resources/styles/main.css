@@ -1,0 +1,35 @@
+/* Navigation button styles */
+.button {
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #8B2B2B !important;
+    -fx-text-fill: white !important;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6D2323;
+    -fx-alignment: left;
+    -fx-padding: 10 20;
+}
+
+.nav-button:hover {
+    -fx-background-color: #8B2B2B;
+    -fx-text-fill: white;
+}
+
+/* Table styles */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
+
+.table-view .column-header {
+    -fx-background-color: #6D2323;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}
