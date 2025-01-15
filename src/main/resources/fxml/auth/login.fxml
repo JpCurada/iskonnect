@@ -1,34 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox alignment="CENTER" spacing="20" 
-      xmlns="http://javafx.com/javafx" 
-      xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="com.iskonnect.controllers.LoginController"
-      stylesheets="@../styles/auth.css">
-    
-    <padding>
-        <Insets top="20" right="40" bottom="20" left="40"/>
-    </padding>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="460.0" prefWidth="780.0" 
+            xmlns="http://javafx.com/javafx" 
+            xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="com.iskonnect.controllers.LoginController"
+            stylesheets="@../styles/auth.css">
 
-    <Label text="Welcome to ISKOnnect" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    
-    <TextField fx:id="emailField" 
-              promptText="Email" 
-              styleClass="input-field"/>
-              
-    <PasswordField fx:id="passwordField" 
-                  promptText="Password" 
-                  styleClass="input-field"/>
-    
-    <Button fx:id="loginButton" 
-            text="Login" 
-            onAction="#handleLogin" 
-            styleClass="auth-button"/>
-            
-    <Hyperlink text="Create Account" 
-               onAction="#switchToRegister" 
-               styleClass="auth-link"/>
-</VBox>
+    <!-- Left Side - Form -->
+    <left>
+        <VBox spacing="15" prefWidth="340.0">
+            <padding>
+                <Insets top="20" right="30" bottom="20" left="30"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Text text="ISKOnnect" fill="#801818">
+                    <font>
+                        <Font name="Segoe UI Bold" size="12.0"/>
+                    </font>
+                </Text>
+                <ImageView fitHeight="34.0" fitWidth="33.0">
+                    <image>
+                        <Image url="@../../images/logo.svg"/>
+                    </image>
+                </ImageView>
+            </HBox>
+
+            <!-- Title Section -->
+            <VBox spacing="5">
+                <Text text="Welcome Back" fill="#801818">
+                    <font>
+                        <Font name="Segoe UI Bold" size="25.0"/>
+                    </font>
+                </Text>
+                <Text text="Hello, Isko, Iska! Please enter your details." fill="#909090">
+                    <font>
+                        <Font size="10.0"/>
+                    </font>
+                </Text>
+            </VBox>
+
+            <!-- Form Fields -->
+            <TextField fx:id="emailField" 
+                      promptText="Email"
+                      style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+                <font>
+                    <Font size="10.0"/>
+                </font>
+            </TextField>
+
+            <PasswordField fx:id="passwordField" 
+                          promptText="Password"
+                          style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+                <font>
+                    <Font size="10.0"/>
+                </font>
+            </PasswordField>
+
+            <Button fx:id="loginButton" 
+                    text="Sign in" 
+                    onAction="#handleLogin"
+                    style="-fx-background-color: #801818; -fx-background-radius: 7;"
+                    textFill="WHITE"/>
+
+            <HBox alignment="CENTER">
+                <Hyperlink text="Need an account? Create an account" 
+                          onAction="#switchToRegister"
+                          style="-fx-text-fill: #909090;">
+                    <font>
+                        <Font size="9.0"/>
+                    </font>
+                </Hyperlink>
+            </HBox>
+        </VBox>
+    </left>
+
+    <!-- Right Side - Image -->
+    <right>
+        <VBox alignment="CENTER">
+            <ImageView fitHeight="462.0" fitWidth="440.0" pickOnBounds="true">
+                <image>
+                    <Image url="@../../images/pup_auth.png"/>
+                </image>
+            </ImageView>
+        </VBox>
+    </right>
+</BorderPane>

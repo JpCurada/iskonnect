@@ -22,7 +22,7 @@ public class Main extends Application {
 
     // For login/register screens
     public static void setLoginRoot(String fxml) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml), 600, 400); // Login screen size
+        Scene scene = new Scene(loadFXML(fxml), 780, 460); // Login screen size
         stage.setScene(scene);
     }
 
