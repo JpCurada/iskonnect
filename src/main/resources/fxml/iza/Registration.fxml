@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
+   <right>
+      <AnchorPane prefHeight="460.0" prefWidth="780.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text fill="#801818" layoutX="59.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Get Started" wrappingWidth="220.64871978759766">
+               <font>
+                  <Font name="Segoe UI Bold" size="25.0" />
+               </font>
+            </Text>
+            <Text accessibleRole="HYPERLINK" fill="#909090" layoutX="113.0" layoutY="389.0" onMouseClicked="#showLoginStage" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an account? Login">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="9.0" />
+               </font>
+            </Text>
+            <TextField layoutX="62.0" layoutY="142.0" prefHeight="25.0" prefWidth="100.0" promptText="First Name" style="-fx-background-color: TRANSPARENT; -fx-border-radius: 7; -fx-border-color: #AAA7AD; -fx-background-radius: 7; -fx-border-width: 1;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="lastName" layoutX="183.0" layoutY="143.4" prefHeight="25.0" prefWidth="100.0" promptText="Last Name" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;" AnchorPane.bottomAnchor="291.0">
+               <font>
+                  <Font size="10.0" />
+               </font></TextField>
+            <TextField fx:id="email" layoutX="62.0" layoutY="181.0" prefHeight="25.0" prefWidth="220.0" promptText="Email" style="-fx-background-color: transparent; -fx-background-radius: 10; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="password" layoutX="62.0" layoutY="218.0" prefHeight="25.0" prefWidth="220.0" promptText="Enter your password" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font></PasswordField>
+            <TextField layoutX="62.0" layoutY="255.0" prefHeight="25.0" prefWidth="220.0" promptText="Student Number" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </TextField>
+            <CheckBox layoutX="66.0" layoutY="296.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="220.0" text="I agree to the Terms &amp; Conditions" textFill="#909090">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </CheckBox>
+            <Button id="signUpButton" fx:id="signUpButton" layoutX="59.0" layoutY="338.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="220.0" style="-fx-background-color: #801818; -fx-background-radius: 7;" text="Create account" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Text fill="#801818" layoutX="218.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ISKOnnect" textAlignment="RIGHT" wrappingWidth="111.04874420166016">
+               <font>
+                  <Font name="Segoe UI Bold" size="12.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="34.0" fitWidth="33.0" layoutX="235.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@6-removebg-preview.png" />
+               </image>
+            </ImageView>
+            <Text accessibleRole="HYPERLINK" fill="#909090" layoutX="61.0" layoutY="119.0" onMouseClicked="#showLoginStage" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to ISKOnnect - Let's create your account ">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </right>
+   <effect>
+      <ColorAdjust />
+   </effect>
+   <left>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="462.0" fitWidth="440.0" layoutX="-4.0" pickOnBounds="true">
+               <image>
+                  <Image url="@462585035_635015149077263_6464253312514189562_n.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </left>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</BorderPane>

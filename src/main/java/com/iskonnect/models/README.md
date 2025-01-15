@@ -361,4 +361,23 @@ public class SystemIntegrationTest {
 }
 ```
 
-Would you like me to provide more detailed implementation for any specific component?
+src/main/java/com/iskonnect/
+├── models/
+│   ├── User.java         (just data properties, getters/setters)
+│   ├── Student.java      (extends User)
+│   ├── Admin.java        (extends User)
+│   ├── Material.java     (material properties)
+│   ├── Badge.java        (badge properties)
+│   └── Vote.java         (vote properties)
+│
+├── services/
+│   ├── UserService.java      (database operations for users)
+│   ├── MaterialService.java  (database operations for materials)
+│   └── BadgeService.java     (database operations for badges)
+│
+├── controllers/
+│   ├── LoginController.java  (handles UI logic, uses services)
+│   └── RegisterController.java
+│
+└── utils/
+    └── DatabaseConnection.java (database connection handling)
