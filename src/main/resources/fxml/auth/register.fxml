@@ -40,7 +40,7 @@
                 </Text>
                 <ImageView fitHeight="34.0" fitWidth="33.0">
                     <image>
-                        <Image url="@../../images/logo.svg"/>
+                        <Image url="@../../images/ISKONNECT_TRANSPARENT.png"/>
                     </image>
                 </ImageView>
             </HBox>

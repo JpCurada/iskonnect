@@ -28,21 +28,21 @@
                 </Text>
                 <ImageView fitHeight="34.0" fitWidth="33.0">
                     <image>
-                        <Image url="@../../images/logo.svg"/>
+                        <Image url="@../../images/ISKONNECT_TRANSPARENT.png"/>
                     </image>
                 </ImageView>
             </HBox>
 
             <!-- Title Section -->
             <VBox spacing="5">
-                <Text text="Welcome Back" fill="#801818">
+                <Text text="Hello Isko, Iska" fill="#801818">
                     <font>
                         <Font name="Segoe UI Bold" size="25.0"/>
                     </font>
                 </Text>
-                <Text text="Hello, Isko, Iska! Please enter your details." fill="#909090">
+                <Text text="Please enter your details to sign in." fill="#909090">
                     <font>
-                        <Font size="10.0"/>
+                        <Font size="11.0"/>
                     </font>
                 </Text>
             </VBox>
@@ -52,7 +52,7 @@
                       promptText="Email"
                       style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
                 <font>
-                    <Font size="10.0"/>
+                    <Font size="11.0"/>
                 </font>
             </TextField>
 
@@ -60,7 +60,7 @@
                           promptText="Password"
                           style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
                 <font>
-                    <Font size="10.0"/>
+                    <Font size="11.0"/>
                 </font>
             </PasswordField>
 
@@ -75,7 +75,7 @@
                           onAction="#switchToRegister"
                           style="-fx-text-fill: #909090;">
                     <font>
-                        <Font size="9.0"/>
+                        <Font size="11.0"/>
                     </font>
                 </Hyperlink>
             </HBox>

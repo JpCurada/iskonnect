@@ -24,14 +24,22 @@ public class Main extends Application {
         stage.setScene(scene);
     }
 
-    public static void setMainRoot(String fxml) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml), 921, 575);
-        stage.setScene(scene);
+    public static void setMainRoot() throws IOException {
+        try {
+            System.out.println("Loading main interface...");
+            Scene scene = new Scene(loadFXML("student/base"), 780, 460);
+            stage.setScene(scene);
+            System.out.println("Main interface loaded successfully");
+        } catch (IOException e) {
+            System.out.println("Error loading main interface: " + e.getMessage());
+            throw e;
+        }
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/" + fxml + ".fxml"));
-        return fxmlLoader.load();
+        String resourcePath = "/fxml/" + fxml + ".fxml";
+        System.out.println("Loading FXML: " + resourcePath);
+        return new FXMLLoader(Main.class.getResource(resourcePath)).load();
     }
 
     public static Stage getStage() {
