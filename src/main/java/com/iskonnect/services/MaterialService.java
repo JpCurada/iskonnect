@@ -1,147 +1,225 @@
 package com.iskonnect.services;
 
-import com.iskonnect.models.Material;
 import com.iskonnect.utils.DatabaseConnection;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+// Add imports at the top of the file
+import java.io.*;
+import java.net.*;
+import javax.net.ssl.*;
+import java.nio.file.*;
+
 
 public class MaterialService {
-    
-    public List<Material> getAllMaterials() {
-        List<Material> materials = new ArrayList<>();
-        String query = "SELECT * FROM materials ORDER BY upload_date DESC";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                materials.add(material);
+    private static final String SUPABASE_BUCKET_NAME = "iskonnect-materials";
+    private static final String SUPABASE_ACCESS_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXBudnBneHpmZXh3dXN3eXl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYzMzI0MDAsImV4cCI6MjA1MTkwODQwMH0.Q8HfCmY2TdLgiwE0uhyfWAcAa4qhi-0f8Thqq0Mp5sg";
+
+    public UserStats getUserStats(String userId) throws Exception {
+        UserStats stats = new UserStats();
+        String pointsQuery = "SELECT points FROM users WHERE user_id = ?";
+        String materialsQuery = "SELECT COUNT(*) FROM materials WHERE uploader_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Get points
+            try (PreparedStatement stmt = conn.prepareStatement(pointsQuery)) {
+                stmt.setString(1, userId);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stats.setPoints(rs.getInt("points"));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            // Get materials count
+            try (PreparedStatement stmt = conn.prepareStatement(materialsQuery)) {
+                stmt.setString(1, userId);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stats.setMaterialsCount(rs.getInt(1));
+                }
+            }
         }
-        return materials;
+        return stats;
     }
 
-    public List<Material> searchMaterials(String searchTerm) {
-        List<Material> materials = new ArrayList<>();
-        String query = """
-            SELECT * FROM materials 
-            WHERE title ILIKE ? 
-            OR description ILIKE ? 
-            OR subject ILIKE ?
-            ORDER BY upload_date DESC
-        """;
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            String searchPattern = "%" + searchTerm + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern);
-            
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                materials.add(material);
+    public void uploadMaterial(String userId, MaterialUploadRequest request) throws Exception {
+        String modifiedFilename = generateFileName(request.getFile().getName());
+        String objectPath = "reviewers/" + modifiedFilename;
+        String fileUrl = "https://nhepnvpgxzfexwuswyyw.supabase.co/storage/v1/object/public/iskonnect-materials/" + objectPath;
+
+        // Upload file to Supabase storage
+        uploadFileToSupabase(request.getFile(), objectPath);
+
+        // Save to database using your existing connection
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                if (saveMaterialToDatabase(conn, userId, request, fileUrl, modifiedFilename) &&
+                    updateUserPoints(conn, userId, 5)) {
+                    conn.commit();
+                } else {
+                    conn.rollback();
+                    throw new Exception("Failed to save material");
+                }
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return materials;
     }
 
-    public boolean saveMaterial(Material material) {
-        String query = """
-            INSERT INTO materials (title, description, subject, college, course, file_url, uploader_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """;
+    private void uploadFileToSupabase(File file, String objectPath) throws Exception {
+        String uploadUrl = "https://nhepnvpgxzfexwuswyyw.supabase.co/storage/v1/object/" +
+            SUPABASE_BUCKET_NAME + "/" + objectPath;
+
+        HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection();
+        connection.setRequestMethod("POST");  // Changed from PUT to POST
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Authorization", "Bearer " + SUPABASE_ACCESS_KEY);
+        connection.setRequestProperty("Content-Type", "application/octet-stream");  // Changed content type
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        // Add these headers
+        connection.setRequestProperty("x-upsert", "true");  // Allow overwriting if file exists
+        
+        // Get file size and set content length
+        long fileSize = file.length();
+        connection.setRequestProperty("Content-Length", String.valueOf(fileSize));
+
+        try (FileInputStream fis = new FileInputStream(file);
+            OutputStream os = connection.getOutputStream()) {
             
-            stmt.setString(1, material.getTitle());
-            stmt.setString(2, material.getDescription());
-            stmt.setString(3, material.getSubject());
-            stmt.setString(4, material.getCollege());
-            stmt.setString(5, material.getCourse());
-            stmt.setString(6, material.getFileUrl());
-            stmt.setString(7, material.getUploaderId());
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            long totalBytesRead = 0;
             
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+                totalBytesRead += bytesRead;
+                
+                // You could add progress tracking here if needed
+                double progress = (double) totalBytesRead / fileSize;
+                System.out.println("Upload progress: " + (progress * 100) + "%");
+            }
+            os.flush();
+        }
+
+        int responseCode = connection.getResponseCode();
+        
+        // Print detailed error information
+        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.append("Upload failed with response code: ").append(responseCode);
+            
+            // Try to read error stream
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(connection.getErrorStream()))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    errorMessage.append("\nError details: ").append(line);
+                }
+            } catch (Exception e) {
+                errorMessage.append("\nCould not read error details: ").append(e.getMessage());
+            }
+            
+            throw new Exception(errorMessage.toString());
+        }
+
+        // Check if file was actually uploaded
+        verifyFileUpload(uploadUrl);
+    }
+
+    private void verifyFileUpload(String uploadUrl) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection();
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("Authorization", "Bearer " + SUPABASE_ACCESS_KEY);
+        
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new Exception("File upload verification failed. File might not have been uploaded correctly.");
+        }
+    }
+
+
+    private boolean saveMaterialToDatabase(Connection conn, String userId, MaterialUploadRequest request, 
+                                         String fileUrl, String filename) throws Exception {
+        String query = """
+            INSERT INTO materials (title, description, subject, college, course, file_url, 
+                                 filename, uploader_id, upload_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, request.getMaterialName());
+            stmt.setString(2, request.getDescription());
+            stmt.setString(3, request.getSubject());
+            stmt.setString(4, request.getCollege());
+            stmt.setString(5, request.getCourse());
+            stmt.setString(6, fileUrl);
+            stmt.setString(7, filename);
+            stmt.setString(8, userId);
+            stmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
-    public Material getMaterialById(int materialId) {
-        String query = "SELECT * FROM materials WHERE material_id = ?";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, materialId);
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private boolean updateUserPoints(Connection conn, String userId, int points) throws Exception {
+        String query = "UPDATE users SET points = points + ? WHERE user_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, points);
+            stmt.setString(2, userId);
+            return stmt.executeUpdate() > 0;
         }
-        return null;
     }
 
-    public List<Material> getMaterialsByUser(String userId) {
-        List<Material> materials = new ArrayList<>();
-        String query = "SELECT * FROM materials WHERE uploader_id = ? ORDER BY upload_date DESC";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setString(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                materials.add(material);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private String generateFileName(String originalFilename) {
+        LocalDateTime now = LocalDateTime.now();
+        String datePart = now.format(DateTimeFormatter.ofPattern("MMddyyyy"));
+        String timePart = now.format(DateTimeFormatter.ofPattern("HHmm"));
+        return datePart + timePart + "_" + originalFilename;
+    }
+
+    // Inner classes remain the same
+    public static class UserStats {
+        private int points;
+        private int materialsCount;
+
+        public int getPoints() { return points; }
+        public void setPoints(int points) { this.points = points; }
+        public int getMaterialsCount() { return materialsCount; }
+        public void setMaterialsCount(int count) { this.materialsCount = count; }
+    }
+
+    public static class MaterialUploadRequest {
+        private final String materialName;
+        private final String description;
+        private final String subject;
+        private final String college;
+        private final String course;
+        private final File file;
+
+        public MaterialUploadRequest(String materialName, String description, String subject,
+                                   String college, String course, File file) {
+            this.materialName = materialName;
+            this.description = description;
+            this.subject = subject;
+            this.college = college;
+            this.course = course;
+            this.file = file;
         }
-        return materials;
+
+        // Getters
+        public String getMaterialName() { return materialName; }
+        public String getDescription() { return description; }
+        public String getSubject() { return subject; }
+        public String getCollege() { return college; }
+        public String getCourse() { return course; }
+        public File getFile() { return file; }
     }
 }

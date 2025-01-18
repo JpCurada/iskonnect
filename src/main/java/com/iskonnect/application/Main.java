@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         stage.setTitle("ISKOnnect");
-        
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ISKONNECT_TRANSPARENT.png")));
         setLoginRoot("auth/login");
         stage.show();
     }
@@ -35,6 +36,7 @@ public class Main extends Application {
             throw e;
         }
     }
+    
 
     private static Parent loadFXML(String fxml) throws IOException {
         String resourcePath = "/fxml/" + fxml + ".fxml";
