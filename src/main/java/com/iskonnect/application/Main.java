@@ -36,6 +36,11 @@ public class Main extends Application {
             throw e;
         }
     }
+
+    public static void setAdminRoot() throws IOException {
+        Scene scene = new Scene(loadFXML("admin/base"), 780, 460);
+        stage.setScene(scene);
+    }
     
 
     private static Parent loadFXML(String fxml) throws IOException {

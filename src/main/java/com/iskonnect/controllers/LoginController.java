@@ -1,3 +1,5 @@
+// Path: src/main/java/com/iskonnect/controllers/LoginController.java
+
 package com.iskonnect.controllers;
 
 import com.iskonnect.application.Main;
@@ -5,6 +7,8 @@ import com.iskonnect.models.User;
 import com.iskonnect.services.UserService;
 import com.iskonnect.utils.UserSession;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -35,6 +39,7 @@ public class LoginController {
                 if (user != null) {
                     System.out.println("Login successful for user: " + user.getFullName());
                     
+                    // Start user session
                     UserSession.getInstance().startSession(
                         user.getUserId(),
                         user.getUserType(),
@@ -43,15 +48,11 @@ public class LoginController {
                         user.getEmail()
                     );
     
-                    System.out.println("Session started, attempting to load main interface...");
-                    try {
-                        Main.setMainRoot();
-                        System.out.println("Main interface loaded successfully");
-                    } catch (IOException e) {
-                        System.out.println("Failed to load main interface: " + e.getMessage());
-                        e.printStackTrace();
-                        showAlert(Alert.AlertType.ERROR, "Navigation Error", 
-                            "Could not load main interface.");
+                    // Route based on user type
+                    if (user.getUserType().equals("ADMIN")) {
+                        navigateToAdminInterface();
+                    } else {
+                        navigateToStudentInterface();
                     }
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Login Failed", 
@@ -74,8 +75,6 @@ public class LoginController {
         }
     }
 
-
-
     private boolean validateInput(String email, String password) {
         if (email.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all fields.");
@@ -84,39 +83,29 @@ public class LoginController {
         return true;
     }
 
-    private void attemptLogin(String email, String password) {
+    private void navigateToStudentInterface() {
         try {
-            User user = userService.authenticate(email, password);
-
-            if (user != null) {
-                startUserSession(user);
-                navigateToMainInterface();
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Login Failed", 
-                    "Invalid email or password. Please try again.");
-            }
-        } catch (Exception e) {
-            handleLoginError(e);
+            System.out.println("Loading student interface...");
+            Main.setMainRoot();
+        } catch (IOException e) {
+            System.out.println("Failed to load student interface: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
+                "Could not load student interface.");
         }
     }
 
-    private void startUserSession(User user) {
-        UserSession.getInstance().startSession(
-            user.getUserId(),
-            user.getUserType(),
-            user.getFirstName(),
-            user.getLastName(),
-            user.getEmail()
-        );
-    }
-
-    private void navigateToMainInterface() {
+    private void navigateToAdminInterface() {
         try {
-            Main.setMainRoot();
+            System.out.println("Loading admin interface...");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/base.fxml"));
+            Scene scene = new Scene(loader.load(), 780, 460);
+            Main.getStage().setScene(scene);
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
-                "Could not load main interface.");
+            System.out.println("Failed to load admin interface: " + e.getMessage());
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
+                "Could not load admin interface.");
         }
     }
 

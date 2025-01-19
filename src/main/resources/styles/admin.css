@@ -1,0 +1,74 @@
+/* Path: src/main/resources/styles/admin.css */
+
+/* Navigation Buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-padding: 8 15;
+    -fx-background-radius: 50 0 0 50;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #8B1818;
+}
+
+/* Statistics Cards */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+.content-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+/* Tables */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 8;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #666666;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Text Styles */
+.heading {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.subheading {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.text-muted {
+    -fx-text-fill: #666666;
+}
