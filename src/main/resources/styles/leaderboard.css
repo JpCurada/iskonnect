@@ -1,0 +1,33 @@
+/* styles/leaderboard.css */
+.table-row-cell:first {
+    -fx-background-color: #FFD700; /* Gold */
+}
+
+.table-row-cell:second {
+    -fx-background-color: #C0C0C0; /* Silver */
+}
+
+.table-row-cell:third {
+    -fx-background-color: #CD7F32; /* Bronze */
+}
+
+/* Make text in colored rows black for better visibility */
+.table-row-cell:first .table-cell,
+.table-row-cell:second .table-cell,
+.table-row-cell:third .table-cell {
+    -fx-text-fill: black;
+}
+
+/* Keep header styling */
+.table-view .column-header {
+    -fx-background-color: #A31D1D;
+    -fx-border-color: #E5D0AC;
+}
+
+/* Optional: style for alternating rows after top 3 */
+.table-row-cell:filled {
+    -fx-background-color: white;
+}
+.table-row-cell:filled:odd {
+    -fx-background-color: #f8f8f8;
+}
