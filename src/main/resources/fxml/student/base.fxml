@@ -92,8 +92,12 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                 </Button>
+            </VBox>
+
+            <!-- Push Logout Button and Line to the Bottom -->
+            <VBox alignment="BOTTOM_CENTER" prefHeight="137.0" prefWidth="202.0" spacing="10.0">
                 <Line endX="100" startX="-100" stroke="WHITE" />
-                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="265.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE">
+                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="202.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -101,14 +105,11 @@
                             </image>
                         </ImageView>
                     </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
                 </Button>
             </VBox>
         </VBox>
     </left>
     <center>
-        <VBox fx:id="contentArea" prefHeight="426.0" prefWidth="610.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 50 0 0 0;" BorderPane.alignment="CENTER" />
+        <VBox fx:id="contentArea" prefHeight="426.0" prefWidth="610.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>
