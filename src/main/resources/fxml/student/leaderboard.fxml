@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,49 +8,44 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="contentArea" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 40 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.LeaderboardController">
-    
+<VBox fx:id="contentArea" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" stylesheets="@/styles/leaderboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.LeaderboardController">
+
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
 
     <!-- Header -->
     <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="Leaderboard" />
-    
+
     <!-- Filters -->
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <ComboBox fx:id="timeFilter" prefWidth="150" promptText="Time Period" style="-fx-background-radius: 7; -fx-border-radius: 7;">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor></ComboBox>
+        <ComboBox fx:id="timeFilter" prefWidth="150" promptText="Time Period" styleClass="time-filter" />
     </HBox>
 
     <!-- Statistics -->
     <HBox alignment="CENTER" spacing="20">
-        <VBox alignment="CENTER" spacing="5" style="-fx-background-color: white; -fx-padding: 15 30; -fx-background-radius: 7;" styleClass="stat-box">
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
             <Text style="-fx-fill: #666666;" text="Total Contributors" />
             <Text fx:id="totalContributorsText" style="-fx-font-weight: bold; -fx-fill: #A31D1D;" text="0" />
         </VBox>
-        <VBox alignment="CENTER" spacing="5" style="-fx-background-color: white; -fx-padding: 15 30; -fx-background-radius: 7;" styleClass="stat-box">
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
             <Text style="-fx-fill: #666666;" text="Total Materials" />
             <Text fx:id="totalMaterialsText" style="-fx-font-weight: bold; -fx-fill: #A31D1D;" text="0" />
         </VBox>
-        <VBox alignment="CENTER" spacing="5" style="-fx-background-color: white; -fx-padding: 15 30; -fx-background-radius: 7;" styleClass="stat-box">
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
             <Text style="-fx-fill: #666666;" text="Total Points" />
             <Text fx:id="totalPointsText" style="-fx-font-weight: bold; -fx-fill: #A31D1D;" text="0" />
         </VBox>
     </HBox>
 
     <!-- Table -->
-    <TableView fx:id="leaderboardTable" style="-fx-background-radius: 7; -fx-border-radius: 7;" VBox.vgrow="ALWAYS">
+    <TableView fx:id="leaderboardTable" prefHeight="241.0" prefWidth="562.0" styleClass="leaderboard-table" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="rankColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Rank" />
+            <TableColumn fx:id="rankColumn" prefWidth="60" text="Rank" />
             <TableColumn fx:id="nameColumn" prefWidth="200" text="Student" />
-            <TableColumn fx:id="pointsColumn" prefWidth="100" style="-fx-alignment: CENTER;" text="Points" />
-            <TableColumn fx:id="materialsColumn" prefWidth="100" style="-fx-alignment: CENTER;" text="Materials" />
-            <TableColumn fx:id="badgesColumn" prefWidth="100" style="-fx-alignment: CENTER;" text="Badges" />
+            <TableColumn fx:id="pointsColumn" prefWidth="100" text="Points" />
+            <TableColumn fx:id="materialsColumn" prefWidth="100" text="Materials" />
+            <TableColumn fx:id="badgesColumn" prefWidth="100" text="Badges" />
         </columns>
     </TableView>
-
-
 </VBox>

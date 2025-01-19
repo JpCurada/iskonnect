@@ -19,7 +19,7 @@ public class LeaderboardController {
     @FXML private TableColumn<LeaderboardEntry, Integer> pointsColumn;
     @FXML private TableColumn<LeaderboardEntry, Integer> materialsColumn;
     @FXML private TableColumn<LeaderboardEntry, Integer> badgesColumn;
-    
+
     @FXML private ComboBox<String> timeFilter;
     @FXML private Text totalContributorsText;
     @FXML private Text totalMaterialsText;
@@ -46,9 +46,9 @@ public class LeaderboardController {
 
     private void setupTimeFilter() {
         timeFilter.setItems(FXCollections.observableArrayList(
-            "All Time",
-            "This Month",
-            "This Week"
+                "All Time",
+                "This Month",
+                "This Week"
         ));
         timeFilter.setValue("All Time");
     }
@@ -68,17 +68,35 @@ public class LeaderboardController {
                 setText(empty ? null : numberFormat.format(item));
             }
         });
+
+        // Apply rank-based styles
+        leaderboardTable.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(LeaderboardEntry entry, boolean empty) {
+                super.updateItem(entry, empty);
+                if (entry == null || empty) {
+                    setStyle(""); // Reset style for empty rows
+                } else {
+                    switch (entry.getRank()) {
+                        case 1 -> setStyle("-fx-background-color: #FFECB3;"); // Gold
+                        case 2 -> setStyle("-fx-background-color: #D7CCC8;"); // Silver
+                        case 3 -> setStyle("-fx-background-color: #CFD8DC;"); // Bronze
+                        default -> setStyle(""); // Default style
+                    }
+                }
+            }
+        });
     }
 
     private void loadLeaderboardData() {
         try {
             List<LeaderboardEntry> entries = leaderboardService.getLeaderboard(timeFilter.getValue());
-            
+
             // Set ranks
             for (int i = 0; i < entries.size(); i++) {
                 entries.get(i).setRank(i + 1);
             }
-            
+
             leaderboardTable.setItems(FXCollections.observableArrayList(entries));
         } catch (Exception e) {
             showError("Failed to load leaderboard data");

@@ -97,7 +97,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/collections_fffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
