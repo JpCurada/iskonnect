@@ -1,33 +1,51 @@
-/* styles/leaderboard.css */
-.table-row-cell:first {
-    -fx-background-color: #FFD700; /* Gold */
-}
-
-.table-row-cell:second {
-    -fx-background-color: #C0C0C0; /* Silver */
-}
-
-.table-row-cell:third {
-    -fx-background-color: #CD7F32; /* Bronze */
-}
-
-/* Make text in colored rows black for better visibility */
-.table-row-cell:first .table-cell,
-.table-row-cell:second .table-cell,
-.table-row-cell:third .table-cell {
+/* General Table Styling */
+.leaderboard-table {
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-background-color: white;
     -fx-text-fill: black;
 }
 
-/* Keep header styling */
+/* Column Header Styling */
 .table-view .column-header {
-    -fx-background-color: #A31D1D;
+    -fx-background-color: #E5D0AC;
     -fx-border-color: #E5D0AC;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
 
-/* Optional: style for alternating rows after top 3 */
+/* Row Styling */
 .table-row-cell:filled {
     -fx-background-color: white;
 }
+
 .table-row-cell:filled:odd {
     -fx-background-color: #f8f8f8;
+}
+
+/* Top 3 Ranks */
+.rank-1 {
+    -fx-background-color: #FFE082; /* Gold */
+}
+
+.rank-2 {
+    -fx-background-color: #CFD8DC; /* Silver */
+}
+
+.rank-3 {
+    -fx-background-color: #D7CCC8; /* Bronze */
+}
+
+/* Stats Boxes Styling */
+.stat-box {
+    -fx-background-color: white;
+    -fx-padding: 15 30;
+    -fx-background-radius: 7;
+}
+
+/* Time Filter Styling */
+.time-filter {
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-background-color: lightgray;
 }
