@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.StudentViewController">
+    <top>
+        <HBox prefHeight="34.0" prefWidth="780.0" BorderPane.alignment="CENTER" />
+    </top>
+    <left>
+        <VBox fx:id="navigationPane" prefHeight="426.0" prefWidth="222.0" spacing="20" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="5.0" top="8.0" />
+            </padding>
+
+            <!-- User Info -->
+            <VBox prefHeight="46.0" prefWidth="202.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 15; -fx-padding: 10;">
+            <HBox prefHeight="24.0" prefWidth="162.0">
+               <children>
+                  <ImageView fitHeight="41.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../iskonnect/src/main/resources/images/icons/profile_icon.png" />
+                     </image>
+                  </ImageView>
+                  <VBox prefHeight="52.0" prefWidth="133.0">
+                     <children>
+                            <Text fx:id="fullNameText" style="-fx-font-weight: bold;" text="Firstname Surname" />
+                            <Text fx:id="studentNumberText" text="2023-01234-MN-0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            </VBox>
+
+            <!-- Navigation Buttons -->
+            <VBox spacing="8.0">
+                <Button fx:id="homeButton" onAction="#handleHome" prefHeight="32.0" prefWidth="203.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Home" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="contributeButton" onAction="#handleContribute" prefHeight="32.0" prefWidth="205.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Contribute" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="leaderboardButton" onAction="#handleLeaderboard" prefHeight="32.0" prefWidth="210.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Leaderboard" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="contributionsButton" onAction="#handleContributions" prefHeight="32.0" prefWidth="217.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Contributions" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="collectionsButton" onAction="#handleCollections" prefHeight="32.0" prefWidth="216.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Collections" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Line endX="100" startX="-100" stroke="WHITE" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="257.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../../../../../iskonnect/src/main/resources/fxml/mai/style.css" text="Logout" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../iskonnect/src/main/resources/fxml/iskonnect/src/main/resources/images/icons/home_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </VBox>
+    </left>
+    <center>
+        <VBox fx:id="contentArea" prefHeight="425.6" prefWidth="557.6" style="-fx-background-color: #FEF9E1; -fx-background-radius: 50 0 0 0;" BorderPane.alignment="CENTER" />
+    </center>
+</BorderPane>
