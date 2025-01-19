@@ -49,3 +49,17 @@
     -fx-border-radius: 7;
     -fx-background-color: lightgray;
 }
+
+/* Hide the vertical scrollbar space */
+.table-view .virtual-flow .scroll-bar:vertical {
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+    -fx-max-width: 0;
+}
+
+/* Hide the horizontal scrollbar space */
+.table-view .virtual-flow .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
