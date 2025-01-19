@@ -1,21 +1,22 @@
 package com.iskonnect.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConnection {
-
     private static Connection connection;
+    private static final Dotenv dotenv = Dotenv.load();
 
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
                 // Set up connection properties
                 Properties props = new Properties();
-                props.setProperty("user", "postgres.nhepnvpgxzfexwuswyyw");
-                props.setProperty("password", "55Oj5Y4Z6mH9hmhC");
+                props.setProperty("user", dotenv.get("DB_USER"));
+                props.setProperty("password", dotenv.get("DB_PASSWORD"));
                 props.setProperty("ssl", "true");
                 props.setProperty("sslmode", "require");
 
@@ -23,7 +24,7 @@ public class DatabaseConnection {
                 Class.forName("org.postgresql.Driver");
                 System.out.println("PostgreSQL JDBC Driver loaded.");
 
-                String url = "jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres";
+                String url = dotenv.get("DB_URL");
                 System.out.println("Attempting to connect to database...");
                 
                 connection = DriverManager.getConnection(url, props);

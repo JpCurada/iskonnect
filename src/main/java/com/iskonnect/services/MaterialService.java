@@ -2,25 +2,25 @@ package com.iskonnect.services;
 
 import com.iskonnect.utils.DatabaseConnection;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-// Add imports at the top of the file
+
 import java.io.*;
-import java.net.*;
-import javax.net.ssl.*;
-import java.nio.file.*;
 
 
 public class MaterialService {
-    private static final String SUPABASE_BUCKET_NAME = "iskonnect-materials";
-    private static final String SUPABASE_ACCESS_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXBudnBneHpmZXh3dXN3eXl3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNjMzMjQwMCwiZXhwIjoyMDUxOTA4NDAwfQ.01Hz0wmOizrB9N4hOlYjcBO9HmLFSzCrW04oPWOEXT0";
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String SUPABASE_BUCKET_NAME = dotenv.get("SUPABASE_BUCKET_NAME");
+    private static final String SUPABASE_ACCESS_KEY = dotenv.get("SUPABASE_ACCESS_KEY");
+    private static final String SUPABASE_URL = dotenv.get("SUPABASE_URL");
 
     public UserStats getUserStats(String userId) throws Exception {
         UserStats stats = new UserStats();
@@ -76,7 +76,7 @@ public class MaterialService {
     }
 
     private void uploadFileToSupabase(File file, String objectPath) throws Exception {
-        String uploadUrl = "https://nhepnvpgxzfexwuswyyw.supabase.co/storage/v1/object/" +
+        String uploadUrl = SUPABASE_URL + "/storage/v1/object/" +
             SUPABASE_BUCKET_NAME + "/" + objectPath;
 
         HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection();
