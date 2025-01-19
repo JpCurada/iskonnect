@@ -1,32 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="307.0" prefWidth="497.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0; -fx-border-radius: 30 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.HomeController">
+<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;"
+      styleClass="content-panel"
+      stylesheets="@../../styles/home.css,@../../styles/shared.css" 
+      xmlns="http://javafx.com/javafx/23.0.1" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.iskonnect.controllers.HomeController">
+    
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-   <HBox prefHeight="0.0" prefWidth="458.0">
-      <children>
-         <Text fill="#000000bd" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;date&gt;" />
-      </children>
-   </HBox>
-   <HBox prefHeight="0.0" prefWidth="458.0">
-      <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hello, Iska">
-            <font>
-               <Font name="System Bold" size="24.0" />
-            </font>
-         </Text>
-      </children>
-   </HBox>
-   <HBox layoutX="30.0" layoutY="30.0" prefHeight="0.0" prefWidth="458.0">
-      <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Kamusta ang araw mo, &lt;fname&gt;?" />
-      </children>
-   </HBox>
+
+    <!-- Header Section -->
+    <VBox spacing="5">
+        <Text fx:id="dateText" fill="#666666" />
+        <Text style="-fx-font-size: 24; -fx-font-weight: bold;" text="Hello, Isko" />
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Text text="Kumusta araw mo, " />
+            <Text fx:id="firstNameText" style="-fx-font-weight: bold;" />
+            <Text text="?" />
+        </HBox>
+    </VBox>
+
+    <!-- Search Bar -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <TextField fx:id="searchField" prefWidth="300" 
+                  promptText="Ano ang hanap mo?" 
+                  style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #ddd;" />
+        <Button onAction="#handleSearch" 
+                style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 20;" 
+                text="Search" />
+    </HBox>
+
+    <!-- Materials Grid -->
+    <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+        <content>
+            <GridPane fx:id="materialsGrid" hgap="15" vgap="15">
+                <padding>
+                    <Insets bottom="10" left="10" right="10" top="10" />
+                </padding>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="25" />
+                    <ColumnConstraints percentWidth="25" />
+                    <ColumnConstraints percentWidth="25" />
+                    <ColumnConstraints percentWidth="25" />
+                </columnConstraints>
+            </GridPane>
+        </content>
+    </ScrollPane>
+
 </VBox>

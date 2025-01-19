@@ -1,7 +1,9 @@
+// Path: src/main/java/com/iskonnect/services/MaterialService.java
+
 package com.iskonnect.services;
 
 import com.iskonnect.utils.DatabaseConnection;
-
+import com.iskonnect.models.Material;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.net.HttpURLConnection;
@@ -12,7 +14,8 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.io.*;
 
 
@@ -196,6 +199,56 @@ public class MaterialService {
         public void setMaterialsCount(int count) { this.materialsCount = count; }
     }
 
+    public List<Material> getAllMaterials() throws Exception {
+        List<Material> materials = new ArrayList<>();
+        String query = """
+            SELECT 
+                m.*,
+                u.first_name,
+                u.last_name,
+                COALESCE((
+                    SELECT COUNT(*) 
+                    FROM votes v 
+                    WHERE v.material_id = m.material_id 
+                    AND v.vote_type = 'UPVOTE'
+                ), 0) as upvotes
+            FROM materials m
+            JOIN users u ON m.uploader_id = u.user_id
+            ORDER BY m.upload_date DESC
+        """;
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Material material = new Material(
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getString("subject"),
+                    rs.getString("college"),
+                    rs.getString("course"),
+                    rs.getString("uploader_id")
+                );
+                
+                // Set additional properties
+                material.setMaterialId(rs.getInt("material_id"));
+                material.setFileUrl(rs.getString("file_url"));
+                material.setFileName(rs.getString("filename"));
+                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                
+                // Set uploader name
+                String uploaderName = rs.getString("first_name") + " " + rs.getString("last_name");
+                material.setUploaderName(uploaderName);
+                
+                // Set vote count
+                material.setUpvotes(rs.getInt("upvotes"));
+
+                materials.add(material);
+            }
+        }
+        return materials;
+    }
     public static class MaterialUploadRequest {
         private final String materialName;
         private final String description;

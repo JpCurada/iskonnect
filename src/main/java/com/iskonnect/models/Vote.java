@@ -1,3 +1,4 @@
+// Path: src/main/java/com/iskonnect/models/Vote.java
 package com.iskonnect.models;
 
 public class Vote {

@@ -6,3 +6,38 @@
 .hover-button:hover {
     -fx-background-color: #6D2323; /* Hover color */
 }
+
+/* Add these styles to your existing style.css */
+
+.material-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #E0E0E0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.material-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #E0E0E0;
+    -fx-padding: 8 16;
+}
+
+.search-button {
+    -fx-background-color: #A31D1D;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #8B1A1A;
+}
