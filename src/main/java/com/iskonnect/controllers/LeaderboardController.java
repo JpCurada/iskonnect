@@ -35,6 +35,8 @@ public class LeaderboardController {
 
     @FXML
     public void initialize() {
+        leaderboardTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         setupTimeFilter();
         setupTable();
         loadLeaderboardData();
