@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
+<VBox alignment="CENTER" spacing="15" style="-fx-border-radius: 30 0 0 0; -fx-background-radius: 30 0 0 0; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-    <Label text="Collections Page" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Collections Page" />
 </VBox>
