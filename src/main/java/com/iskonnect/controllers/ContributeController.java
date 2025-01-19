@@ -2,19 +2,22 @@ package com.iskonnect.controllers;
 
 import com.iskonnect.services.MaterialService;
 import com.iskonnect.utils.UserSession;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContributeController {
     @FXML private TextField materialNameField;
-    @FXML private TextArea descriptionField;  // Changed from TextField to TextArea
+    @FXML private TextArea descriptionField; // Changed from TextField to TextArea
     @FXML private TextField subjectField;
-    @FXML private TextField collegeField;
-    @FXML private TextField courseField;
+    @FXML private ComboBox<String> collegeComboBox; // Changed to ComboBox
+    @FXML private ComboBox<String> courseComboBox;  // Changed to ComboBox
     @FXML private Button selectFileButton;
     @FXML private Button uploadButton;
     @FXML private Label statusLabel;
@@ -25,14 +28,26 @@ public class ContributeController {
     private File selectedFile;
     private final MaterialService materialService;
 
+    // Map to store colleges and their corresponding courses
+    private final Map<String, List<String>> collegeToCoursesMap = new HashMap<>();
+
     public ContributeController() {
         this.materialService = new MaterialService();
     }
 
     @FXML
     private void initialize() {
-
+        // Load user statistics (points and materials shared)
         loadUserStats();
+
+        // Populate colleges and courses
+        populateCollegeToCoursesMap();
+
+        // Add placeholder text for collegeComboBox and courseComboBox
+        initializeComboBoxes();
+
+        // Add listener to dynamically update courses based on selected college
+        collegeComboBox.setOnAction(event -> updateCourseComboBox());
     }
 
     private void loadUserStats() {
@@ -46,15 +61,70 @@ public class ContributeController {
         }
     }
 
+    private void populateCollegeToCoursesMap() {
+        collegeToCoursesMap.put("OUS", List.of(
+                "BSENTREP", "BABR", "BSBAHRM", "BSBAMM", "BSOA", "BSTM", "BPA"));
+        collegeToCoursesMap.put("CAF", List.of("BSA", "BSMA", "BSBAFM"));
+        collegeToCoursesMap.put("CADBE", List.of("BS-ARCH", "BSID", "BSEP"));
+        collegeToCoursesMap.put("CAL", List.of("ABE", "ABF", "ABPHILO", "ABTA"));
+        collegeToCoursesMap.put("CBA", List.of("BSBA-MM", "BSBA-HRDM", "BSEntrep", "BSOA"));
+        collegeToCoursesMap.put("COC", List.of("BAPR", "ABJ", "BA Broadcasting", "ABCR"));
+        collegeToCoursesMap.put("CCIS", List.of("BSCS", "BSIT"));
+        collegeToCoursesMap.put("COED", List.of(
+                "BTLEd", "BLIS", "BSEd", "BEEd", "BECEd"));
+        collegeToCoursesMap.put("CE", List.of(
+                "BSCE", "BSCpE", "BSEE", "BSECE", "BSIE", "BSME", "BSRE"));
+        collegeToCoursesMap.put("CHK", List.of("BPE"));
+        collegeToCoursesMap.put("CPSPA", List.of("BAPS", "BAPE", "BAIS", "BPA"));
+        collegeToCoursesMap.put("CSSD", List.of("BC", "ABH", "BSE", "BSPSY", "BSS"));
+        collegeToCoursesMap.put("CS", List.of(
+                "BAS", "BSAM", "BSBIO", "BSCHEM", "BSFT", "BSM", "BSND", "BSP"));
+        collegeToCoursesMap.put("CTHTM", List.of("BSTM", "BTM", "BSHM"));
+    }
+
+    private void initializeComboBoxes() {
+        // Populate the collegeComboBox with colleges
+        collegeComboBox.setItems(FXCollections.observableArrayList(collegeToCoursesMap.keySet()));
+
+        // Add placeholder text to the collegeComboBox
+        collegeComboBox.setPromptText("Select a College");
+
+        // Add placeholder text to the courseComboBox
+        courseComboBox.setPromptText("Select a Course");
+
+        // Disable the courseComboBox until a college is selected
+        courseComboBox.setDisable(true);
+    }
+
+    private void updateCourseComboBox() {
+        // Get the selected college
+        String selectedCollege = collegeComboBox.getValue();
+
+        if (selectedCollege != null) {
+            // Fetch the courses for the selected college
+            List<String> courses = collegeToCoursesMap.get(selectedCollege);
+
+            if (courses != null) {
+                // Update the courseComboBox with the relevant courses
+                courseComboBox.setItems(FXCollections.observableArrayList(courses));
+                courseComboBox.setDisable(false); // Enable the combo box
+            }
+        } else {
+            // If no college is selected, clear and disable the courseComboBox
+            courseComboBox.setItems(FXCollections.observableArrayList());
+            courseComboBox.setDisable(true);
+        }
+    }
+
     @FXML
     private void handleFileSelection() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"),
-            new FileChooser.ExtensionFilter("Document Files", "*.pdf", "*.doc", "*.docx", "*.txt"),
-            new FileChooser.ExtensionFilter("All Files", "*.*")
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"),
+                new FileChooser.ExtensionFilter("Document Files", "*.pdf", "*.doc", "*.docx", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
         );
-    
+
         selectedFile = fileChooser.showOpenDialog(selectFileButton.getScene().getWindow());
         if (selectedFile != null) {
             fileNameLabel.setText(selectedFile.getName());
@@ -69,72 +139,38 @@ public class ContributeController {
         if (!validateFields()) {
             return;
         }
-    
-        // Check file size (e.g., 10MB limit)
-        long maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
-        if (selectedFile != null && selectedFile.length() > maxFileSize) {
-            showError("File is too large. Maximum size is 10MB.");
-            return;
-        }
-    
-        // Check file type
-        if (selectedFile != null && !isValidFileType(selectedFile)) {
-            showError("Invalid file type. Only PDF, DOC, DOCX, TXT, and common image formats are allowed.");
-            return;
-        }
-    
+
         try {
             disableUploadDuringProcess(true);
             statusLabel.setText("Uploading...");
-    
+
             MaterialService.MaterialUploadRequest request = new MaterialService.MaterialUploadRequest(
-                materialNameField.getText().trim(),
-                descriptionField.getText().trim(),
-                subjectField.getText().trim(),
-                collegeField.getText().trim(),
-                courseField.getText().trim(),
-                selectedFile
+                    materialNameField.getText().trim(),
+                    descriptionField.getText().trim(),
+                    subjectField.getText().trim(),
+                    collegeComboBox.getValue(), // Use ComboBox value for college
+                    courseComboBox.getValue(),  // Use ComboBox value for course
+                    selectedFile
             );
-    
+
             materialService.uploadMaterial(UserSession.getInstance().getUserId(), request);
-            
+
             showSuccess("Material uploaded successfully!");
             clearFields();
             loadUserStats();
         } catch (Exception e) {
-            String errorMessage = e.getMessage();
-            if (errorMessage.contains("response code: 400")) {
-                showError("Upload failed: The file may be too large or in an unsupported format.");
-            } else if (errorMessage.contains("response code: 401")) {
-                showError("Upload failed: Authentication error. Please try logging in again.");
-            } else if (errorMessage.contains("response code: 403")) {
-                showError("Upload failed: You don't have permission to upload files.");
-            } else {
-                showError("Upload failed: " + e.getMessage());
-            }
+            showError("Upload failed: " + e.getMessage());
             e.printStackTrace();
         } finally {
             disableUploadDuringProcess(false);
         }
     }
-    
-    private boolean isValidFileType(File file) {
-        String filename = file.getName().toLowerCase();
-        return filename.endsWith(".pdf") || 
-               filename.endsWith(".doc") || 
-               filename.endsWith(".docx") || 
-               filename.endsWith(".txt") || 
-               filename.endsWith(".png") || 
-               filename.endsWith(".jpg") || 
-               filename.endsWith(".jpeg") || 
-               filename.endsWith(".gif");
-    }
 
     private boolean validateFields() {
         if (materialNameField.getText().isEmpty() || descriptionField.getText().isEmpty() ||
-            subjectField.getText().isEmpty() || collegeField.getText().isEmpty() ||
-            courseField.getText().isEmpty() || selectedFile == null) {
-            
+                subjectField.getText().isEmpty() || collegeComboBox.getValue() == null ||
+                courseComboBox.getValue() == null || selectedFile == null) {
+
             showError("Please fill in all fields and select a file.");
             return false;
         }
@@ -155,52 +191,12 @@ public class ContributeController {
         materialNameField.clear();
         descriptionField.clear();
         subjectField.clear();
-        collegeField.clear();
-        courseField.clear();
+        collegeComboBox.getSelectionModel().clearSelection();
+        courseComboBox.getSelectionModel().clearSelection();
+        courseComboBox.setDisable(true);
         selectedFile = null;
+        fileNameLabel.setText("No file selected");
         statusLabel.setText("");
-    }
-
-    private void setupFieldValidation() {
-        // Add text change listeners for real-time validation
-        materialNameField.textProperty().addListener((obs, old, newValue) -> {
-            if (newValue.length() > 100) {
-                materialNameField.setText(old);
-                showError("Material name cannot exceed 100 characters");
-            }
-        });
-
-        descriptionField.textProperty().addListener((obs, old, newValue) -> {
-            if (newValue.length() > 500) {
-                descriptionField.setText(old);
-                showError("Description cannot exceed 500 characters");
-            }
-        });
-
-        // Add focus listeners for field validation
-        materialNameField.focusedProperty().addListener((obs, old, newValue) -> {
-            if (!newValue && materialNameField.getText().isEmpty()) {
-                showError("Material name is required");
-            }
-        });
-
-        subjectField.focusedProperty().addListener((obs, old, newValue) -> {
-            if (!newValue && subjectField.getText().isEmpty()) {
-                showError("Subject is required");
-            }
-        });
-
-        collegeField.focusedProperty().addListener((obs, old, newValue) -> {
-            if (!newValue && collegeField.getText().isEmpty()) {
-                showError("College is required");
-            }
-        });
-
-        courseField.focusedProperty().addListener((obs, old, newValue) -> {
-            if (!newValue && courseField.getText().isEmpty()) {
-                showError("Course is required");
-            }
-        });
     }
 
     private void disableUploadDuringProcess(boolean disable) {
@@ -209,7 +205,7 @@ public class ContributeController {
         materialNameField.setDisable(disable);
         descriptionField.setDisable(disable);
         subjectField.setDisable(disable);
-        collegeField.setDisable(disable);
-        courseField.setDisable(disable);
+        collegeComboBox.setDisable(disable);
+        courseComboBox.setDisable(disable);
     }
 }
