@@ -34,24 +34,39 @@
                <font>
                   <Font size="10.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
             </TextField>
             <TextField fx:id="lastName" layoutX="183.0" layoutY="143.4" prefHeight="25.0" prefWidth="100.0" promptText="Last Name" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;" AnchorPane.bottomAnchor="291.0">
                <font>
                   <Font size="10.0" />
-               </font></TextField>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor></TextField>
             <TextField fx:id="email" layoutX="62.0" layoutY="181.0" prefHeight="25.0" prefWidth="220.0" promptText="Email" style="-fx-background-color: transparent; -fx-background-radius: 10; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
                <font>
                   <Font size="10.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
             </TextField>
             <PasswordField fx:id="password" layoutX="62.0" layoutY="218.0" prefHeight="25.0" prefWidth="220.0" promptText="Enter your password" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
                <font>
                   <Font size="10.0" />
-               </font></PasswordField>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor></PasswordField>
             <TextField layoutX="62.0" layoutY="255.0" prefHeight="25.0" prefWidth="220.0" promptText="Student Number" style="-fx-background-color: transparent; -fx-background-radius: 7; -fx-border-color: #AAA7AD; -fx-border-radius: 7;">
                <font>
                   <Font size="10.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
             </TextField>
             <CheckBox layoutX="66.0" layoutY="296.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="220.0" text="I agree to the Terms &amp; Conditions" textFill="#909090">
                <font>

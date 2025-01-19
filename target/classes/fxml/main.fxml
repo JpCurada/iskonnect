@@ -1,5 +1,0 @@
-<VBox xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="com.iskonnect.controllers.MainController"
-      spacing="10" alignment="CENTER">
-    <Label text="Welcome to iSkonnect"/>
-</VBox>
