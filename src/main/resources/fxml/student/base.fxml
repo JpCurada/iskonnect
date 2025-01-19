@@ -22,9 +22,22 @@
             </padding>
 
             <!-- User Info -->
-            <VBox style="-fx-background-color: #FEF9E1; -fx-background-radius: 15; -fx-padding: 10;">
-                <Text fx:id="fullNameText" style="-fx-font-weight: bold;" text="Firstname Surname" />
-                <Text fx:id="studentNumberText" text="2023-01234-MN-0" />
+            <VBox prefHeight="50.0" prefWidth="193.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 15; -fx-padding: 10;">
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/icons/profile_icon.png" />
+                     </image>
+                  </ImageView>
+                  <VBox prefHeight="42.0" prefWidth="117.0" spacing="5.0">
+                     <children>
+                            <Text fx:id="fullNameText" style="-fx-font-weight: bold;" text="Firstname Surname" />
+                            <Text fx:id="studentNumberText" text="2023-01234-MN-0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
                 <VBox.margin>
                     <Insets right="9.0" />
                 </VBox.margin>
@@ -36,7 +49,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/home_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -48,7 +61,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/contribute_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -58,9 +71,9 @@
                 </Button>
                 <Button fx:id="leaderboardButton" onAction="#handleLeaderboard" prefHeight="32.0" prefWidth="235.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Leaderboard" textFill="WHITE">
                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="33.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/leaderboard_ffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -72,7 +85,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/contributions_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -101,7 +114,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../iskonnect/src/main/resources/images/icons/home_icon.png" />
+                                <Image url="@../../images/icons/logout_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
