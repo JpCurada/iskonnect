@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
-        <javafx.version>21.0.5</javafx.version>
+        <javafx.version>23.0.1</javafx.version>
     </properties>
     
     <dependencies>
