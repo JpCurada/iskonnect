@@ -20,7 +20,7 @@ import java.nio.file.*;
 
 public class MaterialService {
     private static final String SUPABASE_BUCKET_NAME = "iskonnect-materials";
-    private static final String SUPABASE_ACCESS_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXBudnBneHpmZXh3dXN3eXl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYzMzI0MDAsImV4cCI6MjA1MTkwODQwMH0.Q8HfCmY2TdLgiwE0uhyfWAcAa4qhi-0f8Thqq0Mp5sg";
+    private static final String SUPABASE_ACCESS_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXBudnBneHpmZXh3dXN3eXl3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNjMzMjQwMCwiZXhwIjoyMDUxOTA4NDAwfQ.01Hz0wmOizrB9N4hOlYjcBO9HmLFSzCrW04oPWOEXT0";
 
     public UserStats getUserStats(String userId) throws Exception {
         UserStats stats = new UserStats();
