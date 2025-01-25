@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.iskonnect.controllers.BadgeNotificationController"
+            styleClass="notification-panel"
+            style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8F9FA);
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+                   -fx-background-radius: 8px;
+                   -fx-border-radius: 8px;
+                   -fx-border-color: #E9ECEF;
+                   -fx-border-width: 1px;">
+
+    <VBox spacing="15" 
+          alignment="CENTER"
+          AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20"
+          AnchorPane.bottomAnchor="20">
+
+        <!-- Badge Icon -->
+        <ImageView fx:id="badgeIcon" 
+                   fitHeight="64" 
+                   fitWidth="64"
+                   preserveRatio="true">
+            <Image url="@../../images/ISKONNECT_TRANSPARENT.png"/>
+        </ImageView>
+
+        <!-- Congratulations Text -->
+        <Label text="Achievement Unlocked!" 
+               style="-fx-font-size: 18px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #2D3748;"/>
+
+        <!-- Badge Name -->
+        <Label fx:id="badgeNameLabel" 
+               style="-fx-font-size: 24px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #4A5568;
+                      -fx-text-alignment: center;
+                      -fx-wrap-text: true;"/>
+
+        <!-- Badge Description -->
+        <Label fx:id="badgeDescriptionLabel"
+               wrapText="true"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: #718096;
+                      -fx-text-alignment: center;
+                      -fx-padding: 0 10 0 10;"/>
+
+        <!-- OK Button -->
+        <Button text="Awesome!"
+                onAction="#handleOk"
+                style="-fx-background-color: #4299E1;
+                       -fx-text-fill: white;
+                       -fx-font-size: 14px;
+                       -fx-padding: 10 30;
+                       -fx-background-radius: 20;
+                       -fx-cursor: hand;">
+            <VBox.margin>
+                <Insets top="10"/>
+            </VBox.margin>
+        </Button>
+    </VBox>
+</AnchorPane>

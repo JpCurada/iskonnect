@@ -1,23 +1,24 @@
-// Path: src/main/java/com/iskonnect/services/MaterialService.java
-
 package com.iskonnect.services;
 
-import com.iskonnect.utils.DatabaseConnection;
+import com.iskonnect.controllers.BadgeNotificationController;
+import com.iskonnect.models.Badge;
 import com.iskonnect.models.Material;
+import com.iskonnect.utils.DatabaseConnection;
 import io.github.cdimascio.dotenv.Dotenv;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
-
 
 public class MaterialService {
     private static final Dotenv dotenv = Dotenv.load();
@@ -25,29 +26,37 @@ public class MaterialService {
     private static final String SUPABASE_ACCESS_KEY = dotenv.get("SUPABASE_ACCESS_KEY");
     private static final String SUPABASE_URL = dotenv.get("SUPABASE_URL");
 
-    public UserStats getUserStats(String userId) throws Exception {
+    public UserStats getUserStats(String userId) {
         UserStats stats = new UserStats();
         String pointsQuery = "SELECT points FROM users WHERE user_id = ?";
         String materialsQuery = "SELECT COUNT(*) FROM materials WHERE uploader_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Get points
             try (PreparedStatement stmt = conn.prepareStatement(pointsQuery)) {
                 stmt.setString(1, userId);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    stats.setPoints(rs.getInt("points"));
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        stats.setPoints(rs.getInt("points"));
+                    }
                 }
             }
 
-            // Get materials count
             try (PreparedStatement stmt = conn.prepareStatement(materialsQuery)) {
                 stmt.setString(1, userId);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    stats.setMaterialsCount(rs.getInt(1));
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        stats.setMaterialsCount(rs.getInt(1));
+                    }
                 }
             }
+
+            // Explicitly deallocate prepared statements (if necessary)
+            try (PreparedStatement deallocateStmt = conn.prepareStatement("DEALLOCATE ALL")) {
+                deallocateStmt.execute();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return stats;
     }
@@ -55,130 +64,154 @@ public class MaterialService {
     public void uploadMaterial(String userId, MaterialUploadRequest request) throws Exception {
         String modifiedFilename = generateFileName(request.getFile().getName());
         String objectPath = "reviewers/" + modifiedFilename;
-        String fileUrl = "https://nhepnvpgxzfexwuswyyw.supabase.co/storage/v1/object/public/iskonnect-materials/" + objectPath;
-
-        // Upload file to Supabase storage
+        String fileUrl = SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET_NAME + "/" + objectPath;
+    
         uploadFileToSupabase(request.getFile(), objectPath);
-
-        // Save to database using your existing connection
-        try (Connection conn = DatabaseConnection.getConnection()) {
+    
+        Connection conn = null; // Declare conn outside the try block
+        try {
+            conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false);
-            try {
-                if (saveMaterialToDatabase(conn, userId, request, fileUrl, modifiedFilename) &&
-                    updateUserPoints(conn, userId, 5)) {
-                    conn.commit();
-                } else {
-                    conn.rollback();
-                    throw new Exception("Failed to save material");
+    
+            try (PreparedStatement materialStmt = conn.prepareStatement("""
+                INSERT INTO materials (title, description, subject, college, course, file_url, 
+                                       filename, uploader_id, upload_date)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """)) {
+                materialStmt.setString(1, request.getMaterialName());
+                materialStmt.setString(2, request.getDescription());
+                materialStmt.setString(3, request.getSubject());
+                materialStmt.setString(4, request.getCollege());
+                materialStmt.setString(5, request.getCourse());
+                materialStmt.setString(6, fileUrl);
+                materialStmt.setString(7, modifiedFilename);
+                materialStmt.setString(8, userId);
+                materialStmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+                materialStmt.executeUpdate();
+            }
+    
+            // Update user points and retrieve updated points
+            int updatedPoints = 0; // Variable to hold updated points
+            try (PreparedStatement pointsStmt = conn.prepareStatement("""
+                UPDATE users SET points = points + 5 WHERE user_id = ? RETURNING points
+            """)) {
+                pointsStmt.setString(1, userId);
+                ResultSet rs = pointsStmt.executeQuery();
+                if (rs.next()) {
+                    updatedPoints = rs.getInt("points");
                 }
-            } catch (Exception e) {
-                conn.rollback();
-                throw e;
+            }
+    
+            // Evaluate and award badges based on updated points
+            BadgeService badgeService = new BadgeService();
+            List<Badge> awardedBadges = badgeService.evaluateAndAwardBadges(userId, updatedPoints);
+    
+            // Show badge notification if any badges were awarded
+            if (!awardedBadges.isEmpty()) {
+                showBadgeNotification(awardedBadges); // Use the awardedBadges variable here
+            }
+    
+            conn.commit(); // Commit the transaction
+    
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback(); // Rollback in case of error
+            }
+            throw e; // Rethrow the exception for further handling
+        } finally {
+            if (conn != null) {
+                conn.close(); // Ensure the connection is closed
+            }
+        }
+    }
+
+    private void showBadgeNotification(List<Badge> awardedBadges) {
+        for (Badge badge : awardedBadges) {
+            // Load FXML for the notification dialog
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/student/BadgeNotification.fxml"));
+                Parent root = loader.load();
+
+                // Set badge details in the controller
+                BadgeNotificationController controller = loader.getController();
+                controller.setBadgeDetails(badge.getName(), badge.getDescription());
+
+                // Create a new stage for the dialog
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Congratulations!");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private void uploadFileToSupabase(File file, String objectPath) throws Exception {
-        String uploadUrl = SUPABASE_URL + "/storage/v1/object/" +
-            SUPABASE_BUCKET_NAME + "/" + objectPath;
-
+        String uploadUrl = SUPABASE_URL + "/storage/v1/object/" + SUPABASE_BUCKET_NAME + "/" + objectPath;
         HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection();
-        connection.setRequestMethod("POST");  // Changed from PUT to POST
+        connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setRequestProperty("Authorization", "Bearer " + SUPABASE_ACCESS_KEY);
-        connection.setRequestProperty("Content-Type", "application/octet-stream");  // Changed content type
-        
-        // Add these headers
-        connection.setRequestProperty("x-upsert", "true");  // Allow overwriting if file exists
-        
-        // Get file size and set content length
-        long fileSize = file.length();
-        connection.setRequestProperty("Content-Length", String.valueOf(fileSize));
+        connection.setRequestProperty("Content-Type", "application/octet-stream");
+        connection.setRequestProperty("x-upsert", "true");
 
         try (FileInputStream fis = new FileInputStream(file);
-            OutputStream os = connection.getOutputStream()) {
-            
+             OutputStream os = connection.getOutputStream()) {
             byte[] buffer = new byte[8192];
             int bytesRead;
-            long totalBytesRead = 0;
-            
             while ((bytesRead = fis.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
-                totalBytesRead += bytesRead;
-                
-                // You could add progress tracking here if needed
-                double progress = (double) totalBytesRead / fileSize;
-                System.out.println("Upload progress: " + (progress * 100) + "%");
             }
-            os.flush();
         }
 
         int responseCode = connection.getResponseCode();
-        
-        // Print detailed error information
         if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
-            StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("Upload failed with response code: ").append(responseCode);
-            
-            // Try to read error stream
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getErrorStream()))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    errorMessage.append("\nError details: ").append(line);
-                }
-            } catch (Exception e) {
-                errorMessage.append("\nCould not read error details: ").append(e.getMessage());
-            }
-            
-            throw new Exception(errorMessage.toString());
-        }
-
-        // Check if file was actually uploaded
-        verifyFileUpload(uploadUrl);
-    }
-
-    private void verifyFileUpload(String uploadUrl) throws Exception {
-        HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection();
-        connection.setRequestMethod("HEAD");
-        connection.setRequestProperty("Authorization", "Bearer " + SUPABASE_ACCESS_KEY);
-        
-        int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new Exception("File upload verification failed. File might not have been uploaded correctly.");
+            throw new Exception("Upload failed with response code: " + responseCode);
         }
     }
 
-
-    private boolean saveMaterialToDatabase(Connection conn, String userId, MaterialUploadRequest request, 
-                                         String fileUrl, String filename) throws Exception {
+    public List<Material> getAllMaterials() {
+        List<Material> materials = new ArrayList<>();
         String query = """
-            INSERT INTO materials (title, description, subject, college, course, file_url, 
-                                 filename, uploader_id, upload_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """;
+            SELECT 
+                m.*,
+                u.first_name,
+                u.last_name,
+                COALESCE((SELECT COUNT(*) 
+                          FROM votes v 
+                          WHERE v.material_id = m.material_id AND v.vote_type = 'UPVOTE'), 0) as upvotes
+            FROM materials m
+            JOIN users u ON m.uploader_id = u.user_id
+            ORDER BY m.upload_date DESC
+        """;
 
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, request.getMaterialName());
-            stmt.setString(2, request.getDescription());
-            stmt.setString(3, request.getSubject());
-            stmt.setString(4, request.getCollege());
-            stmt.setString(5, request.getCourse());
-            stmt.setString(6, fileUrl);
-            stmt.setString(7, filename);
-            stmt.setString(8, userId);
-            stmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
-            return stmt.executeUpdate() > 0;
-        }
-    }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
-    private boolean updateUserPoints(Connection conn, String userId, int points) throws Exception {
-        String query = "UPDATE users SET points = points + ? WHERE user_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, points);
-            stmt.setString(2, userId);
-            return stmt.executeUpdate() > 0;
+            while (rs.next()) {
+                Material material = new Material(
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getString("subject"),
+                    rs.getString("college"),
+                    rs.getString("course"),
+                    rs.getString("uploader_id")
+                );
+                materials.add(material);
+            }
+
+            // Explicitly deallocate prepared statements
+            try (PreparedStatement deallocateStmt = conn.prepareStatement("DEALLOCATE ALL")) {
+                deallocateStmt.execute();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return materials;
     }
 
     private String generateFileName(String originalFilename) {
@@ -188,7 +221,6 @@ public class MaterialService {
         return datePart + timePart + "_" + originalFilename;
     }
 
-    // Inner classes remain the same
     public static class UserStats {
         private int points;
         private int materialsCount;
@@ -199,56 +231,6 @@ public class MaterialService {
         public void setMaterialsCount(int count) { this.materialsCount = count; }
     }
 
-    public List<Material> getAllMaterials() throws Exception {
-        List<Material> materials = new ArrayList<>();
-        String query = """
-            SELECT 
-                m.*,
-                u.first_name,
-                u.last_name,
-                COALESCE((
-                    SELECT COUNT(*) 
-                    FROM votes v 
-                    WHERE v.material_id = m.material_id 
-                    AND v.vote_type = 'UPVOTE'
-                ), 0) as upvotes
-            FROM materials m
-            JOIN users u ON m.uploader_id = u.user_id
-            ORDER BY m.upload_date DESC
-        """;
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                
-                // Set additional properties
-                material.setMaterialId(rs.getInt("material_id"));
-                material.setFileUrl(rs.getString("file_url"));
-                material.setFileName(rs.getString("filename"));
-                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                
-                // Set uploader name
-                String uploaderName = rs.getString("first_name") + " " + rs.getString("last_name");
-                material.setUploaderName(uploaderName);
-                
-                // Set vote count
-                material.setUpvotes(rs.getInt("upvotes"));
-
-                materials.add(material);
-            }
-        }
-        return materials;
-    }
     public static class MaterialUploadRequest {
         private final String materialName;
         private final String description;
@@ -256,9 +238,10 @@ public class MaterialService {
         private final String college;
         private final String course;
         private final File file;
-
+    
+        // Corrected constructor name
         public MaterialUploadRequest(String materialName, String description, String subject,
-                                   String college, String course, File file) {
+                                     String college, String course, File file) {
             this.materialName = materialName;
             this.description = description;
             this.subject = subject;
@@ -266,8 +249,7 @@ public class MaterialService {
             this.course = course;
             this.file = file;
         }
-
-        // Getters
+    
         public String getMaterialName() { return materialName; }
         public String getDescription() { return description; }
         public String getSubject() { return subject; }
