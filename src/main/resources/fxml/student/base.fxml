@@ -81,18 +81,6 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                 </Button>
-                <Button fx:id="contributionsButton" onAction="#handleContributions" prefHeight="32.0" prefWidth="259.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Contributions" textFill="WHITE">
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../images/icons/contributions_ffffff.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-                </Button>
                 <Button fx:id="collectionsButton" onAction="#handleCollections" prefHeight="32.0" prefWidth="238.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Collections" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
