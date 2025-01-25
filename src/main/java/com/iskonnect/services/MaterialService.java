@@ -186,11 +186,11 @@ public class MaterialService {
             JOIN users u ON m.uploader_id = u.user_id
             ORDER BY m.upload_date DESC
         """;
-
+    
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
-
+    
             while (rs.next()) {
                 Material material = new Material(
                     rs.getString("title"),
@@ -200,14 +200,23 @@ public class MaterialService {
                     rs.getString("course"),
                     rs.getString("uploader_id")
                 );
+                
+                // Add these kasi kulang
+                material.setMaterialId(rs.getInt("material_id"));
+                material.setFileUrl(rs.getString("file_url"));       
+                material.setFileName(rs.getString("filename"));       
+                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                material.setUpvotes(rs.getInt("upvotes"));          
+                
                 materials.add(material);
             }
-
+    
             // Explicitly deallocate prepared statements
             try (PreparedStatement deallocateStmt = conn.prepareStatement("DEALLOCATE ALL")) {
                 deallocateStmt.execute();
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
