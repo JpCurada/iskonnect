@@ -62,12 +62,16 @@ public class LeaderboardService {
         LeaderboardStats stats = new LeaderboardStats();
         String query = """
             SELECT 
-                COUNT(DISTINCT u.user_id) as contributors,
-                COUNT(DISTINCT m.material_id) as materials,
-                SUM(u.points) as total_points
-            FROM users u
-            LEFT JOIN materials m ON u.user_id = m.uploader_id
-            WHERE u.user_type = 'STUDENT'
+                (SELECT COUNT(DISTINCT user_id) 
+                 FROM users 
+                 WHERE user_type = 'STUDENT' AND 
+                       user_id IN (SELECT DISTINCT uploader_id FROM materials)
+                ) as contributors,
+                (SELECT COUNT(*) FROM materials) as materials,
+                (SELECT COALESCE(SUM(points), 0) 
+                 FROM users 
+                 WHERE user_type = 'STUDENT'
+                ) as total_points
             """;
 
         try (Connection conn = DatabaseConnection.getConnection();
