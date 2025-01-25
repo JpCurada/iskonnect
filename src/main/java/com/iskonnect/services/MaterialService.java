@@ -216,6 +216,10 @@ public class MaterialService {
                 material.setUpvotes(rs.getInt("upvotes"));          
                 
                 materials.add(material);
+
+                // Add this inside the while loop
+                System.out.println("Loading material: " + rs.getString("title"));
+                System.out.println("File URL: " + rs.getString("file_url"));
             }
     
             // Explicitly deallocate prepared statements

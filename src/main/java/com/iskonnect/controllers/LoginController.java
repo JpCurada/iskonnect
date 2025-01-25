@@ -7,13 +7,7 @@ import com.iskonnect.models.User;
 import com.iskonnect.services.UserService;
 import com.iskonnect.utils.UserSession;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import java.io.IOException;
+import javafx.scene.control.*;
 
 public class LoginController {
     @FXML private TextField emailField;
@@ -55,8 +49,9 @@ public class LoginController {
                         navigateToStudentInterface();
                     }
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Login Failed", 
-                        "Invalid email or password. Please try again.");
+                    showError("Login Failed", 
+                        "Invalid email or password.\n\n" +
+                        "Please check your credentials and try again.");
                 }
             } catch (Exception e) {
                 handleLoginError(e);
@@ -68,18 +63,33 @@ public class LoginController {
     private void switchToRegister() {
         try {
             Main.setLoginRoot("auth/register");
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
-                "Could not load registration page.");
+        } catch (Exception e) {
+            showError("Navigation Error", "Could not load registration page.");
             e.printStackTrace();
         }
     }
 
     private boolean validateInput(String email, String password) {
-        if (email.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all fields.");
+        if (email.isEmpty() && password.isEmpty()) {
+            showError("Validation Error", "Please enter both email and password.");
             return false;
         }
+        
+        if (email.isEmpty()) {
+            showError("Validation Error", "Please enter your email.");
+            return false;
+        }
+        
+        if (password.isEmpty()) {
+            showError("Validation Error", "Please enter your password.");
+            return false;
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            showError("Invalid Format", "Please enter a valid email address.");
+            return false;
+        }
+
         return true;
     }
 
@@ -87,39 +97,37 @@ public class LoginController {
         try {
             System.out.println("Loading student interface...");
             Main.setMainRoot();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Failed to load student interface: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
-                "Could not load student interface.");
+            showError("Navigation Error", "Could not load student interface.");
         }
     }
 
     private void navigateToAdminInterface() {
         try {
             System.out.println("Loading admin interface...");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/base.fxml"));
-            Scene scene = new Scene(loader.load(), 780, 460);
-            Main.getStage().setScene(scene);
-        } catch (IOException e) {
+            Main.setAdminRoot();
+        } catch (Exception e) {
             System.out.println("Failed to load admin interface: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", 
-                "Could not load admin interface.");
+            showError("Navigation Error", "Could not load admin interface.");
         }
     }
 
     private void handleLoginError(Exception e) {
-        showAlert(Alert.AlertType.ERROR, "Error", 
-            "An error occurred during login. Please try again.");
+        showError("System Error", 
+            "An unexpected error occurred during login.\n" +
+            "Please try again later.");
         e.printStackTrace();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    private void showError(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
+        alert.getDialogPane().setStyle("-fx-font-family: 'Segoe UI';");
         alert.showAndWait();
     }
 }
