@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -62,8 +63,13 @@ public class MaterialService {
     }
 
     public void uploadMaterial(String userId, MaterialUploadRequest request) throws Exception {
+        // Generate the filename with date and time
         String modifiedFilename = generateFileName(request.getFile().getName());
-        String objectPath = "reviewers/" + modifiedFilename;
+        
+        // URL encode the filename to handle spaces and special characters
+        String encodedFilename = encodeFilename(modifiedFilename);
+        
+        String objectPath = "reviewers/" + encodedFilename;
         String fileUrl = SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET_NAME + "/" + objectPath;
     
         uploadFileToSupabase(request.getFile(), objectPath);
@@ -84,7 +90,7 @@ public class MaterialService {
                 materialStmt.setString(4, request.getCollege());
                 materialStmt.setString(5, request.getCourse());
                 materialStmt.setString(6, fileUrl);
-                materialStmt.setString(7, modifiedFilename);
+                materialStmt.setString(7, encodedFilename); // Use the encoded filename
                 materialStmt.setString(8, userId);
                 materialStmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
                 materialStmt.executeUpdate();
@@ -228,6 +234,10 @@ public class MaterialService {
         String datePart = now.format(DateTimeFormatter.ofPattern("MMddyyyy"));
         String timePart = now.format(DateTimeFormatter.ofPattern("HHmm"));
         return datePart + timePart + "_" + originalFilename;
+    }
+
+    private String encodeFilename(String originalFilename) throws UnsupportedEncodingException {
+        return URLEncoder.encode(originalFilename, "UTF-8");
     }
 
     public static class UserStats {
