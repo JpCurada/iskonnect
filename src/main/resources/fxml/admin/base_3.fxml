@@ -9,12 +9,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminViewController">
+    <top>
+        <HBox prefHeight="34.0" prefWidth="780.0" BorderPane.alignment="CENTER" />
+    </top>
     <left>
-        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="167.0" spacing="20" BorderPane.alignment="CENTER">
+        <VBox prefHeight="426.0" prefWidth="189.0" spacing="20" BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="5.0" />
             </padding>
@@ -23,6 +25,11 @@
             <VBox prefHeight="50.0" prefWidth="193.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 15; -fx-padding: 10;">
             <HBox prefHeight="100.0" prefWidth="200.0">
                 <children>
+                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../../images/icons/profile_icon.png" />
+                        </image>
+                    </ImageView>
                     <VBox prefHeight="42.0" prefWidth="117.0" spacing="5.0">
                         <children>
                             <Text fx:id="adminNameText" style="-fx-font-weight: bold;" text="Admin Name" />
@@ -37,8 +44,8 @@
             </VBox>
 
             <!-- Navigation Buttons -->
-            <VBox prefHeight="110.0" prefWidth="150.0" spacing="8.0" VBox.vgrow="ALWAYS">
-                <Button fx:id="dashboardButton" onAction="#handleDashboard" prefHeight="32.0" prefWidth="160.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Dashboard" textFill="WHITE">
+            <VBox spacing="8.0">
+                <Button fx:id="dashboardButton" onAction="#handleDashboard" prefHeight="32.0" prefWidth="223.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Dashboard" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -50,7 +57,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="usersButton" onAction="#handleUsers" prefHeight="30.0" prefWidth="160.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Users" textFill="WHITE">
+                <Button fx:id="usersButton" onAction="#handleUsers" prefHeight="32.0" prefWidth="223.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Users" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -62,7 +69,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="reportsButton" onAction="#handleReports" prefHeight="32.0" prefWidth="160.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Reports" textFill="WHITE">
+                <Button fx:id="reportsButton" onAction="#handleReports" prefHeight="32.0" prefWidth="223.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Reports" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -77,9 +84,9 @@
             </VBox>
 
             <!-- Logout Section -->
-            <VBox alignment="BOTTOM_LEFT" prefHeight="205.0" prefWidth="123.0" spacing="10.0" VBox.vgrow="ALWAYS">
-                <Line endX="43.292877197265625" endY="0.09292374551296234" startX="-100" stroke="WHITE" />
-                <Button fx:id="logoutButton" alignment="BOTTOM_LEFT" onAction="#handleLogout" prefHeight="32.0" prefWidth="160.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE">
+            <VBox alignment="BOTTOM_CENTER" prefHeight="214.0" prefWidth="202.0" spacing="10.0">
+                <Line endX="100" startX="-100" stroke="WHITE" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="202.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -89,27 +96,9 @@
                     </graphic>
                 </Button>
             </VBox>
-         <BorderPane.margin>
-            <Insets top="30.0" />
-         </BorderPane.margin>
         </VBox>
     </left>
     <center>
-        <VBox fx:id="contentArea" prefHeight="426.0" prefWidth="610.0" style="-fx-background-color: #FEF9E1;" BorderPane.alignment="CENTER">
-         <children>
-              <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="558.0" style="-fx-border-color: #6d2323; -fx-border-width: 0 0 3 0;">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ADMIN">
-                     <font>
-                        <Font name="Arial Black" size="20.0" />
-                     </font>
-                  </Text>
-               </children>
-               <padding>
-                  <Insets right="18.0" />
-               </padding>
-            </HBox>
-            <VBox prefHeight="429.0" prefWidth="578.0" VBox.vgrow="ALWAYS" />
-         </children></VBox>
+        <VBox fx:id="contentArea" prefHeight="426.0" prefWidth="610.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>
