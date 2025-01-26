@@ -39,7 +39,7 @@
     </HBox>
 
     <!-- Table -->
-    <TableView fx:id="leaderboardTable" prefHeight="241.0" prefWidth="562.0" styleClass="leaderboard-table" VBox.vgrow="ALWAYS">
+    <TableView fx:id="leaderboardTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="leaderboard-table" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="rankColumn" prefWidth="60" text="Rank" />
             <TableColumn fx:id="nameColumn" prefWidth="200" text="Student" />
