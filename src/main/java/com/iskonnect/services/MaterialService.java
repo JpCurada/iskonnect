@@ -81,7 +81,7 @@ public class MaterialService {
     
             try (PreparedStatement materialStmt = conn.prepareStatement("""
                 INSERT INTO materials (title, description, subject, college, course, file_url, 
-                                       filename, uploader_id, upload_date)
+                                       uploader_id, upload_date, filename)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """)) {
                 materialStmt.setString(1, request.getMaterialName());
@@ -90,11 +90,12 @@ public class MaterialService {
                 materialStmt.setString(4, request.getCollege());
                 materialStmt.setString(5, request.getCourse());
                 materialStmt.setString(6, fileUrl);
-                materialStmt.setString(7, encodedFilename); // Use the encoded filename
-                materialStmt.setString(8, userId);
-                materialStmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+                materialStmt.setString(7, userId); // This matches the uploader_id column
+                materialStmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now())); // Matches upload_date column
+                materialStmt.setString(9, encodedFilename); // Matches filename column
                 materialStmt.executeUpdate();
             }
+            
     
             // Update user points and retrieve updated points
             int updatedPoints = 0; // Variable to hold updated points

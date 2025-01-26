@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="15" styleClass="dialog-content" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.iskonnect.controllers.MaterialDetailsDialogController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <VBox spacing="5">
+        <Label text="Material Name" styleClass="label-header"/>
+        <Label fx:id="titleLabel" styleClass="label-content" wrapText="true"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Description" styleClass="label-header"/>
+        <Label fx:id="descriptionLabel" styleClass="label-content" wrapText="true"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Subject" styleClass="label-header"/>
+        <Label fx:id="subjectLabel" styleClass="label-content"/>
+    </VBox>
+
+    <HBox spacing="20">
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label text="Uploader" styleClass="label-header"/>
+            <Label fx:id="uploaderLabel" styleClass="label-content"/>
+        </VBox>
+        
+        <VBox spacing="5">
+            <Label text="Highest Badge" styleClass="label-header"/>
+            <Label fx:id="badgeLabel" styleClass="label-content"/>
+        </VBox>
+        
+        <VBox spacing="5">
+            <Label text="Votes" styleClass="label-header"/>
+            <Label fx:id="votesLabel" styleClass="label-content"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="reportButton" text="Report" onAction="#handleReport" styleClass="report-button"/>
+        <Button fx:id="downloadButton" text="Download" onAction="#handleDownload" styleClass="download-button"/>
+    </HBox>
+</VBox>

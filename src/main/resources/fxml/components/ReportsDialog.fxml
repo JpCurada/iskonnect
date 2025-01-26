@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" styleClass="report-dialog" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iskonnect.controllers.ReportDialogController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Why do you want to report this material?" styleClass="dialog-header"/>
+    
+    <ComboBox fx:id="reasonComboBox" promptText="Select a reason" maxWidth="Infinity"/>
+    
+    <TextArea fx:id="additionalInfoArea" promptText="Additional information (optional)" 
+              wrapText="true" prefRowCount="3"/>
+              
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel" styleClass="cancel-button"/>
+        <Button text="Submit Report" onAction="#handleSubmit" styleClass="submit-button"/>
+    </HBox>
+</VBox>

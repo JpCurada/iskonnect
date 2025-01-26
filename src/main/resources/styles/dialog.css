@@ -1,0 +1,43 @@
+// Path: src/main/resources/styles/dialog.css
+
+.dialog-content {
+    -fx-background-color: white;
+}
+
+.label-header {
+    -fx-font-weight: bold;
+    -fx-text-fill: #666666;
+}
+
+.label-content {
+    -fx-font-size: 14;
+}
+
+.report-button {
+    -fx-background-color: #FF5252;
+    -fx-text-fill: white;
+}
+
+.download-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.report-dialog {
+    -fx-background-color: white;
+}
+
+.dialog-header {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.submit-button {
+    -fx-background-color: #A31D1D;
+    -fx-text-fill: white;
+}
+
+.cancel-button {
+    -fx-background-color: #666666;
+    -fx-text-fill: white;
+}

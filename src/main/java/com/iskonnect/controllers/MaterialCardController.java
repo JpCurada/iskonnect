@@ -7,9 +7,14 @@ import com.iskonnect.models.Vote;
 import com.iskonnect.services.VoteService;
 import com.iskonnect.utils.UserSession;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 import java.awt.Desktop;
 import java.net.URI;
 
@@ -77,14 +82,26 @@ public class MaterialCardController {
     
     private void openMaterial() {
         try {
-            Desktop.getDesktop().browse(new URI(material.getFileUrl()));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/MaterialDetailsDialog.fxml"));
+            Scene scene = new Scene(loader.load());
+            
+            MaterialDetailsDialogController controller = loader.getController();
+            controller.setMaterial(material);
+            
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Material Details");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setScene(scene);
+            
+            controller.setDialogStage(dialogStage);
+            dialogStage.showAndWait();
+            
         } catch (Exception e) {
+            showError("Error opening material details");
             e.printStackTrace();
-            // Show error alert
-            showError("Failed to open material");
         }
     }
-    
+        
     private void showError(String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
             javafx.scene.control.Alert.AlertType.ERROR
