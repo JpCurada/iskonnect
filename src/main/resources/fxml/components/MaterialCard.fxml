@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Priority?>
+
+<VBox fx:id="cardContainer" spacing="10" styleClass="material-card" 
+      xmlns="http://javafx.com/javafx/23.0.1" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.iskonnect.controllers.MaterialCardController">
+    <padding>
+        <Insets bottom="15" left="15" right="15" top="15" />
+    </padding>
+    
+    <!-- Title -->
+    <Label fx:id="titleLabel" styleClass="title-label" wrapText="true" VBox.vgrow="ALWAYS"/>
+    
+    <!-- Subject -->
+    <Label fx:id="subjectLabel" styleClass="subject-label" />
+    
+    <!-- Tags -->
+    <HBox fx:id="tagsContainer" spacing="5">
+        <Label fx:id="collegeTag" styleClass="tag, college-tag" />
+        <Label fx:id="courseTag" styleClass="tag, course-tag" />
+    </HBox>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <!-- Contributor -->
+        <Label fx:id="contributorLabel" styleClass="contributor-label" HBox.hgrow="ALWAYS"/>
+        
+        <!-- Vote Section -->
+        <HBox fx:id="voteContainer" spacing="5" alignment="CENTER_RIGHT">
+            <Button fx:id="upvoteButton" text="↑" styleClass="vote-button" />
+            <Label fx:id="voteCountLabel" styleClass="vote-count" />
+        </HBox>
+    </HBox>
+</VBox>

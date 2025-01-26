@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import com.iskonnect.utils.DatabaseConnection;
+
 import java.io.IOException;
 
 public class Main extends Application {
@@ -41,7 +43,6 @@ public class Main extends Application {
         Scene scene = new Scene(loadFXML("admin/base"), 780, 460);
         stage.setScene(scene);
     }
-    
 
     private static Parent loadFXML(String fxml) throws IOException {
         String resourcePath = "/fxml/" + fxml + ".fxml";
@@ -54,6 +55,13 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        // Add a shutdown hook to close the Hikari connection pool
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down connection pool...");
+            DatabaseConnection.closePool();
+        }));
+
+        // Launch the JavaFX application
         launch();
     }
 }

@@ -1,36 +1,39 @@
-/* Path: src/main/resources/styles/home.css */
+// Path: src/main/resources/styles/home.css
 
-/* Card styles */
+/* Material Card Styles */
 .material-card {
     -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);
-    -fx-padding: 15;
-    -fx-spacing: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-min-width: 200;
     -fx-cursor: hand;
-    -fx-border-radius: 8;
 }
 
 .material-card:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 4);
     -fx-translate-y: -2;
-    -fx-transition: all 0.2s ease-in-out;
 }
 
-/* Preview image styles */
-.preview-image {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 4;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);
+.title-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
 }
 
-/* Tag styles */
-.tag {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 12;
-    -fx-padding: 5 10;
-    -fx-font-size: 11;
+.subject-label {
     -fx-text-fill: #666666;
+    -fx-font-size: 12;
+}
+
+.contributor-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 12;
+}
+
+.tag {
+    -fx-background-color: #F5F5F5;
+    -fx-padding: 4 8;
+    -fx-background-radius: 12;
+    -fx-font-size: 11;
 }
 
 .college-tag {
@@ -43,43 +46,11 @@
     -fx-text-fill: #7B1FA2;
 }
 
-/* Search field styles */
-.search-field {
-    -fx-background-color: white;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-border-color: #ddd;
-    -fx-padding: 8 15;
-}
-
-.search-field:focused {
-    -fx-border-color: #A31D1D;
-    -fx-effect: dropshadow(gaussian, rgba(163,29,29,0.1), 5, 0, 0, 0);
-}
-
-/* Button styles */
-.primary-button {
-    -fx-background-color: #A31D1D;
-    -fx-text-fill: white;
-    -fx-background-radius: 20;
-    -fx-padding: 8 20;
-    -fx-cursor: hand;
-}
-
-.primary-button:hover {
-    -fx-background-color: #8B1818;
-}
-
-.primary-button:pressed {
-    -fx-background-color: #761515;
-}
-
-/* Vote button styles */
 .vote-button {
     -fx-background-color: transparent;
     -fx-text-fill: #A31D1D;
     -fx-font-weight: bold;
-    -fx-padding: 5;
+    -fx-padding: 4 8;
     -fx-cursor: hand;
 }
 
@@ -92,23 +63,6 @@
     -fx-text-fill: #761515;
 }
 
-/* Scroll pane styles */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
-    -fx-padding: 0;
-}
-
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-pane > .scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-padding: 0 0 0 5;
-}
-
-.scroll-pane > .scroll-bar:vertical > .thumb {
-    -fx-background-color: #ddd;
-    -fx-background-radius: 5;
+.vote-count {
+    -fx-font-weight: bold;
 }

@@ -8,23 +8,15 @@ import com.iskonnect.services.MaterialService;
 import com.iskonnect.services.VoteService;
 import com.iskonnect.utils.UserSession;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.awt.Desktop;
-import java.net.URI;
-import java.io.IOException;
-
-
 
 public class HomeController {
     @FXML private Text dateText;
@@ -35,7 +27,6 @@ public class HomeController {
     private MaterialService materialService;
     private VoteService voteService;
     private List<Material> materials;
-    private Map<Integer, Boolean> userVotes = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -51,10 +42,8 @@ public class HomeController {
         // Load materials
         loadMaterials();
         
-        // Add search listener
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterMaterials(newValue);
-        });
+        // Add enter key handler for search
+        searchField.setOnAction(e -> handleSearch());
     }
 
     private void loadMaterials() {
@@ -85,77 +74,16 @@ public class HomeController {
     }
 
     private VBox createMaterialCard(Material material) {
-        VBox card = new VBox(10);
-        card.getStyleClass().add("material-card");
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-        card.setPadding(new Insets(15));
-        card.setAlignment(Pos.TOP_LEFT);
-
-        // Preview Image Placeholder
-        ImageView preview = new ImageView(new Image(getClass().getResourceAsStream("/images/placeholder.png")));
-        preview.setFitWidth(200);
-        preview.setFitHeight(120);
-        preview.setStyle("-fx-background-color: #f0f0f0; -fx-background-radius: 5;");
-
-        // Tags
-        HBox tags = new HBox(5);
-        Label collegeTag = createTag(material.getCollege());
-        Label courseTag = createTag(material.getCourse());
-        tags.getChildren().addAll(collegeTag, courseTag);
-
-        // Material Name
-        Label name = new Label(material.getTitle());
-        name.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-        name.setWrapText(true);
-
-        // Contributor
-        Label contributor = new Label("By " + material.getUploaderId());
-        contributor.setStyle("-fx-text-fill: #666666; -fx-font-size: 12;");
-
-        // Upvote Section
-        HBox voteBox = createVoteBox(material);
-
-        // Add click handler to open material
-        card.setOnMouseClicked(e -> openMaterial(material.getFileUrl()));
-
-        card.getChildren().addAll(preview, tags, name, contributor, voteBox);
-        return card;
-    }
-
-    private Label createTag(String text) {
-        Label tag = new Label(text);
-        tag.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 5 10; -fx-background-radius: 15; -fx-font-size: 11;");
-        return tag;
-    }
-
-    private HBox createVoteBox(Material material) {
-        HBox voteBox = new HBox(5);
-        voteBox.setAlignment(Pos.CENTER_LEFT);
-
-        Button upvoteBtn = new Button("↑");
-        upvoteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #A31D1D; -fx-font-weight: bold;");
-        
-        Label voteCount = new Label(String.valueOf(voteService.getVoteCount(material.getMaterialId())));
-        voteCount.setStyle("-fx-font-weight: bold;");
-
-        upvoteBtn.setOnAction(e -> {
-            e.consume(); // Prevent card click
-            handleVote(material, voteCount);
-        });
-
-        voteBox.getChildren().addAll(upvoteBtn, voteCount);
-        return voteBox;
-    }
-
-    private void handleVote(Material material, Label voteCount) {
-        int materialId = material.getMaterialId();
-        boolean hasVoted = userVotes.getOrDefault(materialId, false);
-        
-        String voteType = hasVoted ? "DOWNVOTE" : "UPVOTE";
-        if (voteService.addVote(new Vote(materialId, UserSession.getInstance().getUserId(), voteType))) {
-            int newCount = Integer.parseInt(voteCount.getText()) + (hasVoted ? -1 : 1);
-            voteCount.setText(String.valueOf(newCount));
-            userVotes.put(materialId, !hasVoted);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/MaterialCard.fxml"));
+            VBox card = loader.load();
+            MaterialCardController cardController = loader.getController();
+            cardController.setMaterial(material);
+            return card;
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to create material card");
+            return new VBox();
         }
     }
 
@@ -168,7 +96,8 @@ public class HomeController {
         List<Material> filtered = materials.stream()
             .filter(m -> m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
                         m.getCollege().toLowerCase().contains(searchText.toLowerCase()) ||
-                        m.getCourse().toLowerCase().contains(searchText.toLowerCase()))
+                        m.getCourse().toLowerCase().contains(searchText.toLowerCase()) ||
+                        m.getSubject().toLowerCase().contains(searchText.toLowerCase()))
             .toList();
         
         displayMaterials(filtered);
@@ -176,16 +105,16 @@ public class HomeController {
 
     @FXML
     private void handleSearch() {
-        filterMaterials(searchField.getText());
+        String searchText = searchField.getText();
+        filterMaterials(searchText);
     }
 
-    private void openMaterial(String fileUrl) {
-        try {
-            Desktop.getDesktop().browse(new URI(fileUrl));
-        } catch (Exception e) {
-            showError("Failed to open material");
-            e.printStackTrace();
-        }
+    @FXML
+    private void handleRefresh() {
+        // Clear search field
+        searchField.clear();
+        // Reload all materials
+        loadMaterials();
     }
 
     private void showError(String message) {
