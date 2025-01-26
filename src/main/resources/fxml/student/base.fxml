@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.StudentViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.StudentViewController">
     <top>
         <HBox prefHeight="34.0" prefWidth="780.0" BorderPane.alignment="CENTER" />
     </top>
@@ -85,7 +85,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../images/icons/collections_fffff.png" />
+                                <Image url="@../../images/icons/collections_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
