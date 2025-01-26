@@ -1,70 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iskonnect.controllers.BadgeNotificationController"
-            styleClass="notification-panel"
-            style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8F9FA);
-                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
-                   -fx-background-radius: 8px;
-                   -fx-border-radius: 8px;
-                   -fx-border-color: #E9ECEF;
-                   -fx-border-width: 1px;">
-
-    <VBox spacing="15" 
-          alignment="CENTER"
-          AnchorPane.topAnchor="20"
-          AnchorPane.leftAnchor="20"
-          AnchorPane.rightAnchor="20"
-          AnchorPane.bottomAnchor="20">
-
-        <!-- Badge Icon -->
-        <ImageView fx:id="badgeIcon" 
-                   fitHeight="64" 
-                   fitWidth="64"
-                   preserveRatio="true">
-            <Image url="@../../images/ISKONNECT_TRANSPARENT.png"/>
-        </ImageView>
-
-        <!-- Congratulations Text -->
-        <Label text="Achievement Unlocked!" 
-               style="-fx-font-size: 18px;
-                      -fx-font-weight: bold;
-                      -fx-text-fill: #2D3748;"/>
-
-        <!-- Badge Name -->
-        <Label fx:id="badgeNameLabel" 
-               style="-fx-font-size: 24px;
-                      -fx-font-weight: bold;
-                      -fx-text-fill: #4A5568;
-                      -fx-text-alignment: center;
-                      -fx-wrap-text: true;"/>
-
-        <!-- Badge Description -->
-        <Label fx:id="badgeDescriptionLabel"
-               wrapText="true"
-               style="-fx-font-size: 14px;
-                      -fx-text-fill: #718096;
-                      -fx-text-alignment: center;
-                      -fx-padding: 0 10 0 10;"/>
-
-        <!-- OK Button -->
-        <Button text="Awesome!"
-                onAction="#handleOk"
-                style="-fx-background-color: #4299E1;
-                       -fx-text-fill: white;
-                       -fx-font-size: 14px;
-                       -fx-padding: 10 30;
-                       -fx-background-radius: 20;
-                       -fx-cursor: hand;">
-            <VBox.margin>
-                <Insets top="10"/>
-            </VBox.margin>
-        </Button>
-    </VBox>
+<AnchorPane prefHeight="300.0" prefWidth="250.0" style="-fx-background-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#801818" layoutX="4.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Badge Unlocked!" textAlignment="CENTER" wrappingWidth="241.98203241825104">
+         <font>
+            <Font name="Segoe UI Bold" size="18.0" />
+         </font>
+      </Text>
+      <Button id="signUpButton" fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="251.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="59.0" style="-fx-background-color: #801818; -fx-background-radius: 7;" text="Back to Home" textAlignment="CENTER" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="7.0" />
+         </font>
+      </Button>
+      <Text accessibleRole="HYPERLINK" fill="#909090" layoutX="22.0" layoutY="230.0" onMouseClicked="#showLoginStage" strokeType="OUTSIDE" strokeWidth="0.0" text="You’ve done an awesome job uploading materials to ISKOnnect! Your contributions are making a difference." textAlignment="CENTER" wrappingWidth="208.7805688381195">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="7.0" />
+         </font>
+      </Text>
+      <Text fill="#801818" layoutX="1.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are now a &lt;badge name&gt;" textAlignment="CENTER" wrappingWidth="248.9154430627823">
+         <font>
+            <Font name="Segoe UI Bold" size="10.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="53.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/icons/logout_ffffff.png" />
+         </image>
+      </ImageView>
+   </children>
 </AnchorPane>

@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.StudentViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="780.0" style="-fx-background-color: #A31D1D;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.StudentViewController">
     <top>
         <HBox prefHeight="34.0" prefWidth="780.0" BorderPane.alignment="CENTER" />
     </top>
@@ -44,7 +44,7 @@
             </VBox>
 
             <!-- Navigation Buttons -->
-            <VBox spacing="8.0">
+            <VBox spacing="8.0" VBox.vgrow="ALWAYS">
                 <Button fx:id="homeButton" onAction="#handleHome" prefHeight="32.0" prefWidth="223.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Home" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -85,7 +85,7 @@
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../images/icons/collections_fffff.png" />
+                                <Image url="@../../images/icons/collections_ffffff.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -98,7 +98,7 @@
             <!-- Push Logout Button and Line to the Bottom -->
             <VBox alignment="BOTTOM_CENTER" prefHeight="137.0" prefWidth="202.0" spacing="10.0">
                 <Line endX="100" startX="-100" stroke="WHITE" />
-                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="202.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE">
+                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="32.0" prefWidth="202.0" style="-fx-border-radius: 50; -fx-background-radius: 50 0 0 50; -fx-alignment: CENTER_LEFT;" styleClass="hover-button" stylesheets="@../../styles/style.css" text="Logout" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -106,6 +106,9 @@
                             </image>
                         </ImageView>
                     </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                 </Button>
             </VBox>
         </VBox>
