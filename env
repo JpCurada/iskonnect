@@ -1,0 +1,9 @@
+# Database Configuration
+DB_URL=jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+DB_USER=postgres.nhepnvpgxzfexwuswyyw
+DB_PASSWORD=55Oj5Y4Z6mH9hmhC
+
+# Supabase Configuration
+SUPABASE_URL=https://nhepnvpgxzfexwuswyyw.supabase.co
+SUPABASE_BUCKET_NAME=iskonnect-materials
+SUPABASE_ACCESS_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXBudnBneHpmZXh3dXN3eXl3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNjMzMjQwMCwiZXhwIjoyMDUxOTA4NDAwfQ.01Hz0wmOizrB9N4hOlYjcBO9HmLFSzCrW04oPWOEXT0
