@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox spacing="15" styleClass="report-dialog" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.iskonnect.controllers.ReportDialogController">
+<VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-radius: 8;" styleClass="report-dialog" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.ReportDialogController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-
-    <Label text="Why do you want to report this material?" styleClass="dialog-header"/>
+   <HBox prefHeight="0.0" prefWidth="556.0" style="-fx-alignment: left;">
+      <children>
+         <ImageView fitHeight="31.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../images/icons/warning_801818.png" />
+            </image>
+            <HBox.margin>
+               <Insets right="5.0" />
+            </HBox.margin>
+         </ImageView>
+      
+                <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="dialog-header" text="Why do you want to report this material?" textFill="#801818">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
     
-    <ComboBox fx:id="reasonComboBox" promptText="Select a reason" maxWidth="Infinity"/>
+    <ComboBox fx:id="reasonComboBox" maxWidth="Infinity" promptText="Select a reason" style="-fx-background-color: transparent; -fx-border-color: #E0E0E0; -fx-background-radius: 4; -fx-border-radius: 4;">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor></ComboBox>
     
-    <TextArea fx:id="additionalInfoArea" promptText="Additional information (optional)" 
-              wrapText="true" prefRowCount="3"/>
+    <TextArea fx:id="additionalInfoArea" prefRowCount="3" promptText="Additional information (optional)" wrapText="true">
+      <font>
+         <Font size="14.0" />
+      </font></TextArea>
               
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Cancel" onAction="#handleCancel" styleClass="cancel-button"/>
-        <Button text="Submit Report" onAction="#handleSubmit" styleClass="submit-button"/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button onAction="#handleCancel" style="-fx-background-color: #801818;" styleClass="cancel-button" text="Cancel" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+        <Button onAction="#handleSubmit" style="-fx-background-color: #801818;" styleClass="submit-button" text="Report" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
     </HBox>
 </VBox>
