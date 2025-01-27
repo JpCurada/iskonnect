@@ -23,12 +23,15 @@
           AnchorPane.rightAnchor="20"
           AnchorPane.bottomAnchor="20">
 
-        <!-- Badge Icon -->
+        <!-- Dynamic Badge Logo -->
         <ImageView fx:id="badgeIcon" 
-                   fitHeight="64" 
-                   fitWidth="64"
+                   fitHeight="150.0" 
+                   fitWidth="200.0" 
+                   pickOnBounds="true" 
                    preserveRatio="true">
-            <Image url="@../../images/ISKONNECT_TRANSPARENT.png"/>
+            <VBox.margin>
+                <Insets bottom="10"/>
+            </VBox.margin>
         </ImageView>
 
         <!-- Congratulations Text -->

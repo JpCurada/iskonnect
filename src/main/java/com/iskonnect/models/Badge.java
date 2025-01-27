@@ -4,12 +4,14 @@ public class Badge {
     private int intBadgeId;
     private String strName;
     private String strDescription;
-    private String strImageUrl;
+    private String strImageUrl; // Add this field
     private int intRequirementPoints;
 
-    public Badge(String strName, String strDescription, int intRequirementPoints) {
+    // Updated constructor to include imageUrl
+    public Badge(String strName, String strDescription, String strImageUrl, int intRequirementPoints) {
         this.strName = strName;
         this.strDescription = strDescription;
+        this.strImageUrl = strImageUrl; // Initialize this field
         this.intRequirementPoints = intRequirementPoints;
     }
 
@@ -17,7 +19,7 @@ public class Badge {
     public int getBadgeId() { return intBadgeId; }
     public String getName() { return strName; }
     public String getDescription() { return strDescription; }
-    public String getImageUrl() { return strImageUrl; }
+    public String getImageUrl() { return strImageUrl; } // Add this getter
     public int getRequirementPoints() { return intRequirementPoints; }
 
     // Setters
