@@ -7,11 +7,13 @@ import com.iskonnect.models.Material;
 import com.iskonnect.services.MaterialService;
 import com.iskonnect.services.VoteService;
 import com.iskonnect.utils.UserSession;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -23,6 +25,9 @@ public class HomeController {
     @FXML private Text firstNameText;
     @FXML private TextField searchField;
     @FXML private GridPane materialsGrid;
+    @FXML private Text welcomeText;
+    @FXML private Text greetingText;
+    @FXML private Text questionMark;
 
     private MaterialService materialService;
     private VoteService voteService;
@@ -32,18 +37,66 @@ public class HomeController {
     public void initialize() {
         materialService = new MaterialService();
         voteService = new VoteService();
-        
+
         // Set current date
         dateText.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d")));
-        
+
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
-        
+
+        //make text responsive
+        dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                makeResponsive(dateText, newScene, 50, null, 14, 18);
+            }
+        });
+
+        welcomeText.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                makeResponsive(welcomeText, newScene, 30, "-fx-font-weight: bold;", 20, 28);
+            }
+        });
+
+        greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                makeResponsive(greetingText, newScene, 50, null, 12, 16);
+            }
+        });
+
+        greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                makeResponsive(questionMark, newScene, 50, null, 12, 16);
+            }
+        });
+
+        firstNameText.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                makeResponsive(firstNameText, newScene, 50, "-fx-font-weight: bold;", 12, 16);
+            }
+        });
+
         // Load materials
         loadMaterials();
-        
+
         // Add enter key handler for search
         searchField.setOnAction(e -> handleSearch());
+    }
+
+    private void makeResponsive(javafx.scene.Node node, Scene scene, double divisor, String additionalStyle, double minFontSize, double maxFontSize) {
+        node.styleProperty().bind(
+                Bindings.createStringBinding(
+                        () -> {
+                            double baseSize = scene.getWidth() / divisor;
+                            double size = Math.min(Math.max(baseSize, minFontSize), maxFontSize); // Min 12px, Max 28px
+                            String style = String.format("-fx-font-size: %.2fpx;", size);
+                            if (additionalStyle != null) {
+                                style += additionalStyle;
+                            }
+                            return style;
+                        },
+                        scene.widthProperty()
+                )
+        );
     }
 
     private void loadMaterials() {
