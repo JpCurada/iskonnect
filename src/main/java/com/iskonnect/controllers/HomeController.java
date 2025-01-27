@@ -53,7 +53,7 @@ public class HomeController {
         //hello isko
         welcomeText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                makeResponsive(welcomeText, newScene, 30, "-fx-font-weight: bold;", 20, 28);
+                makeResponsive(welcomeText, newScene, 40, "-fx-font-weight: bold;", 20, 30);
             }
         });
         //kamusta
