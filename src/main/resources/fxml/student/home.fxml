@@ -18,12 +18,12 @@
 
     <!-- Header Section -->
     <VBox spacing="5">
-        <Text fx:id="dateText" fill="#666666" />
-        <Text style="-fx-font-size: 24; -fx-font-weight: bold;" text="Hello, Isko" />
-        <HBox alignment="CENTER_LEFT">
-            <Text text="Kumusta araw mo, " />
-            <Text fx:id="firstNameText" style="-fx-font-weight: bold;" text="name" />
-            <Text text="?" />
+        <Text fx:id="dateText" fill="#666666" text="date" VBox.vgrow="ALWAYS"/>
+        <Text fx:id="welcomeText" text="Hello, Isko" VBox.vgrow="ALWAYS"/>
+        <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+            <Text fx:id="greetingText" text="Kumusta araw mo, " HBox.hgrow="ALWAYS"/>
+            <Text fx:id="firstNameText" style="-fx-font-weight: bold;" text="name" HBox.hgrow="ALWAYS"/>
+            <Text fx:id = "questionMark" text="?" HBox.hgrow="ALWAYS"/>
         </HBox>
     </VBox>
 
