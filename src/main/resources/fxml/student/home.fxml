@@ -4,18 +4,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.text.Text?>
 
-<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;"
-      styleClass="content-panel"
-      stylesheets="@../../styles/home.css,@../../styles/shared.css" 
-      xmlns="http://javafx.com/javafx/23.0.1" 
-      xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.iskonnect.controllers.HomeController">
+<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/home.css,@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.HomeController">
     
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
@@ -34,16 +29,12 @@
 
     <!-- Search Bar -->
     <HBox alignment="CENTER_RIGHT" spacing="10">
-        <TextField fx:id="searchField" prefWidth="300" 
-                  promptText="Ano ang hanap mo?" 
-                  style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #ddd;" />
-        <Button onAction="#handleSearch" 
-                style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 20;" 
-                text="Search" />
+        <TextField fx:id="searchField" prefWidth="300" promptText="Ano ang hanap mo?" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #ddd;" />
+        <Button onAction="#handleSearch" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 20;" text="Search" />
     </HBox>
 
     <!-- Materials Grid -->
-    <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
         <content>
             <GridPane fx:id="materialsGrid" hgap="15" vgap="15">
                 <padding>
