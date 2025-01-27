@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -47,5 +48,8 @@
             <TableColumn fx:id="materialsColumn" prefWidth="100" text="Materials" />
             <TableColumn fx:id="badgesColumn" prefWidth="100" text="Badges" />
         </columns>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
     </TableView>
 </VBox>

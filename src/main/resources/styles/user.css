@@ -1,0 +1,34 @@
+.table-view .column-header {
+    -fx-background-color: #E5D0AC;
+    -fx-border-color: #E5D0AC;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-column-cell{
+    -fx-background-color: white;
+
+}
+
+/* Change background color of selected row */
+.table-row-cell:filled:selected {
+    -fx-background-color: #F5D0AC;
+    -fx-text-fill:black
+
+}
+
+/* Optional: Adjust hover color */
+.table-row-cell:filled:hover {
+    -fx-background-color: #F5D0AC;
+    -fx-text-fill:black
+}
+
+/* Optional: Focused row selection */
+.table-row-cell:filled:selected:focused {
+    -fx-background-color: #F5D0AC;
+    -fx-text-fill:black
+}
+
+.table-view .table-column-cell{
+    -fx-alignment: CENTER; 
+}
+
