@@ -59,14 +59,13 @@ public class HomeController {
     }
 
     private void makeAllTextResponsive(Scene scene) {
-        // Base scaling factor (adjust 800 for desired responsiveness)
         double baseWidth = 1000; // Reference width for scaling
         scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double scalingFactor = newWidth.doubleValue() / baseWidth; // Calculate scaling factor
+            double scalingFactor = newWidth.doubleValue() / baseWidth;
 
-            // Update font sizes proportionally with additional styling
+            //update font sizes proportionally
             setTextSize(dateText, scalingFactor, 14, 18, null);
-            setTextSize(welcomeText, scalingFactor, 20, 30, "-fx-font-weight: bold;");
+            setTextSize(welcomeText, scalingFactor, 20, 60, "-fx-font-weight: bold;");
             setTextSize(greetingText, scalingFactor, 12, 16, null);
             setTextSize(questionMark, scalingFactor, 12, 16, null);
             setTextSize(firstNameText, scalingFactor, 12, 16, "-fx-font-weight: bold;");
