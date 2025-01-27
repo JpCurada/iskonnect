@@ -1,5 +1,3 @@
-// Path: src/main/java/com/iskonnect/controllers/LoginController.java
-
 package com.iskonnect.controllers;
 
 import com.iskonnect.application.Main;
@@ -12,19 +10,26 @@ import javafx.scene.control.*;
 public class LoginController {
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
+    @FXML private TextField visiblePasswordField; // TextField for showing password
     @FXML private Button loginButton;
+    @FXML private CheckBox showPasswordCheckBox;
 
     private UserService userService;
 
     @FXML
     private void initialize() {
         userService = new UserService();
+        
+        // Add listener to the checkbox to toggle password visibility
+        showPasswordCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            togglePasswordVisibility(newValue);
+        });
     }
 
     @FXML
     private void handleLogin() {
         String email = emailField.getText().trim();
-        String password = passwordField.getText();
+        String password = passwordField.isVisible() ? passwordField.getText() : visiblePasswordField.getText(); // Get password from the visible field if shown
     
         if (validateInput(email, password)) {
             try {
@@ -129,5 +134,22 @@ public class LoginController {
         alert.setContentText(content);
         alert.getDialogPane().setStyle("-fx-font-family: 'Segoe UI';");
         alert.showAndWait();
+    }
+
+    // Method to toggle password visibility
+    private void togglePasswordVisibility(boolean isVisible) {
+        if (isVisible) {
+            // Show password
+            visiblePasswordField.setText(passwordField.getText()); // Set the text of the visible field
+            passwordField.setVisible(false); // Hide the password field
+            visiblePasswordField.setVisible(true); // Show the text field
+            visiblePasswordField.requestFocus(); // Set focus to the text field
+        } else {
+            // Hide password
+            passwordField .setText(visiblePasswordField.getText()); // Set the text of the password field
+            visiblePasswordField.setVisible(false); // Hide the text field
+            passwordField.setVisible(true); // Show the password field
+            passwordField.requestFocus(); // Set focus back to the password field
+        }
     }
 }
