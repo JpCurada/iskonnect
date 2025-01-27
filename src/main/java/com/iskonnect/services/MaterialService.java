@@ -187,17 +187,17 @@ public class MaterialService {
                 u.first_name,
                 u.last_name,
                 COALESCE((SELECT COUNT(*) 
-                          FROM votes v 
-                          WHERE v.material_id = m.material_id AND v.vote_type = 'UPVOTE'), 0) as upvotes
+                        FROM votes v 
+                        WHERE v.material_id = m.material_id AND v.vote_type = 'UPVOTE'), 0) as upvotes
             FROM materials m
             JOIN users u ON m.uploader_id = u.user_id
             ORDER BY m.upload_date DESC
         """;
-    
+
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-    
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 Material material = new Material(
                     rs.getString("title"),
@@ -208,26 +208,17 @@ public class MaterialService {
                     rs.getString("uploader_id")
                 );
                 
-                // Add these kasi kulang
+                // Make sure we set the uploader's full name
+                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
                 material.setMaterialId(rs.getInt("material_id"));
                 material.setFileUrl(rs.getString("file_url"));       
                 material.setFileName(rs.getString("filename"));       
-                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
                 material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
                 material.setUpvotes(rs.getInt("upvotes"));          
                 
                 materials.add(material);
+            }
 
-                // Add this inside the while loop
-                System.out.println("Loading material: " + rs.getString("title"));
-                System.out.println("File URL: " + rs.getString("file_url"));
-            }
-    
-            // Explicitly deallocate prepared statements
-            try (PreparedStatement deallocateStmt = conn.prepareStatement("DEALLOCATE ALL")) {
-                deallocateStmt.execute();
-            }
-    
         } catch (SQLException e) {
             e.printStackTrace();
         }

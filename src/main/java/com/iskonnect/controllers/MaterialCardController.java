@@ -54,7 +54,7 @@ public class MaterialCardController {
         subjectLabel.setText(material.getSubject());
         collegeTag.setText(material.getCollege());
         courseTag.setText(material.getCourse());
-        contributorLabel.setText("By " + material.getUploaderId());
+        contributorLabel.setText("By " + material.getUploaderName());
         voteCountLabel.setText(String.valueOf(voteService.getVoteCount(material.getMaterialId())));
     }
 
