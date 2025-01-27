@@ -23,22 +23,42 @@ public class RegisterController {
     private UserService userService = new UserService();
 
     @FXML
-    private void handleRegister() {
-        if (validateAllInputs()) {
-            Student newStudent = new Student(
-                studentNumberField.getText(),
-                firstNameField.getText(),
-                lastNameField.getText(),
-                emailField.getText()
-            );
+private void handleRegister() {
+    if (validateAllInputs()) {
+        // Format first name and last name to proper case
+        String formattedFirstName = toProperCase(firstNameField.getText());
+        String formattedLastName = toProperCase(lastNameField.getText());
 
-            if (userService.registerUser(newStudent, passwordField.getText())) {
-                showSuccess("Registration successful!");
-                switchToLogin();
-            } else {
-                showError("Registration failed", "There was an error during registration. Please try again.");
+        Student newStudent = new Student(
+            studentNumberField.getText(),
+            formattedFirstName, // Use formatted first name
+            formattedLastName,   // Use formatted last name
+            emailField.getText()
+        );
+
+        if (userService.registerUser (newStudent, passwordField.getText())) {
+            showSuccess("Registration successful!");
+            switchToLogin();
+        } else {
+            showError("Registration failed", "There was an error during registration. Please try again.");
+        }
+    }
+}
+
+    private String toProperCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input; // Return as is if null or empty
+        }
+        String[] words = input.split(" ");
+        StringBuilder properCased = new StringBuilder();
+        for (String word : words) {
+            if (word.length() > 0) {
+                properCased.append(Character.toUpperCase(word.charAt(0))); // Capitalize first letter
+                properCased.append(word.substring(1).toLowerCase()); // Lowercase the rest
+                properCased.append(" "); // Add space between words
             }
         }
+        return properCased.toString().trim(); // Remove trailing space
     }
 
     private boolean validateAllInputs() {
