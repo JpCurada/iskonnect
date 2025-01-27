@@ -1,5 +1,3 @@
-// Path: src/main/java/com/iskonnect/services/BadgeService.java
-
 package com.iskonnect.services;
 
 import com.iskonnect.models.Badge;
@@ -12,27 +10,29 @@ public class BadgeService {
     public List<Badge> getUserBadges(String userId) {
         List<Badge> badges = new ArrayList<>();
         String query = """
-            SELECT b.* FROM badges b
+            SELECT b.name, b.description, b.image_url, b.requirement_points 
+            FROM badges b
             JOIN user_badges ub ON b.badge_id = ub.badge_id
             WHERE ub.user_id = ?
             ORDER BY b.requirement_points DESC
         """;
-
+    
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-
+    
             stmt.setString(1, userId);
-
+    
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     badges.add(new Badge(
                         rs.getString("name"),
                         rs.getString("description"),
+                        rs.getString("image_url"), // Now correctly referencing image_url from badges
                         rs.getInt("requirement_points")
                     ));
                 }
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,6 +83,7 @@ public class BadgeService {
                     badges.add(new Badge(
                         rs.getString("name"),
                         rs.getString("description"),
+                        rs.getString("image_url"),
                         rs.getInt("requirement_points")
                     ));
                 }
@@ -96,24 +97,29 @@ public class BadgeService {
 
     public List<Badge> evaluateAndAwardBadges(String userId, int currentPoints) {
         List<Badge> newlyAwardedBadges = new ArrayList<>();
+        
+        // Define the badge query to select eligible badges
         String badgeQuery = """
-            SELECT badge_id, name, description, requirement_points FROM badges
-            WHERE requirement_points <= ?
-            AND badge_id NOT IN (
+            SELECT b.badge_id, b.name, b.description, b.image_url, b.requirement_points 
+            FROM badges b
+            WHERE b.requirement_points <= ?
+            AND b.badge_id NOT IN (
                 SELECT badge_id FROM user_badges WHERE user_id = ?
             )
         """;
+    
+        // Define the award query to insert a new badge for the user
         String awardQuery = "INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)";
-
+    
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
-
+    
             try (PreparedStatement badgeStmt = conn.prepareStatement(badgeQuery);
                  PreparedStatement awardStmt = conn.prepareStatement(awardQuery)) {
                 
                 badgeStmt.setInt(1, currentPoints);
                 badgeStmt.setString(2, userId);
-
+    
                 ResultSet rs = badgeStmt.executeQuery();
                 while (rs.next()) {
                     int badgeId = rs.getInt("badge_id");
@@ -127,18 +133,19 @@ public class BadgeService {
                     newlyAwardedBadges.add(new Badge(
                         rs.getString("name"),
                         rs.getString("description"),
+                        rs.getString("image_url"),
                         rs.getInt("requirement_points")
                     ));
                 }
-
+    
                 awardStmt.executeBatch();
                 conn.commit();
-
+    
             } catch (SQLException e) {
                 conn.rollback();
                 throw e;
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }

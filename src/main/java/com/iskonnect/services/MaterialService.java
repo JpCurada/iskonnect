@@ -141,7 +141,7 @@ public class MaterialService {
 
                 // Set badge details in the controller
                 BadgeNotificationController controller = loader.getController();
-                controller.setBadgeDetails(badge.getName(), badge.getDescription());
+                controller.setBadgeDetails(badge.getName(), badge.getDescription(), badge.getImageUrl());
 
                 // Create a new stage for the dialog
                 Stage stage = new Stage();
