@@ -31,18 +31,18 @@
                <VBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="263.0">
                   <children>
                        <!-- Contributor -->
-                       <Label fx:id="contributorLabel" prefHeight="18.0" prefWidth="153.0" styleClass="contributor-label" text="contributor" textFill="WHITE" />
+                       <Label fx:id="contributorLabel" prefHeight="18.0" prefWidth="150.0" styleClass="contributor-label" text="contributor" textFill="WHITE" />
                   </children>
                </VBox>
                <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="135.0">
                   <children>
                        
                        <!-- Vote Section -->
-                       <HBox fx:id="voteContainer" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="49.0" spacing="5">
+                       <HBox fx:id="voteContainer" alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="65.0">
                         <children>
-                           <Button minWidth="35.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="38.0" style="-fx-background-color: transparent;">
+                           <Button layoutX="10.0" layoutY="11.0" minWidth="31.0" prefHeight="31.0" style="-fx-background-color: transparent;" styleClass="vote-button">
                               <graphic>
-                                 <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                        <Image url="@../../images/icons/bookmark-unfilled.png" />
                                     </image>
@@ -54,7 +54,7 @@
                            </Button>
                               <Button fx:id="upvoteButton" minWidth="31.0" prefHeight="31.0" style="-fx-background-color: transparent;" styleClass="vote-button">
                               <graphic>
-                                 <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <ImageView fitHeight="24.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                        <Image url="@../../images/icons/upvote-unfilled.png" />
                                     </image>
