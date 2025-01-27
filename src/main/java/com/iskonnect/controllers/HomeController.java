@@ -50,25 +50,25 @@ public class HomeController {
                 makeResponsive(dateText, newScene, 50, null, 14, 18);
             }
         });
-
+        //hello isko
         welcomeText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeResponsive(welcomeText, newScene, 30, "-fx-font-weight: bold;", 20, 28);
             }
         });
-
+        //kamusta
         greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeResponsive(greetingText, newScene, 50, null, 12, 16);
             }
         });
-
+        //?
         greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeResponsive(questionMark, newScene, 50, null, 12, 16);
             }
         });
-
+        //fname
         firstNameText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeResponsive(firstNameText, newScene, 50, "-fx-font-weight: bold;", 12, 16);
@@ -87,7 +87,7 @@ public class HomeController {
                 Bindings.createStringBinding(
                         () -> {
                             double baseSize = scene.getWidth() / divisor;
-                            double size = Math.min(Math.max(baseSize, minFontSize), maxFontSize); // Min 12px, Max 28px
+                            double size = Math.min(Math.max(baseSize, minFontSize), maxFontSize);
                             String style = String.format("-fx-font-size: %.2fpx;", size);
                             if (additionalStyle != null) {
                                 style += additionalStyle;
