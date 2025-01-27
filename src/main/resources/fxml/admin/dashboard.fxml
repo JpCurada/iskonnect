@@ -1,16 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!-- Path: src/main/resources/fxml/admin/dashboard.fxml -->
+
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" 
-      xmlns="http://javafx.com/javafx/23.0.1" 
-      xmlns:fx="http://javafx.com/fxml/1" 
+<VBox spacing="20" style="-fx-background-color: #FEF9E1;" 
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.iskonnect.controllers.AdminDashboardController">
+      
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="20" left="20" right="20" top="20"/>
     </padding>
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Dashboard Overview" />
+
+    <!-- Statistics Cards -->
+    <HBox spacing="15">
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="Total Students" style="-fx-text-fill: #666666;"/>
+            <Label fx:id="totalStudentsLabel" text="0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"/>
+        </VBox>
+
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="Total Materials" style="-fx-text-fill: #666666;"/>
+            <Label fx:id="totalMaterialsLabel" text="0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"/>
+        </VBox>
+
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="Reported Materials" style="-fx-text-fill: #666666;"/>
+            <Label fx:id="reportedMaterialsLabel" text="0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"/>
+        </VBox>
+    </HBox>
+
+    <!-- Charts Grid -->
+    <GridPane hgap="15" vgap="15">
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="Top 10 Most Upvoted Materials" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+            <BarChart fx:id="topMaterialsChart" legendVisible="false">
+                <xAxis><NumberAxis side="BOTTOM" label="Upvotes"/></xAxis>
+                <yAxis><CategoryAxis side="LEFT"/></yAxis>
+            </BarChart>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="Student Contribution Distribution" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+            <PieChart fx:id="userDistributionChart"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="Top 10 Most Upvoted Contributors" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+            <BarChart fx:id="topContributorsChart" legendVisible="false">
+                <xAxis><NumberAxis side="BOTTOM" label="Received Upvotes"/></xAxis>
+                <yAxis><CategoryAxis side="LEFT"/></yAxis>
+            </BarChart>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="Materials Distribution by College" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+            <BarChart fx:id="collegeDistributionChart" legendVisible="false">
+                <xAxis><NumberAxis side="BOTTOM" label="Number of Materials"/></xAxis>
+                <yAxis><CategoryAxis side="LEFT"/></yAxis>
+            </BarChart>
+        </VBox>
+    </GridPane>
 </VBox>
