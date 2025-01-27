@@ -44,34 +44,10 @@ public class HomeController {
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
 
-        //make text responsive
+        // Make text responsive
         dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                makeResponsive(dateText, newScene, 50, null, 14, 18);
-            }
-        });
-        //hello isko
-        welcomeText.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                makeResponsive(welcomeText, newScene, 40, "-fx-font-weight: bold;", 20, 30);
-            }
-        });
-        //kamusta
-        greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                makeResponsive(greetingText, newScene, 50, null, 12, 16);
-            }
-        });
-        //?
-        greetingText.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                makeResponsive(questionMark, newScene, 50, null, 12, 16);
-            }
-        });
-        //fname
-        firstNameText.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                makeResponsive(firstNameText, newScene, 50, "-fx-font-weight: bold;", 12, 16);
+                makeAllTextResponsive(newScene);
             }
         });
 
@@ -82,21 +58,30 @@ public class HomeController {
         searchField.setOnAction(e -> handleSearch());
     }
 
-    private void makeResponsive(javafx.scene.Node node, Scene scene, double divisor, String additionalStyle, double minFontSize, double maxFontSize) {
-        node.styleProperty().bind(
-                Bindings.createStringBinding(
-                        () -> {
-                            double baseSize = scene.getWidth() / divisor;
-                            double size = Math.min(Math.max(baseSize, minFontSize), maxFontSize);
-                            String style = String.format("-fx-font-size: %.2fpx;", size);
-                            if (additionalStyle != null) {
-                                style += additionalStyle;
-                            }
-                            return style;
-                        },
-                        scene.widthProperty()
-                )
-        );
+    private void makeAllTextResponsive(Scene scene) {
+        // Base scaling factor (adjust 800 for desired responsiveness)
+        double baseWidth = 1000; // Reference width for scaling
+        scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double scalingFactor = newWidth.doubleValue() / baseWidth; // Calculate scaling factor
+
+            // Update font sizes proportionally with additional styling
+            setTextSize(dateText, scalingFactor, 14, 18, null);
+            setTextSize(welcomeText, scalingFactor, 20, 30, "-fx-font-weight: bold;");
+            setTextSize(greetingText, scalingFactor, 12, 16, null);
+            setTextSize(questionMark, scalingFactor, 12, 16, null);
+            setTextSize(firstNameText, scalingFactor, 12, 16, "-fx-font-weight: bold;");
+        });
+    }
+
+    private void setTextSize(javafx.scene.text.Text textNode, double scalingFactor, double minFontSize, double maxFontSize, String additionalStyle) {
+        double computedSize = Math.min(Math.max(16 * scalingFactor, minFontSize), maxFontSize); // Compute scaled size
+        String style = String.format("-fx-font-size: %.2fpx;", computedSize);
+
+        if (additionalStyle != null) {
+            style += additionalStyle;
+        }
+
+        textNode.setStyle(style);
     }
 
     private void loadMaterials() {
