@@ -39,13 +39,26 @@ public class Main extends Application {
     public static void setMainRoot() throws IOException {
         try {
             System.out.println("Loading main interface...");
-            Scene scene = new Scene(loadFXML("student/base"), 780, 460);
+            Parent root = loadFXML("student/base");
+            Scene scene = new Scene(root);
             stage.setScene(scene);
+            
             // Make main interface resizable
             stage.setResizable(true);
-            // Set minimum dimensions but allow resizing
+            // Set minimum dimensions
             stage.setMinWidth(780);
             stage.setMinHeight(460);
+            // Allow maximizing
+            stage.setMaximized(false); // Reset maximized state
+            stage.setMaxWidth(Double.MAX_VALUE);
+            stage.setMaxHeight(Double.MAX_VALUE);
+            
+            // Set initial size
+            if (!stage.isMaximized()) {
+                stage.setWidth(780);
+                stage.setHeight(460);
+            }
+            
             System.out.println("Main interface loaded successfully");
         } catch (IOException e) {
             System.out.println("Error loading main interface: " + e.getMessage());
@@ -54,13 +67,25 @@ public class Main extends Application {
     }
 
     public static void setAdminRoot() throws IOException {
-        Scene scene = new Scene(loadFXML("admin/base"), 780, 460);
+        Parent root = loadFXML("admin/base");
+        Scene scene = new Scene(root);
         stage.setScene(scene);
+        
         // Make admin interface resizable
         stage.setResizable(true);
-        // Set minimum dimensions but allow resizing
+        // Set minimum dimensions
         stage.setMinWidth(780);
         stage.setMinHeight(460);
+        // Allow maximizing
+        stage.setMaximized(false); // Reset maximized state
+        stage.setMaxWidth(Double.MAX_VALUE);
+        stage.setMaxHeight(Double.MAX_VALUE);
+        
+        // Set initial size
+        if (!stage.isMaximized()) {
+            stage.setWidth(780);
+            stage.setHeight(460);
+        }
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
@@ -74,13 +99,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        // Add a shutdown hook to close the Hikari connection pool
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down connection pool...");
             DatabaseConnection.closePool();
         }));
-
-        // Launch the JavaFX application
         launch();
     }
 }
