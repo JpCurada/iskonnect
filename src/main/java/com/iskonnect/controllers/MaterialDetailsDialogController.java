@@ -1,17 +1,21 @@
-// Path: src/main/java/com/iskonnect/controllers/MaterialDetailsDialogController.java
-
 package com.iskonnect.controllers;
 
 import com.iskonnect.models.Material;
 import com.iskonnect.services.BadgeService;
+import com.iskonnect.services.VoteService; // Import VoteService
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.awt.Desktop;
 import java.net.URI;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MaterialDetailsDialogController {
     @FXML private Label titleLabel;
@@ -25,7 +29,9 @@ public class MaterialDetailsDialogController {
 
     private Material material;
     private BadgeService badgeService;
+    private VoteService voteService; // Add VoteService
     private Stage dialogStage;
+    private ScheduledExecutorService voteUpdateService; // Scheduled service for vote updates
 
     public void setMaterial(Material material) {
         this.material = material;
@@ -35,6 +41,7 @@ public class MaterialDetailsDialogController {
     @FXML
     private void initialize() {
         badgeService = new BadgeService();
+        voteService = new VoteService(); // Initialize VoteService
     }
 
     private void updateContent() {
@@ -83,6 +90,8 @@ public class MaterialDetailsDialogController {
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
+        dialogStage.setOnCloseRequest(event -> stopVoteUpdateService()); // Stop service on close
+        startVoteUpdateService(); // Start service when dialog is set
     }
 
     private void showError(String message) {
@@ -91,5 +100,21 @@ public class MaterialDetailsDialogController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // Start the vote update service
+    public void startVoteUpdateService() {
+        voteUpdateService = Executors.newScheduledThreadPool(1);
+        voteUpdateService.scheduleAtFixedRate(() -> {
+            int updatedVoteCount = voteService.getVoteCount(material.getMaterialId());
+            Platform.runLater(() -> votesLabel.setText(String.valueOf(updatedVoteCount)));
+        }, 0, 5, TimeUnit.SECONDS); // Update every 5 seconds
+    }
+
+    // Stop the vote update service
+    public void stopVoteUpdateService() {
+        if (voteUpdateService != null) {
+            voteUpdateService.shutdownNow();
+        }
     }
 }
