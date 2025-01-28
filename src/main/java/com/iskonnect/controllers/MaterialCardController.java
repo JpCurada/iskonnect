@@ -56,6 +56,17 @@ public class MaterialCardController {
         this.material = material;
         updateCard();
         checkBookmarkState();
+        updateVoteIconState(); // New method to update the vote icon based on the user's vote
+    }
+    
+    private void updateVoteIconState() {
+        String userId = UserSession.getInstance().getUserId();
+        if (voteService.voteExists(material.getMaterialId(), userId)) {
+            String currentVoteType = voteService.getVoteType(material.getMaterialId(), userId);
+            updateVoteIcon(currentVoteType.equals("UPVOTE")); // Set icon based on current vote type
+        } else {
+            updateVoteIcon(false); // No vote, set to unfilled
+        }
     }
 
     private void updateCard() {
@@ -74,13 +85,38 @@ public class MaterialCardController {
     }
 
     private void handleVote() {
-        String voteType = "UPVOTE";
-        if (voteService.addVote(new Vote(material.getMaterialId(), 
-                                       UserSession.getInstance().getUserId(), 
-                                       voteType))) {
-            int currentVotes = Integer.parseInt(voteCountLabel.getText());
-            voteCountLabel.setText(String.valueOf(currentVotes + 1));
-            updateVoteIcon(true);
+        String userId = UserSession.getInstance().getUserId();
+        String voteType = "UPVOTE"; // Assume this is the intended action
+    
+        // Check if the user has already voted
+        if (voteService.voteExists(material.getMaterialId(), userId)) {
+            // If they have voted, check the current vote type
+            String currentVoteType = voteService.getVoteType(material.getMaterialId(), userId); // You need to implement this method
+            if (currentVoteType.equals("UPVOTE")) {
+                // User is trying to upvote again, remove the upvote
+                if (voteService.removeVote(material.getMaterialId(), userId)) {
+                    int currentVotes = Integer.parseInt(voteCountLabel.getText());
+                    voteCountLabel.setText(String.valueOf(currentVotes - 1)); // Decrease the vote count
+                    updateVoteIcon(false); // Update the icon to indicate no vote
+                }
+            } else {
+                // User has downvoted, change to upvote
+                voteType = "UPVOTE";
+                Vote vote = new Vote(material.getMaterialId(), userId, voteType);
+                if (voteService.updateVote(vote)) {
+                    int currentVotes = Integer.parseInt(voteCountLabel.getText());
+                    voteCountLabel.setText(String.valueOf(currentVotes + 1)); // Increase the vote count
+                    updateVoteIcon(true); // Update the icon to indicate an upvote
+                }
+            }
+        } else {
+            // User has not voted yet, add the vote
+            Vote vote = new Vote(material.getMaterialId(), userId, voteType);
+            if (voteService.addVote(vote)) {
+                int currentVotes = Integer.parseInt(voteCountLabel.getText());
+                voteCountLabel.setText(String.valueOf(currentVotes + 1)); // Increase the vote count
+                updateVoteIcon(true); // Update the icon to indicate an upvote
+            }
         }
     }
 
