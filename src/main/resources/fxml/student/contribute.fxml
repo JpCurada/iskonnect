@@ -52,7 +52,7 @@
               <HBox spacing="15">
                   <VBox spacing="5" HBox.hgrow="ALWAYS">
                       <Label style="-fx-text-fill: #666666;" text="Subject" />
-                      <TextField fx:id="subjectField" promptText="Enter subject" style="-fx-background-radius: 4; -fx-border-color: #E0E0E0; -fx-border-radius: 4; -fx-background-color: transparent;" />
+                      <TextField fx:id="subjectField" maxWidth="1.7976931348623157E308" prefWidth="100.0" promptText="Enter subject" style="-fx-background-radius: 4; -fx-border-color: #E0E0E0; -fx-border-radius: 4; -fx-background-color: transparent;" />
                   </VBox>
                   <VBox spacing="5" HBox.hgrow="ALWAYS">
                       <Label style="-fx-text-fill: #666666;" text="College" />
