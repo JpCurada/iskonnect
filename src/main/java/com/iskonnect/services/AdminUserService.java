@@ -55,14 +55,16 @@ public class AdminUserService {
             "DELETE FROM votes WHERE material_id IN (SELECT material_id FROM materials WHERE uploader_id = ?)",  // Delete votes on user's materials
             "DELETE FROM reports WHERE reporter_id = ?",        // Delete reports made by user
             "DELETE FROM reports WHERE material_id IN (SELECT material_id FROM materials WHERE uploader_id = ?)", // Delete reports on user's materials
+            "DELETE FROM bookmarks WHERE user_id = ?",          // Delete user's bookmarks
+            "DELETE FROM bookmarks WHERE material_id IN (SELECT material_id FROM materials WHERE uploader_id = ?)", // Delete bookmarks on user's materials
             "DELETE FROM user_badges WHERE user_id = ?",        // Delete user's badges
             "DELETE FROM materials WHERE uploader_id = ?",      // Delete user's materials
-            "DELETE FROM users WHERE user_id = ?",             // Delete the user first
+            "DELETE FROM users WHERE user_id = ?",             // Delete the user
             "DELETE FROM user_credentials WHERE user_id = ?"   // Then delete credentials
         };
-
+    
         try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Start transaction
             try {
                 // Execute each delete query in order
                 for (String query : queries) {
@@ -71,13 +73,13 @@ public class AdminUserService {
                         stmt.executeUpdate();
                     }
                 }
-                
-                conn.commit();
+    
+                conn.commit(); // Commit the transaction
                 return true;
             } catch (SQLException e) {
-                conn.rollback();
+                conn.rollback(); // Rollback if any step fails
                 throw e;
             }
         }
-    }
+    }    
 }
