@@ -25,18 +25,16 @@
 .table-view .column-header-background {
     -fx-background-color: #E5D0AC;
     -fx-background-radius: 10 10 0 0;
-    /*-fx-padding: 0 10 0 0;*/
 }
 
 .table-view .column-header {
     -fx-background-color: transparent;
-    /*-fx-border-color: transparent;*/
 }
 
 /* Align header text to the left */
 .table-view .column-header .label {
-    -fx-alignment: CENTER-LEFT; /* Aligns text to the left */
-    -fx-padding: 0 0 0 10; /* Adds left padding for spacing */
+    -fx-alignment: CENTER-LEFT; /* text to the left */
+    -fx-padding: 0 0 0 10; /* left padding for spacing */
     -fx-text-fill: black;
     -fx-font-weight: bold;
 }
@@ -48,7 +46,6 @@
     -fx-background-radius: 10;
     -fx-background-insets: 2;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0.5, 0, 1);
-    /*-fx-table-cell-border-color: transparent;*/
 }
 .scroll-pane {
     -fx-background-color: transparent;
@@ -57,31 +54,21 @@
     -fx-background-insets: 0;
 }
 
-/* Add this new style to ensure proper cell rendering */
+/* ensure proper cell rendering */
 .table-cell {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    /*-fx-padding: 0 10;*/
 }
 
 .table-view {
     -fx-background-color: transparent;
-    -fx-padding: 5 15 5 5; /* Add extra padding on the right side */
+    -fx-padding: 5 15 5 5; /* padding on the right side */
     -fx-border-color: transparent;
     -fx-background-radius: 10;
 }
 
-.table-row-cell:filled:odd {
-    -fx-background-color: #f8f8f8;
-    /*-fx-background-radius: 10;*/
-    /*-fx-background-insets: 2 10 2 10; !* Match the regular row insets *!*/
-}
-
-.table-row-cell:filled:hover {
-    -fx-background-color: #EFEFEF;
-    /*-fx-background-radius: 10;*/
-    /*-fx-background-insets: 2 10 2 10; !* Match the regular row insets *!*/
-}
+.table-row-cell:filled:odd {-fx-background-color: #f8f8f8;}
+.table-row-cell:filled:hover {-fx-background-color: #EFEFEF;}
 
 /* Rank styling */
 .rank-1 { -fx-background-color: #FFE082; }
@@ -91,7 +78,7 @@
 
 /* Scrollbar Styling */
 .table-view .scroll-bar {
-    -fx-background-color: transparent; /* Make scrollbar background transparent */
+    -fx-background-color: transparent;
 }
 
 .table-view .scroll-bar:vertical,
@@ -100,31 +87,29 @@
     -fx-pref-width: 0;
 }
 
-.table-view .scroll-bar .thumb {
-    -fx-background-color: #E5D0AC; /* Scrollbar thumb color */
-    -fx-background-radius: 7; /* Rounded scrollbar thumb */
+/* Column header styling */
+.table-view .column-header,
+.table-view .column-header-background {
+    -fx-background-color: #E5D0AC;
+    -fx-background-radius: 10 10 0 0;
 }
 
-.table-view .scroll-bar .thumb:hover {
-    -fx-background-color: #D5B28C; /* Darker thumb color on hover */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
 }
 
-/* Hide the vertical scrollbar space */
-.table-view .virtual-flow .scroll-bar:vertical {
-    -fx-pref-width: 0;
-    -fx-opacity: 0;
-    -fx-max-width: 0;
+/* cells don't clip the rounded corners */
+.table-row-cell > .table-cell {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+/* Wrapper styling */
+.table-wrapper {
+    -fx-background-color: transparent;
+    -fx-padding: 0 10 0 10; /* horizontal padding */
 }
 
-/* Hide the horizontal scrollbar space */
-.table-view .virtual-flow .scroll-bar:horizontal {
-    -fx-pref-height: 0;
-    -fx-opacity: 0;
-    -fx-max-height: 0;
-}
-
-
-/* Make the viewport transparent */
+/* viewport transparent */
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
@@ -145,26 +130,4 @@
 
 .custom-scroll-pane > .viewport {
     -fx-background-color: transparent;
-}
-
-/* Column header styling */
-.table-view .column-header,
-.table-view .column-header-background {
-    -fx-background-color: #E5D0AC;
-    -fx-background-radius: 10 10 0 0;
-}
-
-.table-view .column-header-background .filler {
-    -fx-background-color: transparent;
-}
-
-/* Make sure the cells don't clip the rounded corners */
-.table-row-cell > .table-cell {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
-/* Wrapper styling */
-.table-wrapper {
-    -fx-background-color: transparent;
-    -fx-padding: 0 10 0 10; /* Add horizontal padding */
 }
