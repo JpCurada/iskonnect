@@ -3,6 +3,7 @@
 <!-- Path: src/main/resources/fxml/admin/dashboard.fxml -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -54,12 +55,18 @@
                             <yAxis>
                            <CategoryAxis side="LEFT" />
                         </yAxis>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                         </BarChart>
                     </VBox>
                
                                                                                                                                                                                                         <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Student Contribution Distribution" />
-                        <PieChart fx:id="userDistributionChart" />
+                        <PieChart fx:id="userDistributionChart">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor></PieChart>
                     </VBox>
                
                                                                                                                                                                                             <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" GridPane.columnIndex="0" GridPane.rowIndex="1">
@@ -71,6 +78,9 @@
                             <yAxis>
                            <CategoryAxis side="LEFT" />
                         </yAxis>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                         </BarChart>
                     </VBox>
                
@@ -83,6 +93,9 @@
                             <yAxis>
                            <CategoryAxis side="LEFT" />
                         </yAxis>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                         </BarChart>
                     </VBox>
                   <columnConstraints>
