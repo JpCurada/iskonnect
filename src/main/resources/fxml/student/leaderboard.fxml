@@ -3,13 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<!--<?import javafx.scene.layout.VBox?>-->
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="contentArea" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" stylesheets="@/styles/leaderboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.LeaderboardController">
+<VBox fx:id="contentArea" prefHeight="610.0" prefWidth="720.0" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" stylesheets="@/styles/leaderboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.LeaderboardController">
 
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
@@ -38,18 +39,27 @@
             <Text fx:id="totalPointsText" style="-fx-font-weight: bold; -fx-fill: #A31D1D;" text="0" />
         </VBox>
     </HBox>
-
-    <!-- Table -->
-    <TableView fx:id="leaderboardTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="leaderboard-table" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="rankColumn" prefWidth="60" text="Rank" />
-            <TableColumn fx:id="nameColumn" prefWidth="200" text="Student" />
-            <TableColumn fx:id="pointsColumn" prefWidth="100" text="Points" />
-            <TableColumn fx:id="materialsColumn" prefWidth="100" text="Materials" />
-            <TableColumn fx:id="badgesColumn" prefWidth="100" text="Badges" />
-        </columns>
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-    </TableView>
+   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+      <content>
+      
+          <!-- Table -->
+          <StackPane styleClass="table-wrapper">
+          <TableView fx:id="leaderboardTable" styleClass="leaderboard-table" >
+              <columns>
+                  <TableColumn fx:id="rankColumn" prefWidth="60" text="Rank" />
+                  <TableColumn fx:id="nameColumn" prefWidth="200" text="Student" />
+                  <TableColumn fx:id="pointsColumn" prefWidth="100" text="Points" />
+                  <TableColumn fx:id="materialsColumn" prefWidth="100" text="Materials" />
+                  <TableColumn fx:id="badgesColumn" prefWidth="100" text="Badges" />
+              </columns>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+          </TableView>
+          </StackPane>
+      </content>
+   </ScrollPane>
 </VBox>
