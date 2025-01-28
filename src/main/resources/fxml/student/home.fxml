@@ -20,26 +20,16 @@
     <!-- Header Section -->
     <VBox spacing="5">
         <Text fx:id="dateText" styleClass="homeText" fill="#666666" text="date" VBox.vgrow="ALWAYS">
-         <font>
-            <Font size="16.0" />
-         </font></Text>
-        <Text fx:id="welcomeText" styleClass="homeText" fill="#a31d1d" text="Hello, Isko" VBox.vgrow="ALWAYS">
-         <font>
-            <Font name="System Bold" size="44.7" />
-         </font></Text>
+         </Text>
+        <Text fx:id="welcomeText" fill="#a31d1d" text="Hello, Isko" VBox.vgrow="ALWAYS">
+         </Text>
         <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
-            <Text fx:id="greetingText" styleClass="homeText" text="Kumusta ang araw mo, " HBox.hgrow="ALWAYS">
-            <font>
-               <Font size="20.0" />
-            </font></Text>
-            <Text fx:id="firstNameText" styleClass="homeText" text="name" HBox.hgrow="ALWAYS">
-            <font>
-               <Font size="20.0" />
-            </font></Text>
-            <Text fx:id="questionMark" styleClass="homeText" text="?" wrappingWidth="81.37891864776611" HBox.hgrow="ALWAYS">
-            <font>
-               <Font size="20.0" />
-            </font></Text>
+            <Text fx:id="greetingText" styleClass="greeting" text="Kumusta ang araw mo, " HBox.hgrow="ALWAYS">
+            </Text>
+            <Text fx:id="firstNameText" styleClass="greeting" text="name" HBox.hgrow="ALWAYS">
+            </Text>
+            <Text fx:id="questionMark" styleClass="greeting" text="?" wrappingWidth="81.37891864776611" HBox.hgrow="ALWAYS">
+            </Text>
       
           <!-- Search Bar -->
           <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="263.0" spacing="10" HBox.hgrow="ALWAYS">

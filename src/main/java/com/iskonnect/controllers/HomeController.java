@@ -15,6 +15,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
+import java.io.InputStream;
+
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -41,9 +43,21 @@ public class HomeController {
 
         // Load font
         try {
-            Font.loadFont(getClass().getResourceAsStream("fonts/Poppins-Regular.ttf"), 10);
+            InputStream regularFont = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
+            InputStream lightFont = getClass().getResourceAsStream("/fonts/Poppins-Light.ttf");
+            InputStream blackFont = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
+
+            if (regularFont == null || lightFont == null || blackFont == null) {
+                throw new IOException("One or more font files could not be found.");
+            }
+
+            Font.loadFont(regularFont, 10);
+            Font.loadFont(lightFont, 10);
+            Font.loadFont(blackFont, 10);
+
         } catch (Exception e) {
             System.err.println("Could not load font: " + e.getMessage());
+            e.printStackTrace();
         }
 
         // Set current date
@@ -81,19 +95,19 @@ public class HomeController {
         double scalingFactor = width / 1000.0; //base width for scaling
 
         //store styles in variables to maintain consistency
-        welcomeText.setStyle(String.format("-fx-font-size: %.2fpx;",
+        welcomeText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Bold'",
                 Math.min(Math.max(45 * scalingFactor, 20), 45)));
 
-        greetingText.setStyle(String.format("-fx-font-size: %.2fpx;",
+        greetingText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular'",
                 Math.min(Math.max(20 * scalingFactor, 12), 20)));
 
-        firstNameText.setStyle(String.format("-fx-font-size: %.2fpx;",
+        firstNameText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular' ",
                 Math.min(Math.max(20 * scalingFactor, 12), 20)));
 
-        questionMark.setStyle(String.format("-fx-font-size: %.2fpx;",
+        questionMark.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular'",
                 Math.min(Math.max(20 * scalingFactor, 12), 20)));
 
-        dateText.setStyle(String.format("-fx-font-size: %.2fpx;",
+        dateText.setStyle(String.format("-fx-font-size: %.2fpx;  -fx-font-family: 'Poppins Light'",
                 Math.min(Math.max(16 * scalingFactor, 12), 16)));
     }
 

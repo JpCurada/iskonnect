@@ -67,12 +67,3 @@
 .vote-count {
     -fx-font-weight: bold;
 }
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('fonts/Poppins-Regular.ttf');
-}
-
-#homeText{
-    -fx-font-family: 'Poppins';
-}
