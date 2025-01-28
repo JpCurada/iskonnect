@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -38,13 +39,20 @@ public class HomeController {
         materialService = new MaterialService();
         voteService = new VoteService();
 
+        // Load font
+        try {
+            Font.loadFont(getClass().getResourceAsStream("fonts/Poppins-Regular.ttf"), 10);
+        } catch (Exception e) {
+            System.err.println("Could not load font: " + e.getMessage());
+        }
+
         // Set current date
         dateText.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d")));
 
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
 
-        // Make text responsive
+        //text responsive
         dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeAllTextResponsive(newScene);
@@ -58,29 +66,35 @@ public class HomeController {
         searchField.setOnAction(e -> handleSearch());
     }
 
-    private void makeAllTextResponsive(Scene scene) {
-        double baseWidth = 1000; // Reference width for scaling
-        scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double scalingFactor = newWidth.doubleValue() / baseWidth;
 
-            //update font sizes proportionally
-            setTextSize(dateText, scalingFactor, 14, 18, null);
-            setTextSize(welcomeText, scalingFactor, 20, 60, "-fx-font-weight: bold;");
-            setTextSize(greetingText, scalingFactor, 12, 16, null);
-            setTextSize(questionMark, scalingFactor, 12, 16, null);
-            setTextSize(firstNameText, scalingFactor, 12, 16, "-fx-font-weight: bold;");
+    private void makeAllTextResponsive(Scene scene) {
+        // Initial setup
+        updateTextSizes(scene.getWidth());
+
+        // Listen for changes
+        scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            updateTextSizes(newWidth.doubleValue());
         });
     }
 
-    private void setTextSize(javafx.scene.text.Text textNode, double scalingFactor, double minFontSize, double maxFontSize, String additionalStyle) {
-        double computedSize = Math.min(Math.max(16 * scalingFactor, minFontSize), maxFontSize); // Compute scaled size
-        String style = String.format("-fx-font-size: %.2fpx;", computedSize);
+    private void updateTextSizes(double width) {
+        double scalingFactor = width / 1000.0; //base width for scaling
 
-        if (additionalStyle != null) {
-            style += additionalStyle;
-        }
+        //store styles in variables to maintain consistency
+        welcomeText.setStyle(String.format("-fx-font-size: %.2fpx;",
+                Math.min(Math.max(45 * scalingFactor, 20), 45)));
 
-        textNode.setStyle(style);
+        greetingText.setStyle(String.format("-fx-font-size: %.2fpx;",
+                Math.min(Math.max(20 * scalingFactor, 12), 20)));
+
+        firstNameText.setStyle(String.format("-fx-font-size: %.2fpx;",
+                Math.min(Math.max(20 * scalingFactor, 12), 20)));
+
+        questionMark.setStyle(String.format("-fx-font-size: %.2fpx;",
+                Math.min(Math.max(20 * scalingFactor, 12), 20)));
+
+        dateText.setStyle(String.format("-fx-font-size: %.2fpx;",
+                Math.min(Math.max(16 * scalingFactor, 12), 16)));
     }
 
     private void loadMaterials() {
