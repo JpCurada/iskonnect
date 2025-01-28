@@ -1,8 +1,8 @@
 /* General Table Styling */
 .leaderboard-table {
-    -fx-background-radius: 7;
-    -fx-border-radius: 7;
-    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: transparent;
     -fx-text-fill: black;
 }
 
@@ -12,15 +12,43 @@
     -fx-border-color: #E5D0AC;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-background-radius: 10 10 0 0;
+}
+
+/* Align header text to the left */
+.table-view .column-header .label {
+    -fx-alignment: CENTER-LEFT; /* Aligns text to the left */
+    -fx-padding: 0 0 0 10; /* Adds left padding for spacing */
 }
 
 /* Row Styling */
 .table-row-cell {
     -fx-background-color: white;
-    -fx-padding: 15; /* Space inside each row */
-    -fx-background-radius: 10; /* Rounded edges for rows */
-    -fx-margin: 5 0; /* Vertical spacing between rows */
+    -fx-padding: 15; /*kapag 15 nawawala unused rows*/
+    -fx-background-radius: 10; /*rounded edges for rows */
+    -fx-margin: 5 5; /* Vertical spacing between rows */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0.5, 0, 1); /* Subtle shadow for separation */
+    -fx-background-insets: 2; /*creates gap between roews*/
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+/* Add this new style to ensure proper cell rendering */
+.table-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 10;
+}
+
+/* Modify the table view to ensure proper spacing */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+    -fx-border-color: transparent;
 }
 
 .table-row-cell:filled:odd {
@@ -58,6 +86,23 @@
     -fx-border-radius: 7;
     -fx-background-color: lightgray;
 }
+/* Scrollbar Styling */
+.table-view .scroll-bar {
+    -fx-background-color: transparent; /* Make scrollbar background transparent */
+}
+
+.table-view .scroll-bar:vertical {
+    -fx-padding: 0 5 0 0; /* Add padding to avoid overlapping */
+}
+
+.table-view .scroll-bar .thumb {
+    -fx-background-color: #E5D0AC; /* Scrollbar thumb color */
+    -fx-background-radius: 7; /* Rounded scrollbar thumb */
+}
+
+.table-view .scroll-bar .thumb:hover {
+    -fx-background-color: #D5B28C; /* Darker thumb color on hover */
+}
 
 /* Hide the vertical scrollbar space */
 .table-view .virtual-flow .scroll-bar:vertical {
@@ -71,4 +116,16 @@
     -fx-pref-height: 0;
     -fx-opacity: 0;
     -fx-max-height: 0;
+}
+
+
+/* Make the viewport transparent */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Remove any border */
+.scroll-pane {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
