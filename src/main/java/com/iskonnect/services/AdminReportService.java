@@ -82,37 +82,43 @@ public class AdminReportService {
     }
 
     public boolean deleteMaterial(int materialId) throws SQLException {
-            String deleteVotesQuery = "DELETE FROM votes WHERE material_id = ?";
-            String deleteReportsQuery = "DELETE FROM reports WHERE material_id = ?";
-            String deleteMaterialQuery = "DELETE FROM materials WHERE material_id = ?";
-
-            try (Connection conn = DatabaseConnection.getConnection()) {
-                conn.setAutoCommit(false);
-                try {
-                    // Delete votes first
-                    try (PreparedStatement stmt = conn.prepareStatement(deleteVotesQuery)) {
-                        stmt.setInt(1, materialId);
-                        stmt.executeUpdate();
-                    }
-
-                    // Delete reports next
-                    try (PreparedStatement stmt = conn.prepareStatement(deleteReportsQuery)) {
-                        stmt.setInt(1, materialId);
-                        stmt.executeUpdate();
-                    }
-
-                    // Finally delete the material
-                    try (PreparedStatement stmt = conn.prepareStatement(deleteMaterialQuery)) {
-                        stmt.setInt(1, materialId);
-                        int result = stmt.executeUpdate();
-                        conn.commit();
-                        return result > 0;
-                    }
-                } catch (SQLException e) {
-                    conn.rollback();
-                    throw e;
+        String deleteVotesQuery = "DELETE FROM votes WHERE material_id = ?";
+        String deleteReportsQuery = "DELETE FROM reports WHERE material_id = ?";
+        String deleteBookmarksQuery = "DELETE FROM bookmarks WHERE material_id = ?";
+        String deleteMaterialQuery = "DELETE FROM materials WHERE material_id = ?";
+    
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false); // Start transaction
+            try {
+                // Delete votes first
+                try (PreparedStatement stmt = conn.prepareStatement(deleteVotesQuery)) {
+                    stmt.setInt(1, materialId);
+                    stmt.executeUpdate();
                 }
+    
+                // Delete reports next
+                try (PreparedStatement stmt = conn.prepareStatement(deleteReportsQuery)) {
+                    stmt.setInt(1, materialId);
+                    stmt.executeUpdate();
+                }
+    
+                // Delete bookmarks next
+                try (PreparedStatement stmt = conn.prepareStatement(deleteBookmarksQuery)) {
+                    stmt.setInt(1, materialId);
+                    stmt.executeUpdate();
+                }
+    
+                // Finally delete the material
+                try (PreparedStatement stmt = conn.prepareStatement(deleteMaterialQuery)) {
+                    stmt.setInt(1, materialId);
+                    int result = stmt.executeUpdate();
+                    conn.commit(); // Commit the transaction
+                    return result > 0;
+                }
+            } catch (SQLException e) {
+                conn.rollback(); // Rollback if any step fails
+                throw e;
             }
         }
-
-    }
+    }    
+}
