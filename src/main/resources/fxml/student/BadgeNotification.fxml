@@ -1,73 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iskonnect.controllers.BadgeNotificationController"
-            styleClass="notification-panel"
-            style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8F9FA);
-                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
-                   -fx-background-radius: 8px;
-                   -fx-border-radius: 8px;
-                   -fx-border-color: #E9ECEF;
-                   -fx-border-width: 1px;">
+<AnchorPane prefHeight="490.0" prefWidth="435.0" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8F9FA); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #E9ECEF; -fx-border-width: 1px;" styleClass="notification-panel" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.BadgeNotificationController">
 
-    <VBox spacing="15" 
-          alignment="CENTER"
-          AnchorPane.topAnchor="20"
-          AnchorPane.leftAnchor="20"
-          AnchorPane.rightAnchor="20"
-          AnchorPane.bottomAnchor="20">
+    <VBox alignment="CENTER" spacing="15" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
 
         <!-- Dynamic Badge Logo -->
-        <ImageView fx:id="badgeIcon" 
-                   fitHeight="150.0" 
-                   fitWidth="200.0" 
-                   pickOnBounds="true" 
-                   preserveRatio="true">
+        <ImageView fx:id="badgeIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
             <VBox.margin>
-                <Insets bottom="10"/>
+                <Insets bottom="10" />
             </VBox.margin>
         </ImageView>
-
-        <!-- Congratulations Text -->
-        <Label text="Achievement Unlocked!" 
-               style="-fx-font-size: 18px;
-                      -fx-font-weight: bold;
-                      -fx-text-fill: #2D3748;"/>
+      <Text fill="#801818" strokeType="OUTSIDE" strokeWidth="0.0" text="Badge Unlocked!" textAlignment="CENTER" wrappingWidth="250.24869537353516">
+         <font>
+            <Font name="Segoe UI Bold" size="30.0" />
+         </font>
+      </Text>
 
         <!-- Badge Name -->
-        <Label fx:id="badgeNameLabel" 
-               style="-fx-font-size: 24px;
-                      -fx-font-weight: bold;
-                      -fx-text-fill: #4A5568;
-                      -fx-text-alignment: center;
-                      -fx-wrap-text: true;"/>
+        <Label fx:id="badgeNameLabel" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #801818; -fx-text-alignment: center; -fx-wrap-text: true;" text="You are now a &lt;badge name&gt;" textAlignment="CENTER" textFill="#801818">
+         <font>
+            <Font size="7.0" />
+         </font></Label>
 
         <!-- Badge Description -->
-        <Label fx:id="badgeDescriptionLabel"
-               wrapText="true"
-               style="-fx-font-size: 14px;
-                      -fx-text-fill: #718096;
-                      -fx-text-alignment: center;
-                      -fx-padding: 0 10 0 10;"/>
-
-        <!-- OK Button -->
-        <Button text="Awesome!"
-                onAction="#handleOk"
-                style="-fx-background-color: #4299E1;
-                       -fx-text-fill: white;
-                       -fx-font-size: 14px;
-                       -fx-padding: 10 30;
-                       -fx-background-radius: 20;
-                       -fx-cursor: hand;">
-            <VBox.margin>
-                <Insets top="10"/>
-            </VBox.margin>
-        </Button>
+        <Label fx:id="badgeDescriptionLabel" style="-fx-font-size: 13; -fx-text-fill: #718096; -fx-text-alignment: center; -fx-padding: 0 10 0 10;" text="You’ve done an awesome job uploading materials to ISKOnnect! Your contributions are making a difference." textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="13.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding></Label>
+      <Button id="signUpButton" mnemonicParsing="false" onAction="#handleOk" prefHeight="28.0" prefWidth="100.0" style="-fx-background-color: #801818; -fx-background-radius: 7;" text="Back to Home" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
     </VBox>
 </AnchorPane>
