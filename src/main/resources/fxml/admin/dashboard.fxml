@@ -16,186 +16,218 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="948.0" prefWidth="1710.0" spacing="20" style="-fx-background-color: #FEF9E1;" stylesheets="@../../styles/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminDashboardController">
-      
+<VBox styleClass="dashboard-container" prefHeight="948.0" prefWidth="1710.0" spacing="20"
+      style="-fx-background-color: #FEF9E1;" stylesheets="@../../styles/dashboard.css"
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iskonnect.controllers.AdminDashboardController">
+
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="20" left="20" right="20" top="20"/>
     </padding>
-   <VBox prefHeight="200.0" prefWidth="100.0">
-      <children>
-         <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FEF9E1;">
-            <children>
-               <Label prefHeight="26.0" prefWidth="738.0" text="DASHBOARD">
-                  <font>
-                     <Font size="24.0" />
-                  </font>
-               </Label>
-               <VBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="934.0">
-                  <children>
-                     <ComboBox prefHeight="26.0" prefWidth="206.0" promptText="Time Range">
-                        <cursor>
-                           <Cursor fx:constant="HAND" />
-                        </cursor>
-                     </ComboBox>
-                  </children>
-               </VBox>
-            </children>
-         </HBox>
-      </children>
-   </VBox>
-   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="1113.0" prefWidth="1670.0" style="-fx-background-color: #FEF9E1;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-      <content>
-         <VBox prefHeight="747.0" prefWidth="1669.0">
-            <children>
-               <HBox prefHeight="927.0" prefWidth="1669.0" spacing="20.0" style="-fx-background-color: #FEF9E1;">
-                  <children>
-                     <VBox prefHeight="907.0" prefWidth="1167.0" spacing="20.0" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+    <VBox styleClass="header-container" prefHeight="200.0" prefWidth="100.0">
+        <children>
+            <!--Header Panel-->
+            <HBox  prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FEF9E1;">
+                <children>
+                    <Label styleClass="header-title" prefHeight="26.0" prefWidth="738.0" text="DASHBOARD">
+                    </Label>
+                    <VBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="934.0">
                         <children>
-                           <VBox prefHeight="187.0" prefWidth="1342.0" VBox.vgrow="ALWAYS">
-                              <children>
-                              
-                                                                                           <!-- Statistics Cards -->
-                                  <HBox prefHeight="286.0" prefWidth="1669.0" spacing="20.0" VBox.vgrow="ALWAYS">
-                                      <VBox prefHeight="187.0" prefWidth="227.4" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                          <Label style="-fx-text-fill: #666666;" text="Total Students" VBox.vgrow="ALWAYS">
-                                          <font>
-                                             <Font size="14.0" />
-                                          </font>
-                                       </Label>
-                                          <Label fx:id="totalStudentsLabel" alignment="CENTER" prefHeight="139.0" prefWidth="274.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="9999" VBox.vgrow="ALWAYS" />
-                                       <styleClass>
-                                          <String fx:value="root" />
-                                          <String fx:value="card" />
-                                       </styleClass>
-                                      </VBox>
-                              
-                                                                                               <VBox prefWidth="227.4" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                          <Label style="-fx-text-fill: #666666;" text="Total Materials" VBox.vgrow="ALWAYS">
-                                          <font>
-                                             <Font size="14.0" />
-                                          </font>
-                                       </Label>
-                                          <Label fx:id="totalMaterialsLabel" alignment="CENTER" prefHeight="150.0" prefWidth="274.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="0" VBox.vgrow="ALWAYS" />
-                                       <styleClass>
-                                          <String fx:value="card" />
-                                          <String fx:value="root" />
-                                       </styleClass>
-                                      </VBox>
-                              
-                                                                                               <VBox prefWidth="227.4" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                          <Label style="-fx-text-fill: #666666;" text="Reported Materials" VBox.vgrow="ALWAYS">
-                                          <font>
-                                             <Font size="14.0" />
-                                          </font>
-                                       </Label>
-                                          <Label fx:id="reportedMaterialsLabel" alignment="CENTER" prefHeight="170.0" prefWidth="273.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="0" VBox.vgrow="ALWAYS" />
-                                       <styleClass>
-                                          <String fx:value="card" />
-                                          <String fx:value="root" />
-                                       </styleClass>
-                                      </VBox>
-                                  </HBox>
-                              </children>
-                           </VBox>
-                           <VBox prefHeight="700.0" prefWidth="722.0" spacing="20.0" VBox.vgrow="ALWAYS">
-                              <children>
-                                 <HBox prefHeight="340.0" prefWidth="722.0" VBox.vgrow="ALWAYS">
-                                    <children>
-                                    
-                                                                                                                                                                                                                                   <VBox prefHeight="340.0" prefWidth="958.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                             <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Top 10 Most Upvoted Contributors" VBox.vgrow="ALWAYS" />
-                                             <BarChart fx:id="topContributorsChart" legendVisible="false" prefHeight="281.0" prefWidth="692.0" VBox.vgrow="ALWAYS">
-                                                 <xAxis>
-                                                <NumberAxis label="Received Upvotes" prefHeight="48.0" prefWidth="652.0" side="BOTTOM" />
-                                             </xAxis>
-                                                 <yAxis>
-                                                <CategoryAxis side="LEFT" />
-                                             </yAxis>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                             </BarChart>
-                                          <styleClass>
-                                             <String fx:value="card" />
-                                             <String fx:value="root" />
-                                          </styleClass>
-                                         </VBox>
-                                    </children>
-                                 </HBox>
-                                 <HBox prefHeight="340.0" prefWidth="722.0" VBox.vgrow="ALWAYS">
-                                    <children>
-                                         <VBox prefHeight="340.0" prefWidth="964.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                             <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Top 10 Most Upvoted Materials" VBox.vgrow="ALWAYS" />
-                                             <BarChart fx:id="topMaterialsChart" legendVisible="false" prefHeight="289.0" prefWidth="692.0" VBox.vgrow="ALWAYS">
-                                                 <xAxis>
-                                                <NumberAxis label="Upvotes" prefHeight="42.0" prefWidth="881.0" side="BOTTOM" />
-                                             </xAxis>
-                                                 <yAxis>
-                                                <CategoryAxis side="LEFT" />
-                                             </yAxis>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                             </BarChart>
-                                          <styleClass>
-                                             <String fx:value="card" />
-                                             <String fx:value="root" />
-                                          </styleClass>
-                                         </VBox>
-                                    </children>
-                                 </HBox>
-                              </children>
-                           </VBox>
+                            <!--Time Range-->
+                            <ComboBox prefHeight="26.0" prefWidth="206.0" promptText="Time Range">
+                                <cursor>
+                                    <Cursor fx:constant="HAND"/>
+                                </cursor>
+                            </ComboBox>
                         </children>
-                     </VBox>
-                     <VBox prefHeight="907.0" prefWidth="914.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                    </VBox>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+
+    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" nodeOrientation="LEFT_TO_RIGHT"
+                prefHeight="1113.0" prefWidth="1670.0" style="-fx-background-color: #FEF9E1;" vbarPolicy="NEVER"
+                VBox.vgrow="ALWAYS">
+        <content>
+            <!--main Panel-->
+            <VBox prefHeight="747.0" prefWidth="1669.0" style="-fx-background-color: #FEF9E1;">
+                <children>
+                    <!--inner panel, holds the 2 vbox-->
+                    <HBox prefHeight="927.0" prefWidth="1669.0" spacing="20.0" style="-fx-background-color: #FEF9E1;"
+                          VBox.vgrow="ALWAYS">
                         <children>
-                           <HBox prefHeight="436.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
-                              <children>
-                              
-                                                                                                                                                                                                                                         <VBox prefHeight="443.56" prefWidth="934.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                       <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Student Contribution Distribution" VBox.vgrow="ALWAYS" />
-                                       <PieChart fx:id="userDistributionChart" VBox.vgrow="ALWAYS">
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </PieChart>
-                                    <styleClass>
-                                       <String fx:value="root" />
-                                       <String fx:value="card" />
-                                    </styleClass>
-                                   </VBox>
-                              </children>
-                           </HBox>
-                           <HBox prefHeight="437.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
-                              <children>
-                              
-                                                                                                                                                                                                                             <VBox prefHeight="510.0" prefWidth="698.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" stylesheets="@../../styles/dashboard.css" HBox.hgrow="ALWAYS">
-                                       <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Materials Distribution by College" VBox.vgrow="ALWAYS" />
-                                       <BarChart fx:id="collegeDistributionChart" legendVisible="false" VBox.vgrow="ALWAYS">
-                                           <xAxis>
-                                          <NumberAxis label="Number of Materials" side="BOTTOM" />
-                                       </xAxis>
-                                           <yAxis>
-                                          <CategoryAxis side="LEFT" />
-                                       </yAxis>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                       </BarChart>
-                                    <styleClass>
-                                       <String fx:value="root" />
-                                       <String fx:value="card" />
-                                    </styleClass>
-                                   </VBox>
-                              </children>
-                           </HBox>
+                            <!--left panel-->
+                            <VBox prefHeight="907.0" prefWidth="1167.0" spacing="20.0"
+                                  style="-fx-background-color: #FEF9E1;" HBox.hgrow="ALWAYS">
+                                <children>
+                                    <VBox prefHeight="187.0" prefWidth="1342.0" VBox.vgrow="ALWAYS">
+                                        <children>
+
+                                            <!-- Statistics Cards -->
+                                            <HBox styleClass="stats-container" prefHeight="286.0" prefWidth="1669.0"
+                                                  spacing="20.0" VBox.vgrow="ALWAYS">
+                                                <VBox styleClass="stat-card" prefHeight="187.0" prefWidth="227.4"
+                                                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="stat-title" style="-fx-text-fill: #666666;" text="Total Students"
+                                                           VBox.vgrow="ALWAYS">
+                                                        <font>
+                                                            <Font size="14.0"/>
+                                                        </font>
+                                                    </Label>
+                                                    <Label styleClass="stat-value" fx:id="totalStudentsLabel" alignment="CENTER"
+                                                           prefHeight="139.0" prefWidth="274.0"
+                                                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"
+                                                           text="9999" VBox.vgrow="ALWAYS"/>
+                                                </VBox>
+
+                                                <VBox styleClass="stat-card" prefWidth="227.4"
+                                                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="stat-title" style="-fx-text-fill: #666666;" text="Total Materials"
+                                                           VBox.vgrow="ALWAYS">
+                                                        <font>
+                                                            <Font size="14.0"/>
+                                                        </font>
+                                                    </Label>
+                                                    <Label styleClass="stat-value" fx:id="totalMaterialsLabel" alignment="CENTER"
+                                                           prefHeight="150.0" prefWidth="274.0"
+                                                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"
+                                                           text="0" VBox.vgrow="ALWAYS"/>
+                                                </VBox>
+
+                                                <VBox styleClass="stat-card" prefWidth="227.4"
+                                                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="stat-title" style="-fx-text-fill: #666666;" text="Reported Materials"
+                                                           VBox.vgrow="ALWAYS">
+                                                        <font>
+                                                            <Font size="14.0"/>
+                                                        </font>
+                                                    </Label>
+                                                    <Label fx:id="reportedMaterialsLabel" styleClass="stat-value" alignment="CENTER"
+                                                           prefHeight="170.0" prefWidth="273.0"
+                                                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;"
+                                                           text="0" VBox.vgrow="ALWAYS"/>
+                                                </VBox>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                    <VBox prefHeight="700.0" prefWidth="722.0" spacing="20.0" VBox.vgrow="ALWAYS">
+                                        <children>
+                                            <HBox prefHeight="340.0" prefWidth="722.0" VBox.vgrow="ALWAYS">
+                                                <children>
+
+                                                    <VBox styleClass="chart-card" prefHeight="340.0" prefWidth="958.0"
+                                                          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                          HBox.hgrow="ALWAYS">
+                                                        <Label styleClass="chart-title" style="-fx-font-weight: bold; -fx-font-size: 14;"
+                                                               text="Top 10 Most Upvoted Contributors"
+                                                               VBox.vgrow="ALWAYS"/>
+                                                        <BarChart fx:id="topContributorsChart" legendVisible="false"
+                                                                  prefHeight="281.0" prefWidth="692.0"
+                                                                  VBox.vgrow="ALWAYS">
+                                                            <xAxis>
+                                                                <NumberAxis label="Received Upvotes" prefHeight="48.0"
+                                                                            prefWidth="652.0" side="BOTTOM"/>
+                                                            </xAxis>
+                                                            <yAxis>
+                                                                <CategoryAxis side="LEFT"/>
+                                                            </yAxis>
+                                                            <cursor>
+                                                                <Cursor fx:constant="HAND"/>
+                                                            </cursor>
+                                                        </BarChart>
+                                                    </VBox>
+                                                </children>
+                                            </HBox>
+                                            <HBox prefHeight="340.0" prefWidth="722.0" VBox.vgrow="ALWAYS">
+                                                <children>
+                                                    <VBox styleClass="chart-card" prefHeight="340.0" prefWidth="964.0"
+                                                          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                          HBox.hgrow="ALWAYS">
+                                                        <Label styleClass="chart-title" style="-fx-font-weight: bold; -fx-font-size: 14;"
+                                                               text="Top 10 Most Upvoted Materials"
+                                                               VBox.vgrow="ALWAYS"/>
+                                                        <BarChart fx:id="topMaterialsChart" legendVisible="false"
+                                                                  prefHeight="289.0" prefWidth="692.0"
+                                                                  VBox.vgrow="ALWAYS">
+                                                            <xAxis>
+                                                                <NumberAxis label="Upvotes" prefHeight="42.0"
+                                                                            prefWidth="881.0" side="BOTTOM"/>
+                                                            </xAxis>
+                                                            <yAxis>
+                                                                <CategoryAxis side="LEFT"/>
+                                                            </yAxis>
+                                                            <cursor>
+                                                                <Cursor fx:constant="HAND"/>
+                                                            </cursor>
+                                                        </BarChart>
+                                                    </VBox>
+                                                </children>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </VBox>
+                            <!--right panel-->
+                            <VBox prefHeight="907.0" prefWidth="914.0" spacing="20.0"
+                                  style="-fx-background-color: #FEF9E1;" HBox.hgrow="ALWAYS">
+                                <children>
+                                    <!--Student Contribution-->
+                                    <HBox prefHeight="436.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
+                                        <children>
+
+                                            <VBox styleClass="chart-card" prefHeight="443.56" prefWidth="934.0"
+                                                  style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                  HBox.hgrow="ALWAYS">
+                                                <Label styleClass="chart-title" style="-fx-font-weight: bold; -fx-font-size: 14;"
+                                                       text="Student Contribution Distribution" VBox.vgrow="ALWAYS"/>
+                                                <PieChart fx:id="userDistributionChart" VBox.vgrow="ALWAYS">
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND"/>
+                                                    </cursor>
+                                                </PieChart>
+                                            </VBox>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets/>
+                                        </VBox.margin>
+                                    </HBox>
+                                    <!--Materials Distribution-->
+                                    <HBox prefHeight="437.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
+                                        <children>
+
+                                            <VBox styleClass="chart-card" prefHeight="510.0" prefWidth="698.0"
+                                                  style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;"
+                                                  HBox.hgrow="ALWAYS">
+                                                <Label styleClass="chart-title" style="-fx-font-weight: bold; -fx-font-size: 14;"
+                                                       text="Materials Distribution by College" VBox.vgrow="ALWAYS"/>
+                                                <BarChart fx:id="collegeDistributionChart" legendVisible="false"
+                                                          VBox.vgrow="ALWAYS">
+                                                    <xAxis>
+                                                        <NumberAxis label="Number of Materials" side="BOTTOM"/>
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <CategoryAxis side="LEFT"/>
+                                                    </yAxis>
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND"/>
+                                                    </cursor>
+                                                </BarChart>
+                                            </VBox>
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
                         </children>
-                     </VBox>
-                  </children>
-               </HBox>
-            </children>
-         </VBox>
-      </content>
-   </ScrollPane>
+                        <VBox.margin>
+                            <Insets bottom="10.0" left="10.0" right="10.0"/>
+                        </VBox.margin>
+                    </HBox>
+                </children>
+            </VBox>
+        </content>
+    </ScrollPane>
 </VBox>
