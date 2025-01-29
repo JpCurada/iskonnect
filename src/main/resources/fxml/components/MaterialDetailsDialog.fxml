@@ -23,9 +23,9 @@
       <children>
          <HBox alignment="TOP_CENTER" prefWidth="350.0" style="-fx-border-radius: 8; -fx-background-radius: 8; -fx-alignment: center; -fx-background-color: #E5D0AC;">
             <children>
-                 <Label fx:id="descriptionLabel" alignment="TOP_CENTER" contentDisplay="CENTER" styleClass="label-content" textFill="#6d2323" wrapText="true">
+               <Label fx:id="subjectLabel" styleClass="label-content" textFill="#6d2323">
                   <font>
-                     <Font size="15.0" />
+                     <Font size="14.0" />
                   </font>
                </Label>
             </children>
@@ -59,7 +59,7 @@
       <children>
       
                                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="49.0" spacing="5">
-              <Label styleClass="label-header" text="Subject" textFill="#6d2323">
+              <Label styleClass="label-header" text="Description" textFill="#6d2323">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -67,11 +67,11 @@
                   <Insets />
                </VBox.margin>
             </Label>
-              <Label fx:id="subjectLabel" styleClass="label-content" textFill="#6d2323">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
+               <Label fx:id="descriptionLabel" alignment="TOP_CENTER" contentDisplay="CENTER" styleClass="label-content" textFill="#6d2323" wrapText="true">
+                  <font>
+                     <Font size="11.0" />
+                  </font>
+               </Label>
           </VBox>
          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5">
             <children>
