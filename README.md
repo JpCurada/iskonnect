@@ -37,17 +37,67 @@ The best part is how easy it is to find what you need. Everything is listed by c
 
 ## How ISKOnnect Works
 
-In ISKOnnect, we applied Object-Oriented Programming's **inheritance** concept in several key areas of the application.
+ISKOnnect showcases inheritance through several layers — but let us break down the most important ones.
 
-First, in the Model layer, we implemented a strong inheritance hierarchy starting with the abstract User class. This base class holds common attributes that every user needs — like userId, firstName, lastName, and email. Instead of duplicating these properties, we created two child classes: Student and Admin, which inherit from User. This means both Student and Admin automatically get all the base User properties and methods, but they can also have their own unique features. For example, the Student class adds points and badges for the gamification system, while the Admin class includes special permissions for content moderation.
+First, let's look at our `User` class. Instead of creating separate user types from scratch, we built a foundation that all users share:
 
-Second, we applied inheritance in our view structure through base.fxml. This base layout serves as a template that contains common elements like the navigation sidebar and main content area. Both student and admin interfaces extend this base layout, following the "extend and modify" principle of inheritance. When a student logs in, their view inherits from base.fxml but adds student-specific elements like the materials grid and upload button. Similarly, the admin view inherits the same base but adds admin-specific components like the reports table and user management tools.
+```java
+// Path: src/main/java/com/iskonnect/models/User.java
+public abstract class User {
+    private String strUserId;
+    private String strFirstName;
+    private String strLastName;
+    private String strEmail;
+    private String strUserType;  // STUDENT or ADMIN
 
-Third, inheritance is evident in how we handle root scenes in the Main class. Instead of creating separate scene management for student and admin views, we created a parent root handling system. This parent system defines common scene-setting behavior, which is then extended for specific user types. When users log in, the appropriate root is set based on their user type, but the underlying scene management remains consistent thanks to inheritance.
+    public String getFullName() {
+        return strFirstName + " " + strLastName;
+    }
+}
+```
 
-Lastly, we applied inheritance in our services layer to handle database operations. We created base service classes with common CRUD operations, which specific services like MaterialService and UserService extend. This means services inherit basic database interaction methods but can add their own specialized functionality. For example, MaterialService inherits basic save and retrieve operations but adds specific methods for handling file uploads and vote counting.
+Both students and admins need these basic details, so they inherit from this base class. It's like having a template — why write the same code twice? For example, the `Student` class adds points and badges on top of these basics, while `Admin` gets special moderation powers.
 
-This application of inheritance helped us achieve cleaner code, reduce duplication, and make the system more maintainable. It also made it easier to add new features since we could extend existing functionality rather than writing everything from scratch.
+Next up is our view structure. Take a look at how both student and admin interfaces share a common layout in `base.fxml`:
+
+```xml
+<!-- Path: src/main/resources/fxml/student/base.fxml -->
+<BorderPane>
+    <left>
+        <!-- Common sidebar for navigation -->
+        <VBox>
+            <Text fx:id="fullNameText" />
+            <Text fx:id="idText" />
+            <Button fx:id="logoutButton" />
+        </VBox>
+    </left>
+    <center>
+        <!-- This is where specific content goes -->
+        <VBox fx:id="contentArea" />
+    </center>
+</BorderPane>
+```
+
+Both student and admin views inherit this layout, but each adds its own special elements — students see their materials grid and upload options, while admins get their moderation tools. It's like having a house blueprint where you can add different furniture based on who lives there!
+
+This approach really shows the DRY (Don't Repeat Yourself) principle in action. Instead of copy-pasting the same navigation code or user properties everywhere, we write it once and let inheritance do the heavy lifting. For instance, when we need to add a new feature to all users, we just update the parent `User` class, and both students and admins automatically get the update — pretty neat, right?
+
+Look at the login controller — it checks the user type and sets the appropriate root:
+
+```java
+// Path: src/main/java/com/iskonnect/controllers/LoginController.java
+public void handleLogin() {
+    if (user.getUserType().equals("ADMIN")) {
+        Main.setAdminRoot();
+    } else {
+        Main.setMainRoot();  // For students
+    }
+}
+```
+
+Each type gets its own specialized view, but the underlying logic stays the same. It's like having a single front door that leads to different rooms based on who's walking in!
+
+This inheritance setup makes our code cleaner and easier to maintain. When we want to add new features or fix bugs, we know exactly where to look — no more hunting through duplicate code or wondering which copy to update. It's all organized and connected through inheritance, just like a well-planned family tree!
 
 ## How to Use ISKOnnect
 
@@ -65,7 +115,7 @@ This application of inheritance helped us achieve cleaner code, reduce duplicati
 
 ## The Team Behind ISKOnnect
 
-### Team ALPHAB1T
+### Team ALPHA B1T
 - CURADA, John Paul M.(Project & Backend Lead)
 - ZARAGOZA, Marie Criz (Front-End Lead)
 - LUCERO, Ken Audie S. (Backend Developer)
@@ -108,10 +158,10 @@ This application of inheritance helped us achieve cleaner code, reduce duplicati
 - Polytechnic University of the Philippines
 - PUP College of Computer and Information Sciences
 - COMP 20083 Course
-- Master Chris Piamonte
+- Master Chris Piamonte (#CPP)
 
 ---
 
 <div align="center">
-  Gawa ng Team ALPHA B1T para sa mga Iskolar ng Bayan
+  Gawa ng mga Iskolar, para sa kapuwa Iskolar ng Bayan!
 </div>
