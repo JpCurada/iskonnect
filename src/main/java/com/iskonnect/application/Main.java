@@ -29,11 +29,7 @@ public class Main extends Application {
         stage.setScene(scene);
         // Make authentication pages non-resizable
         stage.setResizable(false);
-        // Set fixed dimensions
-        stage.setMinWidth(780);
-        stage.setMaxWidth(780);
-        stage.setMinHeight(460);
-        stage.setMaxHeight(460);
+
         stage.setFullScreen(false); // Ensure login is not fullscreen
         centerStage(); // Center the login window
     }
