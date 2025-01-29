@@ -226,10 +226,10 @@ public class MaterialService {
     }
 
     private String generateFileName(String originalFilename) {
+        String cleanFilename = originalFilename.replaceAll("[^a-zA-Z0-9.-]", "_");
         LocalDateTime now = LocalDateTime.now();
-        String datePart = now.format(DateTimeFormatter.ofPattern("MMddyyyy"));
-        String timePart = now.format(DateTimeFormatter.ofPattern("HHmm"));
-        return datePart + timePart + "_" + originalFilename;
+        String timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        return timestamp + "_" + cleanFilename;
     }
 
     private String encodeFilename(String originalFilename) throws UnsupportedEncodingException {
