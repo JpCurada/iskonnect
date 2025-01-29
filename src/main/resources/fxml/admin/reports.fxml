@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="700.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" stylesheets="@../../styles/report.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminReportsController">
+<VBox styleClass="main-container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="700.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" stylesheets="@../../styles/report.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminReportsController">
     
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
     <!-- Title -->
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Reported Materials" />
+    <Label styleClass="page-title" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Reported Materials" />
 
     <!-- Search Bar -->
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <TextField fx:id="searchField" prefWidth="250" promptText="Search reports..." />
+        <TextField styleClass="search-field" fx:id="searchField" prefWidth="250" promptText="Search reports..." />
         <Region HBox.hgrow="ALWAYS" />
         <ProgressIndicator fx:id="loadingIndicator" prefHeight="25.0" prefWidth="25.0" visible="false" />
     </HBox>
@@ -30,12 +30,12 @@
     <!-- Reports Table -->
     <TableView fx:id="reportsTable" style="-fx-background-radius: 7;" styleClass="report-table" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn id="materialTitle" fx:id="titleColumn" prefWidth="150" text="Material Title" />
-            <TableColumn id="description" fx:id="descriptionColumn" prefWidth="200" text="Description" />
-            <TableColumn id="uploaderID" fx:id="uploaderColumn" prefWidth="100" text="Uploader ID" />
-            <TableColumn id="reporterID" fx:id="reporterColumn" prefWidth="100" text="Reporter ID" />
-            <TableColumn id="reason" fx:id="reasonColumn" prefWidth="150" text="Reason" />
-            <TableColumn id="reportCount" fx:id="countColumn" prefWidth="100" text="Report Count" />
+            <TableColumn id="materialTitle" fx:id="titleColumn" prefWidth="150" text="Material Title" styleClass="column"/>
+            <TableColumn id="description" fx:id="descriptionColumn" prefWidth="200" text="Description" styleClass="column"/>
+            <TableColumn id="uploaderID" fx:id="uploaderColumn" prefWidth="100" text="Uploader ID" styleClass="column"/>
+            <TableColumn id="reporterID" fx:id="reporterColumn" prefWidth="100" text="Reporter ID" styleClass="column"/>
+            <TableColumn id="reason" fx:id="reasonColumn" prefWidth="150" text="Reason" styleClass="column"/>
+            <TableColumn id="reportCount" fx:id="countColumn" prefWidth="100" text="Report Count" styleClass="column"/>
         </columns>
       <cursor>
          <Cursor fx:constant="HAND" />
