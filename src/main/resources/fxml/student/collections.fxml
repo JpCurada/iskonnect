@@ -20,7 +20,20 @@
 
     <!-- Badges Section -->
     <VBox spacing="10">
-        <Text style="-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="My Badges" />
+      <HBox prefHeight="38.0" prefWidth="646.0" VBox.vgrow="ALWAYS">
+         <children>
+              <Text style="-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="My Badges" wrappingWidth="287.3887252807617" />
+            <VBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="364.0" HBox.hgrow="ALWAYS">
+               <children>
+                     <Button alignment="TOP_RIGHT" onAction="#handleRefresh" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Refresh">
+                         <cursor>
+                             <Cursor fx:constant="HAND" />
+                         </cursor>
+                     </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
             <FlowPane fx:id="badgesPane" hgap="15" prefHeight="86.0" prefWidth="644.0" style="-fx-background-color: transparent;" vgap="15">
                 <padding>
@@ -42,11 +55,6 @@
                 </HBox>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#handleRefresh" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Refresh">
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor>
-            </Button>
         </HBox>
 
         <!-- Materials Grid -->
