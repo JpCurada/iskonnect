@@ -34,7 +34,7 @@
                     <VBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="934.0">
                         <children>
                             <!--Time Range-->
-                            <ComboBox prefHeight="26.0" prefWidth="206.0" promptText="Time Range">
+                            <ComboBox fx:id="timeRangeComboBox" prefHeight="26.0" prefWidth="206.0" promptText="Time Range">
                                 <cursor>
                                     <Cursor fx:constant="HAND"/>
                                 </cursor>
