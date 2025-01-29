@@ -112,6 +112,31 @@ This inheritance setup makes our code cleaner and easier to maintain. When we wa
 1. Check reported materials
 2. Keep track of users
 3. Look at how students use the app
+4. Remove reported materials or  ban users
+
+## Demo
+
+
+<div align="center">
+
+### Student View
+
+### Contribute Reviewers
+
+### Download Materials
+
+### Bookmark Contents
+
+### Report Irrelevant Materials
+
+
+### Admin View
+<img src="demo\Admin.gif" width="800" alt="Admin Animation">
+
+
+</div>
+
+
 
 ## The Team Behind ISKOnnect
 
