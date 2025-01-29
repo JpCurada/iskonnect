@@ -71,63 +71,99 @@ public class MaterialService {
         
         String objectPath = "reviewers/" + encodedFilename;
         String fileUrl = SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET_NAME + "/" + objectPath;
-    
+
+        // Upload file first
         uploadFileToSupabase(request.getFile(), objectPath);
-    
-        Connection conn = null; // Declare conn outside the try block
+
+        Connection conn = null;
+        PreparedStatement materialStmt = null;
+        PreparedStatement pointsStmt = null;
+        ResultSet rs = null;
+
         try {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false);
-    
-            try (PreparedStatement materialStmt = conn.prepareStatement("""
+
+            // Insert material
+            String materialSql = """
                 INSERT INTO materials (title, description, subject, college, course, file_url, 
-                                       uploader_id, upload_date, filename)
+                                    uploader_id, upload_date, filename)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """)) {
-                materialStmt.setString(1, request.getMaterialName());
-                materialStmt.setString(2, request.getDescription());
-                materialStmt.setString(3, request.getSubject());
-                materialStmt.setString(4, request.getCollege());
-                materialStmt.setString(5, request.getCourse());
-                materialStmt.setString(6, fileUrl);
-                materialStmt.setString(7, userId); // This matches the uploader_id column
-                materialStmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now())); // Matches upload_date column
-                materialStmt.setString(9, encodedFilename); // Matches filename column
-                materialStmt.executeUpdate();
-            }
+            """;
             
-    
-            // Update user points and retrieve updated points
-            int updatedPoints = 0; // Variable to hold updated points
-            try (PreparedStatement pointsStmt = conn.prepareStatement("""
-                UPDATE users SET points = points + 5 WHERE user_id = ? RETURNING points
-            """)) {
-                pointsStmt.setString(1, userId);
-                ResultSet rs = pointsStmt.executeQuery();
-                if (rs.next()) {
-                    updatedPoints = rs.getInt("points");
-                }
+            materialStmt = conn.prepareStatement(materialSql);
+            materialStmt.setString(1, request.getMaterialName());
+            materialStmt.setString(2, request.getDescription());
+            materialStmt.setString(3, request.getSubject());
+            materialStmt.setString(4, request.getCollege());
+            materialStmt.setString(5, request.getCourse());
+            materialStmt.setString(6, fileUrl);
+            materialStmt.setString(7, userId);
+            materialStmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+            materialStmt.setString(9, encodedFilename);
+            materialStmt.executeUpdate();
+
+            // Update points and retrieve updated points
+            String pointsSql = "UPDATE users SET points = points + 5 WHERE user_id = ? RETURNING points";
+            pointsStmt = conn.prepareStatement(pointsSql);
+            pointsStmt.setString(1, userId);
+            rs = pointsStmt.executeQuery();
+            
+            int updatedPoints = 0;
+            if (rs.next()) {
+                updatedPoints = rs.getInt("points");
             }
-    
-            // Evaluate and award badges based on updated points
+
+            // Evaluate and award badges
             BadgeService badgeService = new BadgeService();
             List<Badge> awardedBadges = badgeService.evaluateAndAwardBadges(userId, updatedPoints);
-    
-            // Show badge notification if any badges were awarded
+
+            // Show badge notifications
             if (!awardedBadges.isEmpty()) {
-                showBadgeNotification(awardedBadges); // Use the awardedBadges variable here
+                showBadgeNotification(awardedBadges);
             }
-    
-            conn.commit(); // Commit the transaction
-    
+
+            // Commit transaction
+            conn.commit();
+
         } catch (SQLException e) {
             if (conn != null) {
-                conn.rollback(); // Rollback in case of error
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
-            throw e; // Rethrow the exception for further handling
+            throw e;
         } finally {
+            // Close all resources in reverse order
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pointsStmt != null) {
+                try {
+                    pointsStmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (materialStmt != null) {
+                try {
+                    materialStmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             if (conn != null) {
-                conn.close(); // Ensure the connection is closed
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -18,25 +18,26 @@ public class DatabaseConnection {
         config.setPassword(dotenv.get("DB_PASSWORD"));
 
         // Connection pooling settings
-        config.setMaximumPoolSize(10); // Adjust based on your application needs
+        config.setMaximumPoolSize(10);
         config.setMinimumIdle(2);
-        config.setIdleTimeout(30000); // 30 seconds
-        config.setConnectionTimeout(20000); // 20 seconds
-        config.setMaxLifetime(1800000); // 30 minutes
-        config.setConnectionTestQuery("SELECT 1"); // Validate connections
+        config.setIdleTimeout(30000);
+        config.setConnectionTimeout(20000);
+        config.setMaxLifetime(1800000);
 
-        // Prepared statement caching settings
-        config.addDataSourceProperty("useServerPrepStmts", "false"); // Disable server-side prepared statements
-        config.addDataSourceProperty("cachePrepStmts", "true");      // Enable local statement caching
-        config.addDataSourceProperty("prepStmtCacheSize", "250");    // Cache up to 250 statements
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048"); // Limit SQL length for caching
+        // Important: Set these properties to handle prepared statements properly
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
 
-        // Connection reset on return to pool
-        config.setInitializationFailTimeout(0); // Don't fail if DB is down on startup
-        config.addDataSourceProperty("cachePrepStmts", "true"); // Caches prepared statements
+        // Clear any existing prepared statements when returning connection to pool
+        config.setConnectionInitSql("DEALLOCATE ALL");
+        
+        // Auto-commit setting (default true)
+        config.setAutoCommit(true);
 
-        // Set session reset
-        config.setConnectionInitSql("DISCARD ALL");
+        // Leak detection
+        config.setLeakDetectionThreshold(60000); // 60 seconds
 
         dataSource = new HikariDataSource(config);
     }
@@ -46,7 +47,7 @@ public class DatabaseConnection {
     }
 
     public static void closePool() {
-        if (dataSource != null) {
+        if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
         }
     }
