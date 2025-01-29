@@ -56,11 +56,17 @@
                   </VBox>
                   <VBox spacing="5" HBox.hgrow="ALWAYS">
                       <Label style="-fx-text-fill: #666666;" text="College" />
-                  <ComboBox fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;" />
+                  <ComboBox fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></ComboBox>
                   </VBox>
                   <VBox spacing="5" HBox.hgrow="ALWAYS">
                       <Label style="-fx-text-fill: #666666;" text="Course" />
-                  <ComboBox fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;" />
+                  <ComboBox fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></ComboBox>
                   </VBox>
               </HBox>
       
