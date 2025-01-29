@@ -1,13 +1,8 @@
-// Path: src/main/java/com/iskonnect/controllers/HomeController.java
-
 package com.iskonnect.controllers;
 
-import com.iskonnect.models.Vote;
 import com.iskonnect.models.Material;
 import com.iskonnect.services.MaterialService;
-import com.iskonnect.services.VoteService;
 import com.iskonnect.utils.UserSession;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,13 +10,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
+
 import java.io.InputStream;
-
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 public class HomeController {
     @FXML private Text dateText;
@@ -31,15 +25,19 @@ public class HomeController {
     @FXML private Text welcomeText;
     @FXML private Text greetingText;
     @FXML private Text questionMark;
+    @FXML private Button nextPageButton;
+    @FXML private Button previousPageButton;
 
     private MaterialService materialService;
-    private VoteService voteService;
     private List<Material> materials;
+
+    private int currentPage = 1;
+    private int itemsPerPage = 8; // Number of items to display per page
+    private int totalPages;
 
     @FXML
     public void initialize() {
         materialService = new MaterialService();
-        voteService = new VoteService();
 
         // Load font
         try {
@@ -66,13 +64,6 @@ public class HomeController {
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
 
-        //text responsive
-        dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                makeAllTextResponsive(newScene);
-            }
-        });
-
         // Load materials
         loadMaterials();
 
@@ -80,45 +71,22 @@ public class HomeController {
         searchField.setOnAction(e -> handleSearch());
     }
 
-
-    private void makeAllTextResponsive(Scene scene) {
-        // Initial setup
-        updateTextSizes(scene.getWidth());
-
-        // Listen for changes
-        scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            updateTextSizes(newWidth.doubleValue());
-        });
-    }
-
-    private void updateTextSizes(double width) {
-        double scalingFactor = width / 1000.0; //base width for scaling
-
-        //store styles in variables to maintain consistency
-        welcomeText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Bold'",
-                Math.min(Math.max(45 * scalingFactor, 20), 45)));
-
-        greetingText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular'",
-                Math.min(Math.max(20 * scalingFactor, 12), 20)));
-
-        firstNameText.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular' ",
-                Math.min(Math.max(20 * scalingFactor, 12), 20)));
-
-        questionMark.setStyle(String.format("-fx-font-size: %.2fpx; -fx-font-family: 'Poppins Regular'",
-                Math.min(Math.max(20 * scalingFactor, 12), 20)));
-
-        dateText.setStyle(String.format("-fx-font-size: %.2fpx;  -fx-font-family: 'Poppins Light'",
-                Math.min(Math.max(16 * scalingFactor, 12), 16)));
-    }
-
     private void loadMaterials() {
         try {
             materials = materialService.getAllMaterials();
-            displayMaterials(materials);
+            totalPages = (int) Math.ceil((double) materials.size() / itemsPerPage);
+            displayMaterials(getMaterialsForCurrentPage());
         } catch (Exception e) {
             showError("Failed to load materials");
             e.printStackTrace();
         }
+        updatePaginationControls();
+    }
+
+    private List<Material> getMaterialsForCurrentPage() {
+        int start = (currentPage - 1) * itemsPerPage;
+        int end = Math.min(start + itemsPerPage, materials.size());
+        return materials.subList(start, end);
     }
 
     private void displayMaterials(List<Material> materialsToDisplay) {
@@ -152,9 +120,30 @@ public class HomeController {
         }
     }
 
+    @FXML
+    private void handleNextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadMaterials();
+        }
+    }
+
+    @FXML
+    private void handlePreviousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadMaterials();
+        }
+    }
+
+    private void updatePaginationControls() {
+        previousPageButton.setDisable(currentPage == 1);
+        nextPageButton.setDisable(currentPage == totalPages);
+    }
+
     private void filterMaterials(String searchText) {
         if (searchText == null || searchText.trim().isEmpty()) {
-            displayMaterials(materials);
+            displayMaterials(getMaterialsForCurrentPage());
             return;
         }
 

@@ -59,4 +59,9 @@
         </content>
     </ScrollPane>
 
+    <!-- Pagination Controls -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="previousPageButton" onAction="#handlePreviousPage" text="Previous" />
+        <Button fx:id="nextPageButton" onAction="#handleNextPage" text="Next" />
+    </HBox>
 </VBox>
