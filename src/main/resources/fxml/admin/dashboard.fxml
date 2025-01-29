@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Path: src/main/resources/fxml/admin/dashboard1.fxml -->
+<!-- Path: src/main/resources/fxml/admin/dashboard.fxml -->
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
