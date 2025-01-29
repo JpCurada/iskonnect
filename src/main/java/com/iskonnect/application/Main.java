@@ -2,14 +2,14 @@ package com.iskonnect.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import com.iskonnect.utils.DatabaseConnection;
-
 import java.io.IOException;
 
 public class Main extends Application {
@@ -34,30 +34,33 @@ public class Main extends Application {
         stage.setMaxWidth(780);
         stage.setMinHeight(460);
         stage.setMaxHeight(460);
+        stage.setFullScreen(false); // Ensure login is not fullscreen
+        centerStage(); // Center the login window
+    }
+
+    private static void centerStage() {
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
     }
 
     public static void setMainRoot() throws IOException {
         try {
-            System.out.println("Loading main interface...");
+            System.out.println("Loading student interface...");
             Parent root = loadFXML("student/base");
             Scene scene = new Scene(root);
             stage.setScene(scene);
             
             // Make main interface resizable
             stage.setResizable(true);
-            // Set minimum dimensions
+            // Remove size restrictions
             stage.setMinWidth(780);
             stage.setMinHeight(460);
-            // Allow maximizing
-            stage.setMaximized(false); // Reset maximized state
             stage.setMaxWidth(Double.MAX_VALUE);
             stage.setMaxHeight(Double.MAX_VALUE);
             
-            // Set initial size
-            if (!stage.isMaximized()) {
-                stage.setWidth(780);
-                stage.setHeight(460);
-            }
+            // Set fullscreen
+            stage.setMaximized(true);
             
             System.out.println("Main interface loaded successfully");
         } catch (IOException e) {
@@ -73,19 +76,14 @@ public class Main extends Application {
         
         // Make admin interface resizable
         stage.setResizable(true);
-        // Set minimum dimensions
+        // Remove size restrictions
         stage.setMinWidth(780);
         stage.setMinHeight(460);
-        // Allow maximizing
-        stage.setMaximized(false); // Reset maximized state
         stage.setMaxWidth(Double.MAX_VALUE);
         stage.setMaxHeight(Double.MAX_VALUE);
         
-        // Set initial size
-        if (!stage.isMaximized()) {
-            stage.setWidth(780);
-            stage.setHeight(460);
-        }
+        // Set fullscreen
+        stage.setMaximized(true);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
@@ -104,5 +102,10 @@ public class Main extends Application {
             DatabaseConnection.closePool();
         }));
         launch();
+    }
+
+    // Add method to toggle fullscreen
+    public static void toggleFullScreen() {
+        stage.setFullScreen(!stage.isFullScreen());
     }
 }
