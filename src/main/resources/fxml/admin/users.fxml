@@ -11,32 +11,32 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="700.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminUsersController">
+<VBox styleClass="main-container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="700.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.AdminUsersController" stylesheets="@../../styles/user.css" >
     
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
     <!-- Header -->
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Manage Users" />
+    <Label styleClass="page-title" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Manage Users" />
 
     <!-- Search Bar -->
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <TextField fx:id="searchField" prefWidth="250" promptText="Search users..." />
+        <TextField styleClass="search-field" fx:id="searchField" prefWidth="250" promptText="Search users..." />
         <Region HBox.hgrow="ALWAYS" />
         <ProgressIndicator fx:id="loadingIndicator" prefHeight="25" prefWidth="25" visible="false" />
     </HBox>
 
     <!-- Users Table -->
-    <TableView fx:id="usersTable" blendMode="SRC_ATOP" style="-fx-background-radius: 7;" stylesheets="@../../styles/user.css" VBox.vgrow="ALWAYS">
+    <TableView styleClass="users-table" fx:id="usersTable" blendMode="SRC_ATOP" style="-fx-background-radius: 7;" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="userIdColumn" prefWidth="100" text="User ID" />
-            <TableColumn fx:id="firstNameColumn" prefWidth="120" text="First Name" />
-            <TableColumn fx:id="lastNameColumn" prefWidth="120" text="Last Name" />
-            <TableColumn fx:id="emailColumn" prefWidth="180" text="Email" />
-            <TableColumn fx:id="pointsColumn" prefWidth="80" text="Points" />
-            <TableColumn fx:id="reportsColumn" prefWidth="80" text="Reports" />
-            <TableColumn fx:id="upvotesColumn" prefWidth="80" text="Upvotes" />
+            <TableColumn fx:id="userIdColumn" prefWidth="100" text="User ID" styleClass="column" />
+            <TableColumn fx:id="firstNameColumn" prefWidth="120" text="First Name" styleClass="column" />
+            <TableColumn fx:id="lastNameColumn" prefWidth="120" text="Last Name" styleClass="column" />
+            <TableColumn fx:id="emailColumn" prefWidth="180" text="Email" styleClass="column" />
+            <TableColumn fx:id="pointsColumn" prefWidth="80" text="Points" styleClass="column" />
+            <TableColumn fx:id="reportsColumn" prefWidth="80" text="Reports" styleClass="column" />
+            <TableColumn fx:id="upvotesColumn" prefWidth="80" text="Upvotes" styleClass="column" />
         </columns>
       <cursor>
          <Cursor fx:constant="HAND" />
@@ -44,5 +44,8 @@
       <columnResizePolicy>
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
+        <placeholder>
+            <Label text="No users found" styleClass="placeholder-label"/>
+        </placeholder>
     </TableView>
 </VBox>
