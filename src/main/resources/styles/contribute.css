@@ -48,7 +48,7 @@
 .form-container {
     -fx-background-color: white;
     -fx-background-radius: 12;
-    /*-fx-padding: 25;*/
+    -fx-padding: 20;
     -fx-spacing: 7;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
 }
@@ -64,8 +64,6 @@
     -fx-border-color: #E0E0E0;
     -fx-border-radius: 6;
     -fx-background-radius: 6;
-    /*-fx-padding: 8 12;*/
-    -fx-font-size: 13px;
 }
 
 .form-input:focused {
@@ -73,9 +71,6 @@
     -fx-border-width: 1.5;
 }
 
-/*.text-area {*/
-/*    -fx-padding: 8;*/
-/*}*/
 
 .text-area .content {
     -fx-background-color: transparent;
@@ -94,6 +89,9 @@
     -fx-spacing: 7;
 }
 
+.drag-text{
+    -fx-text-fill: #666666;
+}
 .drop-area:hover {
     -fx-background-color: #F0F0F0;
 }
