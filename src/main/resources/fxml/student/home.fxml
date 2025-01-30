@@ -43,9 +43,10 @@
             <Insets bottom="10" left="10" right="10" top="10" />
         </padding>
         <columnConstraints>
-            <ColumnConstraints percentWidth="33.33" />
-            <ColumnConstraints percentWidth="33.33" />
-            <ColumnConstraints percentWidth="33.33" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
         </columnConstraints>
     </GridPane>
 

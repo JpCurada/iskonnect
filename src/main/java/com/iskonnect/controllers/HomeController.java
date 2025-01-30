@@ -33,7 +33,7 @@ public class HomeController {
     private List<Material> materials;
 
     private int currentPage = 1;
-    private int itemsPerPage = 9; // Number of items to display per page
+    private int itemsPerPage = 12; // Number of items to display per page
     private int totalPages;
 
     @FXML
@@ -101,7 +101,7 @@ public class HomeController {
             materialsGrid.add(card, column, row);
             
             column++;
-            if (column == 3) { // Assuming 3 columns
+            if (column == 4) { // Columns
                 column = 0;
                 row++;
             }
