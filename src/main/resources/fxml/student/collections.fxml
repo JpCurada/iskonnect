@@ -4,12 +4,16 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
-    
-    <padding>
+<!--<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">-->
+<VBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
+<padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
@@ -18,10 +22,10 @@
         <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="My Achievement Badges" />
         <Text style="-fx-font-size: 14; -fx-fill: #666666;" text="Keep contributing to earn more badges!" />
         
-        <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" hbarPolicy="NEVER" vbarPolicy="NEVER">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
             <GridPane fx:id="badgesGrid" hgap="15" vgap="15">
                 <padding>
-                    <Insets top="20" right="10" bottom="10" left="10" />
+                    <Insets bottom="10" left="10" right="10" top="20" />
                 </padding>
                 <columnConstraints>
                     <ColumnConstraints percentWidth="25" />
@@ -90,7 +94,5 @@
         .badge-name {
             -fx-font-size: 14;
             -fx-font-weight: bold;
-            -fx-text-fill: #6D2323;
-        }
-    </style>
+            -fx-text-fill: #6D2323;-fx-background-color: red;</style>
 </VBox>
