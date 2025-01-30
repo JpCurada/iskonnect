@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.scene.Scene;
 import javafx.scene.text.Font;
 
 import java.io.InputStream;
@@ -27,12 +26,14 @@ public class HomeController {
     @FXML private Text questionMark;
     @FXML private Button nextPageButton;
     @FXML private Button previousPageButton;
+    @FXML private ProgressIndicator loadingIndicator;
+    @FXML private HBox pageNumberContainer;
 
     private MaterialService materialService;
     private List<Material> materials;
 
     private int currentPage = 1;
-    private int itemsPerPage = 8; // Number of items to display per page
+    private int itemsPerPage = 9; // Number of items to display per page
     private int totalPages;
 
     @FXML
@@ -69,24 +70,25 @@ public class HomeController {
 
         // Add enter key handler for search
         searchField.setOnAction(e -> handleSearch());
+
+        // Set up pagination button actions
+        previousPageButton.setOnAction(e -> handlePreviousPage());
+        nextPageButton.setOnAction(e -> handleNextPage());
     }
 
     private void loadMaterials() {
+        loadingIndicator.setVisible(true); // Show loading indicator
         try {
-            materials = materialService.getAllMaterials();
-            totalPages = (int) Math.ceil((double) materials.size() / itemsPerPage);
-            displayMaterials(getMaterialsForCurrentPage());
+            materials = materialService.getMaterials(currentPage, itemsPerPage); // Fetch materials with pagination
+            totalPages = (int) Math.ceil((double) materialService.getTotalMaterialsCount() / itemsPerPage); // Calculate total pages
+            displayMaterials(materials); // Display materials for the current page
         } catch (Exception e) {
             showError("Failed to load materials");
             e.printStackTrace();
+        } finally {
+            loadingIndicator.setVisible(false); // Hide loading indicator
+            updatePaginationControls(); // Update pagination controls
         }
-        updatePaginationControls();
-    }
-
-    private List<Material> getMaterialsForCurrentPage() {
-        int start = (currentPage - 1) * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, materials.size());
-        return materials.subList(start, end);
     }
 
     private void displayMaterials(List<Material> materialsToDisplay) {
@@ -99,7 +101,7 @@ public class HomeController {
             materialsGrid.add(card, column, row);
             
             column++;
-            if (column == 4) {
+            if (column == 3) { // Assuming 3 columns
                 column = 0;
                 row++;
             }
@@ -124,7 +126,7 @@ public class HomeController {
     private void handleNextPage() {
         if (currentPage < totalPages) {
             currentPage++;
-            loadMaterials();
+            loadMaterials(); // Fetch materials for the next page
         }
     }
 
@@ -132,18 +134,30 @@ public class HomeController {
     private void handlePreviousPage() {
         if (currentPage > 1) {
             currentPage--;
-            loadMaterials();
+            loadMaterials(); // Fetch materials for the previous page
         }
     }
 
     private void updatePaginationControls() {
         previousPageButton.setDisable(currentPage == 1);
-        nextPageButton.setDisable(currentPage == totalPages);
+        nextPageButton.setDisable(currentPage >= totalPages);
+        pageNumberContainer.getChildren().clear(); // Clear existing page number buttons
+    
+        // Create buttons for each page number
+        for (int i = 1; i <= totalPages; i++) {
+            final int pageNumber = i; // Create a final variable to hold the page number
+            Button pageButton = new Button(String.valueOf(pageNumber));
+            pageButton.setOnAction(e -> {
+                currentPage = pageNumber; // Set the current page to the clicked page
+                loadMaterials(); // Load materials for the selected page
+            });
+            pageNumberContainer.getChildren().add(pageButton); // Add the button to the container
+        }
     }
 
     private void filterMaterials(String searchText) {
         if (searchText == null || searchText.trim().isEmpty()) {
-            displayMaterials(getMaterialsForCurrentPage());
+            loadMaterials(); // Reload original materials if search is empty
             return;
         }
 
@@ -154,7 +168,11 @@ public class HomeController {
                         m.getSubject().toLowerCase().contains(searchText.toLowerCase()))
             .toList();
         
-        displayMaterials(filtered);
+        materials = filtered; // Update materials to filtered list
+        totalPages = (int) Math.ceil((double) materials.size() / itemsPerPage); // Recalculate total pages
+        currentPage = 1; // Reset to first page
+        displayMaterials(materials); // Display filtered materials
+        updatePaginationControls(); // Update pagination controls
     }
 
     @FXML
@@ -165,10 +183,8 @@ public class HomeController {
 
     @FXML
     private void handleRefresh() {
-        // Clear search field
         searchField.clear();
-        // Reload all materials
-        loadMaterials();
+        loadMaterials(); // Reload original materials
     }
 
     private void showError(String message) {

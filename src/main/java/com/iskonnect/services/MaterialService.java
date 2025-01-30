@@ -215,7 +215,7 @@ public class MaterialService {
         }
     }
 
-    public List<Material> getAllMaterials() {
+    public List<Material> getMaterials(int pageNumber, int itemsPerPage) {
         List<Material> materials = new ArrayList<>();
         String query = """
             SELECT 
@@ -228,37 +228,57 @@ public class MaterialService {
             FROM materials m
             JOIN users u ON m.uploader_id = u.user_id
             ORDER BY m.upload_date DESC
+            LIMIT ? OFFSET ?
         """;
-
+    
         try (Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                
-                // Make sure we set the uploader's full name
-                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                material.setMaterialId(rs.getInt("material_id"));
-                material.setFileUrl(rs.getString("file_url"));       
-                material.setFileName(rs.getString("filename"));       
-                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                material.setUpvotes(rs.getInt("upvotes"));          
-                
-                materials.add(material);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            // Set the limit and offset for pagination
+            stmt.setInt(1, itemsPerPage);
+            stmt.setInt(2, (pageNumber - 1) * itemsPerPage);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Material material = new Material(
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("subject"),
+                        rs.getString("college"),
+                        rs.getString("course"),
+                        rs.getString("uploader_id")
+                    );
+                    
+                    // Set uploader's full name
+                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                    material.setMaterialId(rs.getInt("material_id"));
+                    material.setFileUrl(rs.getString("file_url"));       
+                    material.setFileName(rs.getString("filename"));       
+                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                    material.setUpvotes(rs.getInt("upvotes"));          
+                    
+                    materials.add(material);
+                }
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return materials;
+    }
+
+    public int getTotalMaterialsCount() {
+        String countQuery = "SELECT COUNT(*) FROM materials";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(countQuery);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Return 0 if there's an error
     }
 
     private String generateFileName(String originalFilename) {
