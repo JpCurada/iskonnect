@@ -11,8 +11,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="25" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.ContributeController">
-    
+<VBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.ContributeController">
+
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
