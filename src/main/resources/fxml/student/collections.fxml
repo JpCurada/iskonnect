@@ -11,65 +11,66 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
+<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/shared.css" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.CollectionsController">
 <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-
-    <!-- Badges Section -->
-    <VBox spacing="10">
-        <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="My Achievement Badges" />
-        <Text style="-fx-font-size: 14; -fx-fill: #666666;" text="Keep contributing to earn more badges!" />
-        
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
-            <GridPane fx:id="badgesGrid" hgap="15" vgap="15">
-                <padding>
-                    <Insets bottom="10" left="10" right="10" top="20" />
-                </padding>
-                <columnConstraints>
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                </columnConstraints>
-            </GridPane>
-        </ScrollPane>
-    </VBox>
-
-    <!-- Materials Section -->
-    <VBox spacing="10">
-        <!-- Header -->
-        <HBox spacing="15">
-            <VBox>
-                <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="Bookmarked Materials" />
-                <HBox alignment="CENTER_LEFT" spacing="5">
-                    <Text style="-fx-fill: #666666;" text="Total Bookmarked Materials:" />
-                    <Text fx:id="totalMaterialsText" style="-fx-font-weight: bold;" text="0" />
-                </HBox>
-            </VBox>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#handleRefresh" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Refresh">
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor>
-            </Button>
-        </HBox>
-
-        <!-- Materials Grid -->
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
-            <GridPane fx:id="materialsGrid" hgap="15" vgap="15">
-                <padding>
-                    <Insets bottom="10" left="10" right="10" top="10" />
-                </padding>
-                <columnConstraints>
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                </columnConstraints>
-            </GridPane>
-        </ScrollPane>
-    </VBox>
+   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+      <content>
+         <VBox style="-fx-background-color: #FEF9E1;">
+            <children>
+            
+                <!-- Badges Section -->
+                <VBox spacing="10">
+                    <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="My Achievement Badges" />
+                    <Text style="-fx-font-size: 14; -fx-fill: #666666;" text="Keep contributing to earn more badges!" />
+                     <GridPane fx:id="badgesGrid" hgap="15" vgap="15">
+                         <padding>
+                             <Insets bottom="10" left="10" right="10" top="20" />
+                         </padding>
+                         <columnConstraints>
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                         </columnConstraints>
+                     </GridPane>
+                </VBox>
+            
+                <!-- Materials Section -->
+                <VBox spacing="10">
+                    <!-- Header -->
+                    <HBox spacing="15">
+                        <VBox>
+                            <Text style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #A31D1D;" text="Bookmarked Materials" />
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <Text style="-fx-fill: #666666;" text="Total Bookmarked Materials:" />
+                                <Text fx:id="totalMaterialsText" style="-fx-font-weight: bold;" text="0" />
+                            </HBox>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleRefresh" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Refresh">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                    </HBox>
+                     <GridPane fx:id="materialsGrid" hgap="15" vgap="15">
+                         <padding>
+                             <Insets bottom="10" left="10" right="10" top="10" />
+                         </padding>
+                         <columnConstraints>
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                             <ColumnConstraints percentWidth="25" />
+                         </columnConstraints>
+                     </GridPane>
+                </VBox>
+            </children>
+         </VBox>
+      </content>
+   </ScrollPane>
 
     <style>
         .scroll-pane {
