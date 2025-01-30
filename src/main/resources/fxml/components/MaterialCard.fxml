@@ -89,12 +89,15 @@
             <center>
                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                   <children>
-                     <Label fx:id="titleLabel" styleClass="title-label" text="MaterialName" wrapText="true">
+                     <Label fx:id="titleLabel" styleClass="title-label" text="MaterialName" textAlignment="CENTER" wrapText="true">
                         <font>
                            <Font name="System Bold" size="18.0" />
                         </font>
                      </Label>
                   </children>
+                  <padding>
+                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                  </padding>
                </VBox>
             </center>
             <bottom>
