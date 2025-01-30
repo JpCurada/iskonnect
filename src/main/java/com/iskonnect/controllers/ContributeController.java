@@ -5,7 +5,11 @@ import com.iskonnect.utils.UserSession;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.scene.input.DragEvent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,6 +28,7 @@ public class ContributeController {
     @FXML private Label pointsLabel;
     @FXML private Label materialsCountLabel;
     @FXML private Label fileNameLabel;
+    @FXML private VBox dropArea;
 
     private File selectedFile;
     private final MaterialService materialService;
@@ -48,6 +53,7 @@ public class ContributeController {
 
         // Add listener to dynamically update courses based on selected college
         collegeComboBox.setOnAction(event -> updateCourseComboBox());
+
     }
 
     private void loadUserStats() {
@@ -60,6 +66,37 @@ public class ContributeController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleDragOver(DragEvent event) {
+        if (event.getDragboard().hasFiles()) {
+            event.acceptTransferModes(TransferMode.COPY);
+        }
+        event.consume();
+    }
+
+    @FXML
+    private void handleDragDropped(DragEvent event) {
+        Dragboard dragboard = event.getDragboard();
+        boolean success = false;
+        if (dragboard.hasFiles()) {
+            // Handle the first file (you can modify this to handle multiple files if needed)
+            File file = dragboard.getFiles().get(0);
+            // Update the file name label and handle the file selection
+            fileNameLabel.setText(file.getName());
+            // You can also set the file to a variable for further processing
+            success = true;
+        }
+        event.setDropCompleted(success);
+        event.consume();
+    }
+
+    @FXML
+    private void handleDragExited(DragEvent event) {
+        // Optional: You can add visual feedback when the drag exits the drop area
+        event.consume();
+    }
+
 
     private void populateCollegeToCoursesMap() {
         collegeToCoursesMap.put("OUS", List.of(
