@@ -147,6 +147,14 @@ public class HomeController {
         for (int i = 1; i <= totalPages; i++) {
             final int pageNumber = i; // Create a final variable to hold the page number
             Button pageButton = new Button(String.valueOf(pageNumber));
+            
+            // Set the style based on whether this is the current page
+            if (pageNumber == currentPage) {
+                pageButton.setStyle("-fx-background-color: #A31D1D; -fx-text-fill: white;"); // Highlight style
+            } else {
+                pageButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;"); // Default style
+            }
+    
             pageButton.setOnAction(e -> {
                 currentPage = pageNumber; // Set the current page to the clicked page
                 loadMaterials(); // Load materials for the selected page
