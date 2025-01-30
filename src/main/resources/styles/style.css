@@ -1,13 +1,12 @@
 .hover-button {
-    -fx-background-color: none; /* Default color */
-    -fx-text-fill: white; /* Default text color */
+    -fx-background-color: none;
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
 }
 
 .hover-button:hover {
-    -fx-background-color: #6D2323; /* Hover color */
+    -fx-background-color: #6D2323; /*darkest in color palette*/
 }
-
-/* Add these styles to your existing style.css */
 
 .material-card {
     -fx-background-color: white;
@@ -40,4 +39,17 @@
 
 .search-button:hover {
     -fx-background-color: #8B1A1A;
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 10px;
+}
+
+.button.selected {
+    -fx-background-color: #6D2323; /*darkest in color palette*/
+    -fx-text-fill: white;
+    -fx-opacity: 1;
 }
