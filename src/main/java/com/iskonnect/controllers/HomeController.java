@@ -1,27 +1,23 @@
-// Path: src/main/java/com/iskonnect/controllers/HomeController.java
-
 package com.iskonnect.controllers;
-
-import com.iskonnect.models.Vote;
 import com.iskonnect.models.Material;
 import com.iskonnect.services.MaterialService;
 import com.iskonnect.services.VoteService;
 import com.iskonnect.utils.UserSession;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import java.io.InputStream;
-
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HomeController {
     @FXML private Text dateText;
@@ -31,10 +27,13 @@ public class HomeController {
     @FXML private Text welcomeText;
     @FXML private Text greetingText;
     @FXML private Text questionMark;
-
+    @FXML private VBox paginationContainer;
+    
     private MaterialService materialService;
     private VoteService voteService;
-    private List<Material> materials;
+    private List<Material> allMaterials;
+    private PaginationController paginationController;
+    private static final int ITEMS_PER_PAGE = 12; // 4 columns * 3 rows
 
     @FXML
     public void initialize() {
@@ -66,12 +65,22 @@ public class HomeController {
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
 
-        //text responsive
+        // text responsive
         dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeAllTextResponsive(newScene);
             }
         });
+
+        // Setup pagination
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/Pagination.fxml"));
+            paginationContainer.getChildren().add(loader.load());
+            paginationController = loader.getController();
+            paginationController.setCallback(this::loadPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Load materials
         loadMaterials();
@@ -79,7 +88,6 @@ public class HomeController {
         // Add enter key handler for search
         searchField.setOnAction(e -> handleSearch());
     }
-
 
     private void makeAllTextResponsive(Scene scene) {
         // Initial setup
@@ -113,27 +121,50 @@ public class HomeController {
 
     private void loadMaterials() {
         try {
-            materials = materialService.getAllMaterials();
-            displayMaterials(materials);
+            // Get total count first for pagination
+            int totalItems = materialService.getTotalMaterialsCount();
+            int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+            paginationController.setTotalPages(totalPages);
+            
+            // Load first page
+            loadPage(1);
         } catch (Exception e) {
             showError("Failed to load materials");
             e.printStackTrace();
         }
     }
+    
+    private void loadPage(int page) {
+        List<Material> pageItems = materialService.getAllMaterials(page, ITEMS_PER_PAGE);
+        displayMaterials(pageItems);
+    }
 
     private void displayMaterials(List<Material> materialsToDisplay) {
-        materialsGrid.getChildren().clear();
         int column = 0;
         int row = 0;
 
         for (Material material : materialsToDisplay) {
-            VBox card = createMaterialCard(material);
-            materialsGrid.add(card, column, row);
-            
-            column++;
-            if (column == 4) {
-                column = 0;
-                row++;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/MaterialCard.fxml"));
+                VBox card = loader.load();
+                MaterialCardController cardController = loader.getController();
+                cardController.setMaterial(material);
+                
+                // Enable caching for each card
+                card.setCache(true);
+                card.setCacheHint(CacheHint.SPEED);
+                
+                GridPane.setConstraints(card, column, row);
+                materialsGrid.getChildren().add(card);
+                
+                column++;
+                if (column == 4) {
+                    column = 0;
+                    row++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showError("Failed to create material card");
             }
         }
     }
@@ -153,19 +184,34 @@ public class HomeController {
     }
 
     private void filterMaterials(String searchText) {
-        if (searchText == null || searchText.trim().isEmpty()) {
-            displayMaterials(materials);
-            return;
+        try {
+            materialsGrid.getChildren().clear();
+            
+            if (searchText == null || searchText.trim().isEmpty()) {
+                paginationController.reset();
+                loadPage(1);
+                return;
+            }
+    
+            // Get total count of search results
+            int totalItems = materialService.getSearchResultsCount(searchText);
+            int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+            paginationController.setTotalPages(totalPages);
+    
+            // Load first page of search results
+            List<Material> searchResults = materialService.searchMaterials(searchText, 1, ITEMS_PER_PAGE);
+            displayMaterials(searchResults);
+            
+            // Update pagination callback to use search
+            paginationController.setCallback(page -> {
+                List<Material> pageResults = materialService.searchMaterials(searchText, page, ITEMS_PER_PAGE);
+                displayMaterials(pageResults);
+            });
+    
+        } catch (Exception e) {
+            showError("Error performing search");
+            e.printStackTrace();
         }
-
-        List<Material> filtered = materials.stream()
-            .filter(m -> m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
-                        m.getCollege().toLowerCase().contains(searchText.toLowerCase()) ||
-                        m.getCourse().toLowerCase().contains(searchText.toLowerCase()) ||
-                        m.getSubject().toLowerCase().contains(searchText.toLowerCase()))
-            .toList();
-        
-        displayMaterials(filtered);
     }
 
     @FXML

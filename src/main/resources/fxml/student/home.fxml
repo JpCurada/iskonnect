@@ -59,4 +59,7 @@
         </content>
     </ScrollPane>
 
+    <!-- Pagination Container -->
+    <VBox fx:id="paginationContainer" alignment="CENTER" spacing="10" />
+
 </VBox>

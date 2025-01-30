@@ -215,50 +215,204 @@ public class MaterialService {
         }
     }
 
-    public List<Material> getAllMaterials() {
+
+    public List<Material> getAllMaterials(int page, int itemsPerPage) {
         List<Material> materials = new ArrayList<>();
         String query = """
             SELECT 
-                m.*,
+                m.material_id,
+                m.title,
+                m.description,
+                m.subject,
+                m.college,
+                m.course,
+                m.file_url,
+                m.filename,
+                m.uploader_id,
+                m.upload_date,
                 u.first_name,
                 u.last_name,
-                COALESCE((SELECT COUNT(*) 
-                        FROM votes v 
-                        WHERE v.material_id = m.material_id AND v.vote_type = 'UPVOTE'), 0) as upvotes
+                COUNT(v.vote_id) as upvotes
             FROM materials m
             JOIN users u ON m.uploader_id = u.user_id
+            LEFT JOIN votes v ON m.material_id = v.material_id AND v.vote_type = 'UPVOTE'
+            GROUP BY 
+                m.material_id,
+                m.title,
+                m.description,
+                m.subject,
+                m.college,
+                m.course,
+                m.file_url,
+                m.filename,
+                m.uploader_id,
+                m.upload_date,
+                u.first_name,
+                u.last_name
             ORDER BY m.upload_date DESC
+            LIMIT ? OFFSET ?
         """;
-
+    
         try (Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                
-                // Make sure we set the uploader's full name
-                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                material.setMaterialId(rs.getInt("material_id"));
-                material.setFileUrl(rs.getString("file_url"));       
-                material.setFileName(rs.getString("filename"));       
-                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                material.setUpvotes(rs.getInt("upvotes"));          
-                
-                materials.add(material);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setInt(1, itemsPerPage);
+            stmt.setInt(2, (page - 1) * itemsPerPage);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Material material = new Material(
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("subject"),
+                        rs.getString("college"),
+                        rs.getString("course"),
+                        rs.getString("uploader_id")
+                    );
+                    
+                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                    material.setMaterialId(rs.getInt("material_id"));
+                    material.setFileUrl(rs.getString("file_url"));       
+                    material.setFileName(rs.getString("filename"));       
+                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                    material.setUpvotes(rs.getInt("upvotes"));          
+                    
+                    materials.add(material);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return materials;
+    }
+
+    public int getTotalMaterialsCount() {
+        String query = "SELECT COUNT(*) FROM materials";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Material> searchMaterials(String searchText, int page, int itemsPerPage) {
+        List<Material> materials = new ArrayList<>();
+        String query = """
+            SELECT 
+                m.material_id,
+                m.title,
+                m.description,
+                m.subject,
+                m.college,
+                m.course,
+                m.file_url,
+                m.filename,
+                m.uploader_id,
+                m.upload_date,
+                u.first_name,
+                u.last_name,
+                COUNT(v.vote_id) as upvotes
+            FROM materials m
+            JOIN users u ON m.uploader_id = u.user_id
+            LEFT JOIN votes v ON m.material_id = v.material_id AND v.vote_type = 'UPVOTE'
+            WHERE 
+                LOWER(m.title) LIKE ? OR
+                LOWER(m.college) LIKE ? OR
+                LOWER(m.course) LIKE ? OR
+                LOWER(m.subject) LIKE ?
+            GROUP BY 
+                m.material_id,
+                m.title,
+                m.description,
+                m.subject,
+                m.college,
+                m.course,
+                m.file_url,
+                m.filename,
+                m.uploader_id,
+                m.upload_date,
+                u.first_name,
+                u.last_name
+            ORDER BY m.upload_date DESC
+            LIMIT ? OFFSET ?
+        """;
+    
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            String searchPattern = "%" + searchText.toLowerCase() + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            stmt.setInt(5, itemsPerPage);
+            stmt.setInt(6, (page - 1) * itemsPerPage);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Material material = new Material(
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("subject"),
+                        rs.getString("college"),
+                        rs.getString("course"),
+                        rs.getString("uploader_id")
+                    );
+                    
+                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                    material.setMaterialId(rs.getInt("material_id"));
+                    material.setFileUrl(rs.getString("file_url"));       
+                    material.setFileName(rs.getString("filename"));       
+                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                    material.setUpvotes(rs.getInt("upvotes"));          
+                    
+                    materials.add(material);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return materials;
+    }
+    
+    // Add this method to get search results count
+    public int getSearchResultsCount(String searchText) {
+        String query = """
+            SELECT COUNT(*) FROM materials m
+            WHERE 
+                LOWER(m.title) LIKE ? OR
+                LOWER(m.college) LIKE ? OR
+                LOWER(m.course) LIKE ? OR
+                LOWER(m.subject) LIKE ?
+        """;
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            String searchPattern = "%" + searchText.toLowerCase() + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Material> getAllMaterials() {
+        return getAllMaterials(1, Integer.MAX_VALUE);
     }
 
     private String generateFileName(String originalFilename) {
