@@ -8,6 +8,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +45,10 @@ public class LeaderboardController {
         updateStatistics();
 
         // Add listener for time filter changes
-        timeFilter.setOnAction(e -> loadLeaderboardData());
+        timeFilter.setOnAction(e -> {
+            loadLeaderboardData();
+            updateStatistics();
+        });
     }
 
     private void setupTimeFilter() {
@@ -51,14 +58,57 @@ public class LeaderboardController {
                 "This Week"
         ));
         timeFilter.setValue("All Time");
+        timeFilter.getStyleClass().add("time-filter");
     }
 
     private void setupTable() {
+        // Set up basic cell value factories
         rankColumn.setCellValueFactory(new PropertyValueFactory<>("rank"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
         materialsColumn.setCellValueFactory(new PropertyValueFactory<>("materials"));
         badgesColumn.setCellValueFactory(new PropertyValueFactory<>("badges"));
+
+        // Custom rank column with icons
+        rankColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer rank, boolean empty) {
+                super.updateItem(rank, empty);
+                if (empty || rank == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    HBox container = new HBox();
+                    container.setAlignment(Pos.CENTER);
+                    container.setSpacing(5);
+
+                    try {
+                        if (rank <= 3) {
+                            String iconPath = switch (rank) {
+                                case 1 -> "/images/icons/gold-medal.png";
+                                case 2 -> "/images/icons/silver-medal.png";
+                                case 3 -> "/images/icons/bronze-medal.png";
+                                default -> null;
+                            };
+
+                            if (iconPath != null) {
+                                ImageView icon = new ImageView(new Image(getClass().getResourceAsStream(iconPath)));
+                                icon.setFitHeight(20);
+                                icon.setFitWidth(20);
+                                container.getChildren().add(icon);
+                            }
+                        }
+                        Text rankText = new Text(rank.toString());
+                        rankText.getStyleClass().add("rank-text");
+                        container.getChildren().add(rankText);
+                        setGraphic(container);
+                    } catch (Exception e) {
+                        // Fallback to just showing the rank number if image loading fails
+                        setText(rank.toString());
+                    }
+                }
+            }
+        });
 
         // Format numbers in table cells
         pointsColumn.setCellFactory(column -> new TableCell<>() {
@@ -66,21 +116,42 @@ public class LeaderboardController {
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : numberFormat.format(item));
+                setAlignment(Pos.CENTER_RIGHT);
             }
         });
 
-        // Apply rank-based styles
+        materialsColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : numberFormat.format(item));
+                setAlignment(Pos.CENTER_RIGHT);
+            }
+        });
+
+        badgesColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : numberFormat.format(item));
+                setAlignment(Pos.CENTER_RIGHT);
+            }
+        });
+
+        // Apply rank-based styles with new color scheme
         leaderboardTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(LeaderboardEntry entry, boolean empty) {
                 super.updateItem(entry, empty);
+                getStyleClass().removeAll("rank-1", "rank-2", "rank-3");
+
                 if (entry == null || empty) {
-                    setStyle(""); // Reset style for empty rows
+                    setStyle("");
                 } else {
                     switch (entry.getRank()) {
                         case 1 -> setStyle("-fx-background-color: #FFECB3;"); // Gold
-                        case 2 -> setStyle("-fx-background-color: #D7CCC8;"); // Silver
-                        case 3 -> setStyle("-fx-background-color: #CFD8DC;"); // Bronze
+                        case 2 -> setStyle("-fx-background-color: #CFD8DC;"); // Silver
+                        case 3 -> setStyle("-fx-background-color: #D7CCC8"); // Bronze
                         default -> setStyle(""); // Default style
                     }
                 }
