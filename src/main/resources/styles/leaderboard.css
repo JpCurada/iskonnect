@@ -132,7 +132,7 @@
 }
 
 .leaderboard-table .table-row-cell:odd {
-    -fx-background-color: #f4f4f4cc;
+    -fx-background-color: #fffcf7cc;
 }
 
 .leaderboard-table .table-row-cell:hover {
