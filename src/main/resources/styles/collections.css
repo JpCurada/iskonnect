@@ -1,0 +1,49 @@
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.badge-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+.badge-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);
+    -fx-translate-y: -2;
+}
+.badge-name {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6D2323;
+    -fx-background-color: transparent;
+}
+
+.page-label{
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-fill: #A31D1D;
+}
+
+.sub-text{
+    -fx-fill: #666666;
+}
+
+.mat-count{
+    -fx-font-weight: bold;
+    -fx-fill: #666666;
+}
+
+.badge-container{
+    -fx-background-color: #FEF9E1;
+}
+
+.refresh-button{
+    -fx-background-color: #A31D1D;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+}
