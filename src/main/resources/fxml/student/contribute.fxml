@@ -10,85 +10,118 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.ContributeController">
+<VBox styleClass="content-panel" stylesheets="@../../styles/shared.css, @../../styles/contribute.css" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.ContributeController">
 
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
     <!-- Header -->
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" text="Share Study Material" />
-    
-                            <!-- Stats Cards -->
-    <HBox spacing="15">
-        <VBox style="-fx-background-color: white; -fx-padding: 15 25; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);" styleClass="stat-box">
-            <Label style="-fx-text-fill: #666666; -fx-font-size: 13;" text="Your Points" />
-            <Label fx:id="pointsLabel" style="-fx-font-weight: bold; -fx-text-fill: #A31D1D; -fx-font-size: 20;" text="0" />
+    <Label styleClass="page-title" text="Share Study Material" />
+
+    <!-- Stats Cards -->
+    <HBox prefWidth="200.0" styleClass="stats-container">
+        <VBox styleClass="stat-card">
+            <Label styleClass="stat-label" text="Your Points" />
+            <Label styleClass="stat-value" fx:id="pointsLabel" text="0" />
         </VBox>
-        <VBox style="-fx-background-color: white; -fx-padding: 15 25; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);" styleClass="stat-box">
-            <Label style="-fx-text-fill: #666666; -fx-font-size: 13;" text="Materials Shared" />
-            <Label fx:id="materialsCountLabel" style="-fx-font-weight: bold; -fx-text-fill: #A31D1D; -fx-font-size: 20;" text="0" />
+        <VBox prefWidth="200.0" styleClass="stat-card">
+            <Label styleClass="stat-label"  text="Materials Shared" />
+            <Label styleClass="stat-value" fx:id="materialsCountLabel" text="0" />
         </VBox>
     </HBox>
-   <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-hbar-policy: never; -fx-vbar-policy: never;">
+   <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" vbarPolicy="NEVER">
       <content>
-      
-                                              <!-- Main Form -->
-          <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);">
+
+          <!-- Main Form -->
+          <VBox styleClass="form-container" maxWidth="1.7976931348623157E308" spacing="7.0" >
               <!-- Material Name -->
               <VBox spacing="5">
-                  <Label style="-fx-text-fill: #666666;" text="Material Name" />
-                  <TextField fx:id="materialNameField" promptText="Enter material name" style="-fx-background-radius: 4; -fx-border-color: #E0E0E0; -fx-border-radius: 4; -fx-background-color: transparent;" />
+                  <Label styleClass="form-label" text="Material Name" />
+                  <TextField styleClass="form-input" fx:id="materialNameField" promptText="Enter material name"  VBox.vgrow="ALWAYS" />
               </VBox>
-      
-                                                  <!-- Description -->
-              <VBox spacing="5">
-                  <Label style="-fx-text-fill: #666666;" text="Description" />
-                  <TextArea fx:id="descriptionField" prefRowCount="3" promptText="Enter material description" style="-fx-background-radius: 4; -fx-border-color: #E0E0E0; -fx-border-radius: 4; -fx-background-color: transparent;" wrapText="true" />
+
+              <!-- Description -->
+              <VBox spacing="5.0">
+                  <Label styleClass="form-label" text="Description">
+                      <VBox.margin>
+                          <Insets bottom="5.0" />
+                      </VBox.margin>
+                      <font>
+                          <Font name="System Bold" size="12.0" />
+                      </font>
+                  </Label>
+                  <TextArea styleClass="form-input" fx:id="descriptionField" prefRowCount="3" promptText="Enter material description" wrapText="true" VBox.vgrow="ALWAYS" />
               </VBox>
-      
-                                                  <!-- Subject, College, Course -->
-              <HBox spacing="15">
-                  <VBox spacing="5" HBox.hgrow="ALWAYS">
-                      <Label style="-fx-text-fill: #666666;" text="Subject" />
-                      <TextField fx:id="subjectField" promptText="Enter subject" style="-fx-background-radius: 4; -fx-border-color: #E0E0E0; -fx-border-radius: 4; -fx-background-color: transparent;" />
-                  </VBox>
-                  <VBox spacing="5" HBox.hgrow="ALWAYS">
-                      <Label style="-fx-text-fill: #666666;" text="College" />
-                  <ComboBox fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></ComboBox>
-                  </VBox>
-                  <VBox spacing="5" HBox.hgrow="ALWAYS">
-                      <Label style="-fx-text-fill: #666666;" text="Course" />
-                  <ComboBox fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" style="-fx-background-radius: 4; -fx-background-color: transparent; -fx-border-radius: 4; -fx-border-color: #E0E0E0;">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></ComboBox>
-                  </VBox>
-              </HBox>
-      
-                                                  <!-- File Selection -->
-              <VBox spacing="8">
-                  <HBox alignment="CENTER_LEFT" spacing="10">
-                      <Button fx:id="selectFileButton" onAction="#handleFileSelection" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 16;" text="Choose File">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                      <Label fx:id="fileNameLabel" style="-fx-text-fill: #666666;" text="No file selected" />
-                  </HBox>
-                  <Label fx:id="statusLabel" style="-fx-text-fill: #A31D1D;" wrapText="true" />
+              <VBox prefHeight="109.0" prefWidth="482.0" spacing="10.0">
+                  <children>
+                      <VBox spacing="5">
+                          <Label styleClass="form-label" text="Subject">
+                              <font>
+                                  <Font name="System Bold" size="12.0" />
+                              </font>
+                          </Label>
+                          <TextField styleClass="form-input" fx:id="subjectField" maxWidth="1.7976931348623157E308" promptText="Enter subject" />
+                      </VBox>
+                      <VBox spacing="5">
+                          <Label styleClass="form-label" text="College" />
+                          <ComboBox styleClass="form-input" fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" >
+                              <cursor>
+                                  <Cursor fx:constant="HAND" />
+                              </cursor>
+                          </ComboBox>
+                      </VBox>
+                      <VBox spacing="5">
+                          <Label styleClass="form-label" text="Course" />
+                          <ComboBox styleClass="form-input" fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0">
+                              <cursor>
+                                  <Cursor fx:constant="HAND" />
+                              </cursor>
+                              <VBox.margin>
+                                  <Insets />
+                              </VBox.margin>
+                          </ComboBox>
+                      </VBox>
+                  </children>
+                  <VBox.margin>
+                      <Insets bottom="10.0" />
+                  </VBox.margin>
               </VBox>
-      
-                                                  <!-- Upload Button -->
-              <Button fx:id="uploadButton" maxWidth="Infinity" onAction="#handleUpload" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 10 20; -fx-font-size: 13;" text="Upload Material">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+
+              <!-- File Selection -->
+              <VBox prefHeight="158.0" prefWidth="482.0">
+                  <!-- Drag and Drop Area -->
+                  <VBox styleClass="drop-area" fx:id="dropArea" onDragDropped="#handleDragDropped" onDragExited="#handleDragExited" onDragOver="#handleDragOver" >
+                      <Label styleClass="drag-text" text="Drag and drop your file here" />
+                      <Label styleClass="drag-text" text="or" />
+                      <Button fx:id="selectFileButton"
+                              styleClass="secondary-button"
+                              onAction="#handleFileSelection"
+                              text="Choose File">
+                          <cursor>
+                              <Cursor fx:constant="HAND" />
+                          </cursor>
+                      </Button>
+                  <padding>
+                     <Insets bottom="15.0" top="15.0" />
+                  </padding>
+                  </VBox>
+                  <Label fx:id="fileNameLabel" styleClass="drag-text" text="No file selected" />
+                  <Label fx:id="statusLabel" styleClass="status-label" wrapText="true" />
+              </VBox>
+
+              <!-- Upload Button -->
+              <Button fx:id="uploadButton"
+                      styleClass="primary-button"
+                      maxWidth="Infinity"
+                      onAction="#handleUpload"
+                      text="Upload Material">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </Button>
           </VBox>
       </content>
    </ScrollPane>
