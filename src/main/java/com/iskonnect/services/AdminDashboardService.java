@@ -1,10 +1,9 @@
 package com.iskonnect.services;
 
-import com.iskonnect.utils.DatabaseConnection;
 import java.sql.*;
 import java.util.*;
 
-public class AdminDashboardService {
+public class AdminDashboardService extends BaseService {
 
     public DashboardStats getDashboardStats(String timeRange) throws SQLException {
         String query = """
@@ -16,17 +15,20 @@ public class AdminDashboardService {
 
         query = query.formatted(getTimeFilter("materials", timeRange), getTimeFilter("reports", timeRange));
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new DashboardStats(
-                    rs.getInt("total_students"),
-                    rs.getInt("total_materials"),
-                    rs.getInt("reported_materials")
-                );
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return new DashboardStats(
+                        rs.getInt("total_students"),
+                        rs.getInt("total_materials"),
+                        rs.getInt("reported_materials")
+                    );
+                }
             }
+        } finally {
+            closeConnection();
         }
         return new DashboardStats(0, 0, 0);
     }
@@ -41,22 +43,25 @@ public class AdminDashboardService {
             ORDER BY upvotes DESC 
             LIMIT ?
             """;
-    
+
         query = String.format(query, getTimeFilter("m", timeRange)); // Use "m" as the alias
-    
+
         List<MaterialStat> stats = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-    
-            stmt.setInt(1, limit);
-            ResultSet rs = stmt.executeQuery();
-    
-            while (rs.next()) {
-                stats.add(new MaterialStat(
-                    rs.getString("title"),
-                    rs.getInt("upvotes")
-                ));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, limit);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    stats.add(new MaterialStat(
+                        rs.getString("title"),
+                        rs.getInt("upvotes")
+                    ));
+                }
             }
+        } finally {
+            closeConnection();
         }
         return stats;
     }
@@ -70,23 +75,25 @@ public class AdminDashboardService {
             LEFT JOIN materials m ON u.user_id = m.uploader_id
             WHERE u.user_type = 'STUDENT'
             """;
-    
+
         query = String.format(query, getTimeFilter("m", timeRange), getTimeFilter("m", timeRange));
-    
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-    
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new UserDistribution(
-                    rs.getInt("active_users"),
-                    rs.getInt("inactive_users")
-                );
+
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return new UserDistribution(
+                        rs.getInt("active_users"),
+                        rs.getInt("inactive_users")
+                    );
+                }
             }
+        } finally {
+            closeConnection();
         }
         return new UserDistribution(0, 0);
     }
-    
 
     public List<ContributorStat> getTopContributors(int limit, String timeRange) throws SQLException {
         String query = """
@@ -101,23 +108,26 @@ public class AdminDashboardService {
             ORDER BY received_upvotes DESC
             LIMIT ?
             """;
-    
+
         query = String.format(query, getTimeFilter("m", timeRange));  // Use "m" as the alias
-    
+
         List<ContributorStat> stats = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-    
-            stmt.setInt(1, limit);
-            ResultSet rs = stmt.executeQuery();
-    
-            while (rs.next()) {
-                stats.add(new ContributorStat(
-                    rs.getString("contributor_name"),
-                    rs.getInt("received_upvotes")
-                ));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, limit);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    stats.add(new ContributorStat(
+                        rs.getString("contributor_name"),
+                        rs.getInt("received_upvotes")
+                    ));
+                }
             }
-        }
+        } finally {
+                closeConnection();
+            }
         return stats;
     }
 
@@ -133,17 +143,20 @@ public class AdminDashboardService {
         query = String.format(query, getTimeFilter("materials", timeRange));
 
         List<CollegeStat> stats = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                stats.add(new CollegeStat(
-                    rs.getString("college"),
-                    rs.getInt("material_count")
-                ));
+                while (rs.next()) {
+                    stats.add(new CollegeStat(
+                        rs.getString("college"),
+                        rs.getInt("material_count")
+                    ));
+                }
             }
+        } finally {
+            closeConnection();
         }
         return stats;
     }

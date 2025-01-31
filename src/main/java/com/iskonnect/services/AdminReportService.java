@@ -1,15 +1,14 @@
-// Path: src/main/java/com/iskonnect/services/AdminReportService.java
 package com.iskonnect.services;
 
-import com.iskonnect.utils.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminReportService {
-    
+public class AdminReportService extends BaseService {
+
     public static class ReportEntry {
         private final int materialId;
         private final String title;
@@ -20,9 +19,9 @@ public class AdminReportService {
         private final int reportCount;
         private final String fileUrl;
 
-        public ReportEntry(int materialId, String title, String description, 
-                          String uploaderId, String reporterId, String reason, 
-                          int reportCount, String fileUrl) {
+        public ReportEntry(int materialId, String title, String description,
+                           String uploaderId, String reporterId, String reason,
+                           int reportCount, String fileUrl) {
             this.materialId = materialId;
             this.title = title;
             this.description = description;
@@ -63,118 +62,124 @@ public class AdminReportService {
             ORDER BY report_count DESC
         """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                reports.add(new ReportEntry(
-                    rs.getInt("material_id"),
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("uploader_id"),
-                    rs.getString("reporter_id"),
-                    rs.getString("reason"),
-                    rs.getInt("report_count"),
-                    rs.getString("file_url")
-                ));
+                while (rs.next()) {
+                    reports.add(new ReportEntry(
+                        rs.getInt("material_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("uploader_id"),
+                        rs.getString("reporter_id"),
+                        rs.getString("reason"),
+                        rs.getInt("report_count"),
+                        rs.getString("file_url")
+                    ));
+                }
             }
+        } finally {
+            closeConnection();
         }
         return reports;
     }
 
     public boolean deleteMaterial(int materialId) throws SQLException {
-    String getUploaderQuery = "SELECT uploader_id FROM materials WHERE material_id = ?";
-    String updateUserPointsQuery = "UPDATE users SET points = points - 5 WHERE user_id = ?";
-    String checkUserPointsQuery = "SELECT points FROM users WHERE user_id = ?";
-    String getBadgesToRevokeQuery = "SELECT badge_id FROM badges WHERE requirement_points > ?";
-    String revokeUserBadgeQuery = "DELETE FROM user_badges WHERE user_id = ? AND badge_id = ?";
-    String deleteVotesQuery = "DELETE FROM votes WHERE material_id = ?";
-    String deleteReportsQuery = "DELETE FROM reports WHERE material_id = ?";
-    String deleteBookmarksQuery = "DELETE FROM bookmarks WHERE material_id = ?";
-    String deleteMaterialQuery = "DELETE FROM materials WHERE material_id = ?";
+        String getUploaderQuery = "SELECT uploader_id FROM materials WHERE material_id = ?";
+        String updateUserPointsQuery = "UPDATE users SET points = points - 5 WHERE user_id = ?";
+        String checkUserPointsQuery = "SELECT points FROM users WHERE user_id = ?";
+        String getBadgesToRevokeQuery = "SELECT badge_id FROM badges WHERE requirement_points > ?";
+        String revokeUserBadgeQuery = "DELETE FROM user_badges WHERE user_id = ? AND badge_id = ?";
+        String deleteVotesQuery = "DELETE FROM votes WHERE material_id = ?";
+        String deleteReportsQuery = "DELETE FROM reports WHERE material_id = ?";
+        String deleteBookmarksQuery = "DELETE FROM bookmarks WHERE material_id = ?";
+        String deleteMaterialQuery = "DELETE FROM materials WHERE material_id = ?";
 
-    try (Connection conn = DatabaseConnection.getConnection()) {
-        conn.setAutoCommit(false); // Start transaction
         try {
-            String uploaderId = null;
+            openConnection();
+            getConnection().setAutoCommit(false); // Start transaction
+            try {
+                String uploaderId = null;
 
-            // Step 1: Fetch uploader ID
-            try (PreparedStatement stmt = conn.prepareStatement(getUploaderQuery)) {
-                stmt.setInt(1, materialId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        uploaderId = rs.getString("uploader_id");
-                    } else {
-                        return false; // Material not found
+                // Step 1: Fetch uploader ID
+                try (PreparedStatement stmt = getConnection().prepareStatement(getUploaderQuery)) {
+                    stmt.setInt(1, materialId);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            uploaderId = rs.getString("uploader_id");
+                        } else {
+                            return false; // Material not found
+                        }
                     }
                 }
-            }
 
-            // Step 2: Deduct 5 points from uploader
-            try (PreparedStatement stmt = conn.prepareStatement(updateUserPointsQuery)) {
-                stmt.setString(1, uploaderId);
-                stmt.executeUpdate();
-            }
-
-            // Step 3: Check updated user points
-            int userPoints = 0;
-            try (PreparedStatement stmt = conn.prepareStatement(checkUserPointsQuery)) {
-                stmt.setString(1, uploaderId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        userPoints = rs.getInt("points");
-                    }
-                }
-            }
-
-            // Step 4: Find badges to revoke (badges with requirement_points > userPoints)
-            List<Integer> badgesToRevoke = new ArrayList<>();
-            try (PreparedStatement stmt = conn.prepareStatement(getBadgesToRevokeQuery)) {
-                stmt.setInt(1, userPoints);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        badgesToRevoke.add(rs.getInt("badge_id"));
-                    }
-                }
-            }
-
-            // Step 5: Revoke badges that the user no longer qualifies for
-            for (int badgeId : badgesToRevoke) {
-                try (PreparedStatement stmt = conn.prepareStatement(revokeUserBadgeQuery)) {
+                // Step 2: Deduct 5 points from uploader
+                try (PreparedStatement stmt = getConnection().prepareStatement(updateUserPointsQuery)) {
                     stmt.setString(1, uploaderId);
-                    stmt.setInt(2, badgeId);
                     stmt.executeUpdate();
                 }
-            }
 
-            // Step 6: Delete votes, reports, bookmarks, and the material
-            try (PreparedStatement stmt = conn.prepareStatement(deleteVotesQuery)) {
-                stmt.setInt(1, materialId);
-                stmt.executeUpdate();
-            }
+                // Step 3: Check updated user points
+                int userPoints = 0;
+                try (PreparedStatement stmt = getConnection().prepareStatement(checkUserPointsQuery)) {
+                    stmt.setString(1, uploaderId);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            userPoints = rs.getInt("points");
+                        }
+                    }
+                }
 
-            try (PreparedStatement stmt = conn.prepareStatement(deleteReportsQuery)) {
-                stmt.setInt(1, materialId);
-                stmt.executeUpdate();
-            }
+                // Step 4: Find badges to revoke (badges with requirement_points > userPoints)
+                List<Integer> badgesToRevoke = new ArrayList<>();
+                try (PreparedStatement stmt = getConnection().prepareStatement(getBadgesToRevokeQuery)) {
+                    stmt.setInt(1, userPoints);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        while (rs.next()) {
+                            badgesToRevoke.add(rs.getInt("badge_id"));
+                        }
+                    }
+                }
 
-            try (PreparedStatement stmt = conn.prepareStatement(deleteBookmarksQuery)) {
-                stmt.setInt(1, materialId);
-                stmt.executeUpdate();
-            }
+                // Step 5: Revoke badges that the user no longer qualifies for
+                for (int badgeId : badgesToRevoke) {
+                    try (PreparedStatement stmt = getConnection().prepareStatement(revokeUserBadgeQuery)) {
+                        stmt.setString(1, uploaderId);
+                        stmt.setInt(2, badgeId);
+                        stmt.executeUpdate();
+                    }
+                }
 
-            try (PreparedStatement stmt = conn.prepareStatement(deleteMaterialQuery)) {
-                stmt.setInt(1, materialId);
-                int result = stmt.executeUpdate();
-                conn.commit(); // Commit transaction if all operations succeed
-                return result > 0;
+                // Step 6: Delete votes, reports, bookmarks, and the material
+                try (PreparedStatement stmt = getConnection().prepareStatement(deleteVotesQuery)) {
+                    stmt.setInt(1, materialId);
+                    stmt.executeUpdate();
+                }
+
+                try (PreparedStatement stmt = getConnection().prepareStatement(deleteReportsQuery)) {
+                    stmt.setInt(1, materialId);
+ stmt.executeUpdate();
+                }
+
+                try (PreparedStatement stmt = getConnection().prepareStatement(deleteBookmarksQuery)) {
+                    stmt.setInt(1, materialId);
+                    stmt.executeUpdate();
+                }
+
+                try (PreparedStatement stmt = getConnection().prepareStatement(deleteMaterialQuery)) {
+                    stmt.setInt(1, materialId);
+                    int result = stmt.executeUpdate();
+                    getConnection().commit(); // Commit transaction if all operations succeed
+                    return result > 0;
+                }
+            } catch (SQLException e) {
+                getConnection().rollback(); // Rollback transaction if any step fails
+                throw e;
             }
-        } catch (SQLException e) {
-            conn.rollback(); // Rollback transaction if any step fails
-            throw e;
+        } finally {
+            closeConnection();
         }
     }
-}
-    
 }

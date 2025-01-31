@@ -1,16 +1,14 @@
-// Path: src/main/java/com/iskonnect/services/AdminService.java
-
 package com.iskonnect.services;
 
 import com.iskonnect.models.Material;
 import com.iskonnect.models.Student;
-import com.iskonnect.utils.DatabaseConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminService {
-    
+public class AdminService extends BaseService {
+
     public AdminStats getAdminStats() throws SQLException {
         AdminStats stats = new AdminStats();
         String query = """
@@ -20,15 +18,18 @@ public class AdminService {
                 (SELECT COUNT(*) FROM reports WHERE status = 'PENDING') as pending_reports
             """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                stats.setTotalUsers(rs.getInt("total_users"));
-                stats.setTotalMaterials(rs.getInt("total_materials"));
-                stats.setPendingReports(rs.getInt("pending_reports"));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stats.setTotalUsers(rs.getInt("total_users"));
+                    stats.setTotalMaterials(rs.getInt("total_materials"));
+                    stats.setPendingReports(rs.getInt("pending_reports"));
+                }
             }
+        } finally {
+            closeConnection();
         }
         return stats;
     }
@@ -42,21 +43,24 @@ public class AdminService {
             LIMIT ?
             """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, limit);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Student student = new Student(
-                    rs.getString("user_id"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name"),
-                    rs.getString("email")
-                );
-                users.add(student);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, limit);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    Student student = new Student(
+                        rs.getString("user_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email")
+                    );
+                    users.add(student);
+                }
             }
+        } finally {
+            closeConnection();
         }
         return users;
     }
@@ -74,42 +78,48 @@ public class AdminService {
             LIMIT ?
             """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, limit);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Material material = new Material(
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getString("subject"),
-                    rs.getString("college"),
-                    rs.getString("course"),
-                    rs.getString("uploader_id")
-                );
-                
-                material.setMaterialId(rs.getInt("material_id"));
-                material.setFileUrl(rs.getString("file_url"));
-                material.setFileName(rs.getString("filename"));
-                material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                
-                materials.add(material);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, limit);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    Material material = new Material(
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("subject"),
+                        rs.getString("college"),
+                        rs.getString("course"),
+                        rs.getString("uploader_id")
+                    );
+
+                    material.setMaterialId(rs.getInt("material_id"));
+                    material.setFileUrl(rs.getString("file_url"));
+                    material.setFileName(rs.getString("filename"));
+                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+
+                    materials.add(material);
+                }
             }
+        } finally {
+            closeConnection();
         }
         return materials;
     }
 
     public boolean removeMaterial(int materialId) throws SQLException {
         String query = "DELETE FROM materials WHERE material_id = ?";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, materialId);
-            return stmt.executeUpdate() > 0;
+
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, materialId);
+                return stmt.executeUpdate() > 0;
+            }
+        } finally {
+            closeConnection();
         }
     }
 

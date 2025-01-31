@@ -3,7 +3,6 @@ package com.iskonnect.services;
 import com.iskonnect.controllers.BadgeNotificationController;
 import com.iskonnect.models.Badge;
 import com.iskonnect.models.Material;
-import com.iskonnect.utils.DatabaseConnection;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaterialService {
+public class MaterialService extends BaseService {
     private static final Dotenv dotenv = Dotenv.load();
     private static final String SUPABASE_BUCKET_NAME = dotenv.get("SUPABASE_BUCKET_NAME");
     private static final String SUPABASE_ACCESS_KEY = dotenv.get("SUPABASE_ACCESS_KEY");
@@ -32,8 +31,9 @@ public class MaterialService {
         String pointsQuery = "SELECT points FROM users WHERE user_id = ?";
         String materialsQuery = "SELECT COUNT(*) FROM materials WHERE uploader_id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(pointsQuery)) {
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(pointsQuery)) {
                 stmt.setString(1, userId);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
@@ -42,7 +42,7 @@ public class MaterialService {
                 }
             }
 
-            try (PreparedStatement stmt = conn.prepareStatement(materialsQuery)) {
+            try (PreparedStatement stmt = getConnection().prepareStatement(materialsQuery)) {
                 stmt.setString(1, userId);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
@@ -52,12 +52,14 @@ public class MaterialService {
             }
 
             // Explicitly deallocate prepared statements (if necessary)
-            try (PreparedStatement deallocateStmt = conn.prepareStatement("DEALLOCATE ALL")) {
+            try (PreparedStatement deallocateStmt = getConnection().prepareStatement("DEALLOCATE ALL")) {
                 deallocateStmt.execute();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return stats;
     }
@@ -75,14 +77,9 @@ public class MaterialService {
         // Upload file first
         uploadFileToSupabase(request.getFile(), objectPath);
 
-        Connection conn = null;
-        PreparedStatement materialStmt = null;
-        PreparedStatement pointsStmt = null;
-        ResultSet rs = null;
-
         try {
-            conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false);
+            openConnection();
+            getConnection().setAutoCommit(false);
 
             // Insert material
             String materialSql = """
@@ -91,80 +88,54 @@ public class MaterialService {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
             
-            materialStmt = conn.prepareStatement(materialSql);
-            materialStmt.setString(1, request.getMaterialName());
-            materialStmt.setString(2, request.getDescription());
-            materialStmt.setString(3, request.getSubject());
-            materialStmt.setString(4, request.getCollege());
-            materialStmt.setString(5, request.getCourse());
-            materialStmt.setString(6, fileUrl);
-            materialStmt.setString(7, userId);
-            materialStmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-            materialStmt.setString(9, encodedFilename);
-            materialStmt.executeUpdate();
+            try (PreparedStatement materialStmt = getConnection().prepareStatement(materialSql)) {
+                materialStmt.setString(1, request.getMaterialName());
+                materialStmt.setString(2, request.getDescription());
+                materialStmt.setString(3, request.getSubject());
+                materialStmt.setString(4, request.getCollege());
+                materialStmt.setString(5, request.getCourse());
+                materialStmt.setString(6, fileUrl);
+                materialStmt.setString(7, userId);
+                materialStmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+                materialStmt.setString(9, encodedFilename);
+                materialStmt.executeUpdate();
 
-            // Update points and retrieve updated points
-            String pointsSql = "UPDATE users SET points = points + 5 WHERE user_id = ? RETURNING points";
-            pointsStmt = conn.prepareStatement(pointsSql);
-            pointsStmt.setString(1, userId);
-            rs = pointsStmt.executeQuery();
-            
-            int updatedPoints = 0;
-            if (rs.next()) {
-                updatedPoints = rs.getInt("points");
+                // Update points and retrieve updated points
+                String pointsSql = "UPDATE users SET points = points + 5 WHERE user_id = ? RETURNING points";
+                try (PreparedStatement pointsStmt = getConnection().prepareStatement(pointsSql)) {
+                    pointsStmt.setString(1, userId);
+                    try (ResultSet rs = pointsStmt.executeQuery()) {
+                        int updatedPoints = 0;
+                        if (rs.next()) {
+                            updatedPoints = rs.getInt("points");
+                        }
+
+                        // Evaluate and award badges
+                        BadgeService badgeService = new BadgeService();
+                        List<Badge> awardedBadges = badgeService.evaluateAndAwardBadges(userId, updatedPoints);
+
+                        // Show badge notifications
+                        if (!awardedBadges.isEmpty()) {
+                            showBadgeNotification(awardedBadges);
+                        }
+
+                        // Commit transaction
+                        getConnection().commit();
+
+                    }
+                }
             }
-
-            // Evaluate and award badges
-            BadgeService badgeService = new BadgeService();
-            List<Badge> awardedBadges = badgeService.evaluateAndAwardBadges(userId, updatedPoints);
-
-            // Show badge notifications
-            if (!awardedBadges.isEmpty()) {
-                showBadgeNotification(awardedBadges);
-            }
-
-            // Commit transaction
-            conn.commit();
-
         } catch (SQLException e) {
-            if (conn != null) {
+            if (getConnection() != null) {
                 try {
-                    conn.rollback();
+                    getConnection().rollback();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
             throw e;
         } finally {
-            // Close all resources in reverse order
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pointsStmt != null) {
-                try {
-                    pointsStmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (materialStmt != null) {
-                try {
-                    materialStmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeConnection();
         }
     }
 
@@ -215,7 +186,6 @@ public class MaterialService {
         }
     }
 
-
     public List<Material> getAllMaterials(int page, int itemsPerPage) {
         List<Material> materials = new ArrayList<>();
         String query = """
@@ -253,50 +223,57 @@ public class MaterialService {
             LIMIT ? OFFSET ?
         """;
     
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, itemsPerPage);
-            stmt.setInt(2, (page - 1) * itemsPerPage);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Material material = new Material(
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("subject"),
-                        rs.getString("college"),
-                        rs.getString("course"),
-                        rs.getString("uploader_id")
-                    );
-                    
-                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                    material.setMaterialId(rs.getInt("material_id"));
-                    material.setFileUrl(rs.getString("file_url"));       
-                    material.setFileName(rs.getString("filename"));       
-                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                    material.setUpvotes(rs.getInt("upvotes"));          
-                    
-                    materials.add(material);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, itemsPerPage);
+                stmt.setInt(2, (page - 1) * itemsPerPage);
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Material material = new Material(
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getString("subject"),
+                            rs.getString("college"),
+                            rs.getString("course"),
+                            rs.getString("uploader_id")
+                        );
+                        
+                        material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                        material.setMaterialId(rs.getInt("material_id"));
+                        material.setFileUrl(rs.getString("file_url"));       
+                        material.setFileName(rs.getString("filename"));       
+                        material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                        material.setUpvotes(rs.getInt("upvotes"));          
+                        
+                        materials.add(material);
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return materials;
     }
 
     public int getTotalMaterialsCount() {
         String query = "SELECT COUNT(*) FROM materials";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            
-            if (rs.next()) {
-                return rs.getInt(1);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+                
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return 0;
     }
@@ -343,40 +320,43 @@ public class MaterialService {
             LIMIT ? OFFSET ?
         """;
     
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            String searchPattern = "%" + searchText.toLowerCase() + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern);
-            stmt.setString(4, searchPattern);
-            stmt.setInt(5, itemsPerPage);
-            stmt.setInt(6, (page - 1) * itemsPerPage);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Material material = new Material(
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("subject"),
-                        rs.getString("college"),
-                        rs.getString("course"),
-                        rs.getString("uploader_id")
-                    );
-                    
-                    material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
-                    material.setMaterialId(rs.getInt("material_id"));
-                    material.setFileUrl(rs.getString("file_url"));       
-                    material.setFileName(rs.getString("filename"));       
-                    material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
-                    material.setUpvotes(rs.getInt("upvotes"));          
-                    
-                    materials.add(material);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                String searchPattern = "%" + searchText.toLowerCase() + "%";
+                stmt.setString(1, searchPattern);
+                stmt.setString(2, searchPattern);
+                stmt.setString(3, searchPattern);
+                stmt.setString(4, searchPattern);
+                stmt.setInt(5, itemsPerPage);
+                stmt.setInt(6, (page - 1) * itemsPerPage);
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Material material = new Material(
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getString("subject"),
+                            rs.getString("college"),
+                            rs.getString("course"),
+                            rs.getString("uploader_id")
+                        );
+                        
+                        material.setUploaderName(rs.getString("first_name") + " " + rs.getString("last_name"));
+                        material.setMaterialId(rs.getInt("material_id"));
+                        material.setFileUrl(rs.getString("file_url"));       
+                        material.setFileName(rs.getString("filename"));       
+                        material.setUploadDate(rs.getTimestamp("upload_date").toLocalDateTime());
+                        material.setUpvotes(rs.getInt("upvotes"));          
+                        
+                        materials.add(material);
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return materials;
     }
@@ -392,21 +372,24 @@ public class MaterialService {
                 LOWER(m.subject) LIKE ?
         """;
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            String searchPattern = "%" + searchText.toLowerCase() + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern);
-            stmt.setString(4, searchPattern);
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                String searchPattern = "%" + searchText.toLowerCase() + "%";
+                stmt.setString(1, searchPattern);
+                stmt.setString(2, searchPattern);
+                stmt.setString(3, searchPattern);
+                stmt.setString(4, searchPattern);
+                
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return 0;
     }

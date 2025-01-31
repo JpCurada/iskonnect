@@ -1,11 +1,10 @@
 package com.iskonnect.services;
 
-import com.iskonnect.utils.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeaderboardService {
+public class LeaderboardService extends BaseService {
     
     public List<LeaderboardEntry> getLeaderboard(String timeFilter) {
         List<LeaderboardEntry> leaderboard = new ArrayList<>();
@@ -30,22 +29,25 @@ public class LeaderboardService {
             LIMIT 50
             """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                LeaderboardEntry entry = new LeaderboardEntry(
-                    rs.getString("user_id"),
-                    rs.getString("first_name") + " " + rs.getString("last_name"),
-                    rs.getInt("points"),
-                    rs.getInt("total_materials"),
-                    rs.getInt("total_badges")
-                );
-                leaderboard.add(entry);
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    LeaderboardEntry entry = new LeaderboardEntry(
+                        rs.getString("user_id"),
+                        rs.getString("first_name") + " " + rs.getString("last_name"),
+                        rs.getInt("points"),
+                        rs.getInt("total_materials"),
+                        rs.getInt("total_badges")
+                    );
+                    leaderboard.add(entry);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return leaderboard;
     }
@@ -74,17 +76,20 @@ public class LeaderboardService {
                 ) as total_points
             """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                stats.setTotalContributors(rs.getInt("contributors"));
-                stats.setTotalMaterials(rs.getInt("materials"));
-                stats.setTotalPoints(rs.getInt("total_points"));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stats.setTotalContributors(rs.getInt("contributors"));
+                    stats.setTotalMaterials(rs.getInt("materials"));
+                    stats.setTotalPoints(rs.getInt("total_points"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return stats;
     }
@@ -123,7 +128,7 @@ public class LeaderboardService {
         // Getters and setters
         public int getTotalContributors() { return totalContributors; }
         public void setTotalContributors(int value) { this.totalContributors = value; }
-        public int getTotalMaterials() { return totalMaterials; }
+        public int getTotalMaterials () { return totalMaterials; }
         public void setTotalMaterials(int value) { this.totalMaterials = value; }
         public int getTotalPoints() { return totalPoints; }
         public void setTotalPoints(int value) { this.totalPoints = value; }

@@ -1,11 +1,8 @@
-// Path: src/main/java/com/iskonnect/services/ReportService.java
-
 package com.iskonnect.services;
 
-import com.iskonnect.utils.DatabaseConnection;
 import java.sql.*;
 
-public class ReportService {
+public class ReportService extends BaseService {
     
     public boolean submitReport(int materialId, String reporterId, String reason, String additionalInfo) {
         String query = """
@@ -13,19 +10,21 @@ public class ReportService {
             VALUES (?, ?, ?, ?, 'PENDING', CURRENT_TIMESTAMP)
         """;
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, materialId);
-            stmt.setString(2, reporterId);
-            stmt.setString(3, reason);
-            stmt.setString(4, additionalInfo);
-            
-            return stmt.executeUpdate() > 0;
-            
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, materialId);
+                stmt.setString(2, reporterId);
+                stmt.setString(3, reason);
+                stmt.setString(4, additionalInfo);
+                
+                return stmt.executeUpdate() > 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            closeConnection();
         }
     }
     
@@ -36,19 +35,21 @@ public class ReportService {
             WHERE material_id = ? AND reporter_id = ?
         """;
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, materialId);
-            stmt.setString(2, userId);
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("report_count") > 0;
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setInt(1, materialId);
+                stmt.setString(2, userId);
+                
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("report_count") > 0;
+                }
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return false;
     }
@@ -80,19 +81,21 @@ public class ReportService {
             FROM reports
         """;
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                stats.setTotalReports(rs.getInt("total"));
-                stats.setPendingReports(rs.getInt("pending"));
-                stats.setResolvedReports(rs.getInt("resolved"));
-                stats.setDismissedReports(rs.getInt("dismissed"));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stats.setTotalReports(rs.getInt("total"));
+                    stats.setPendingReports(rs.getInt("pending"));
+                    stats.setResolvedReports(rs.getInt("resolved"));
+                    stats.setDismissedReports(rs.getInt("dismissed"));
+                }
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return stats;
     }
@@ -100,17 +103,19 @@ public class ReportService {
     public boolean updateReportStatus(int reportId, String status) {
         String query = "UPDATE reports SET status = ? WHERE report_id = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setString(1, status);
-            stmt.setInt(2, reportId);
-            
-            return stmt.executeUpdate() > 0;
-            
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                stmt.setString(1, status);
+                stmt.setInt(2, reportId);
+                
+                return stmt.executeUpdate() > 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            closeConnection();
         }
     }
 }

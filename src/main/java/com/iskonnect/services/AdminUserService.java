@@ -1,15 +1,13 @@
-// Path: src/main/java/com/iskonnect/services/AdminUserService.java
-
 package com.iskonnect.services;
 
 import com.iskonnect.models.UserDetails;
-import com.iskonnect.utils.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import java.sql.*;
 
-public class AdminUserService {
-    
+public class AdminUserService extends BaseService {
+
     public ObservableList<UserDetails> getAllUsers() throws SQLException {
         ObservableList<UserDetails> users = FXCollections.observableArrayList();
         String query = """
@@ -29,26 +27,29 @@ public class AdminUserService {
             ORDER BY u.points DESC
         """;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                users.add(new UserDetails(
-                    rs.getString("user_id"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name"),
-                    rs.getInt("points"),
-                    rs.getString("email"),
-                    rs.getInt("report_count"),
-                    rs.getInt("upvote_count")
-                ));
+        try {
+            openConnection();
+            try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    users.add(new UserDetails(
+                        rs.getString("user_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getInt("points"),
+                        rs.getString("email"),
+                        rs.getInt("report_count"),
+                        rs.getInt("upvote_count")
+                    ));
+                }
             }
+        } finally {
+            closeConnection();
         }
         return users;
     }
 
-    public boolean deleteUser(String userId) throws SQLException {
+    public boolean deleteUser (String userId) throws SQLException {
         // Order of deletion is important due to foreign key constraints
         String[] queries = {
             "DELETE FROM votes WHERE user_id = ?",              // Delete user's votes
@@ -62,24 +63,27 @@ public class AdminUserService {
             "DELETE FROM users WHERE user_id = ?",             // Delete the user
             "DELETE FROM user_credentials WHERE user_id = ?"   // Then delete credentials
         };
-    
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.setAutoCommit(false); // Start transaction
+
+        try {
+            openConnection();
+            getConnection().setAutoCommit(false); // Start transaction
             try {
                 // Execute each delete query in order
                 for (String query : queries) {
-                    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                    try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
                         stmt.setString(1, userId);
                         stmt.executeUpdate();
                     }
                 }
-    
-                conn.commit(); // Commit the transaction
+
+                getConnection().commit(); // Commit the transaction
                 return true;
             } catch (SQLException e) {
-                conn.rollback(); // Rollback if any step fails
+                getConnection().rollback(); // Rollback if any step fails
                 throw e;
             }
+        } finally {
+            closeConnection();
         }
-    }    
+    }
 }
