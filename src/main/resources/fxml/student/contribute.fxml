@@ -25,22 +25,22 @@
     <HBox prefWidth="200.0" styleClass="stats-container">
         <VBox styleClass="stat-card">
             <Label styleClass="stat-label" text="Your Points" />
-            <Label styleClass="stat-value" fx:id="pointsLabel" text="0" />
+            <Label fx:id="pointsLabel" styleClass="value" text="0" />
         </VBox>
         <VBox prefWidth="200.0" styleClass="stat-card">
-            <Label styleClass="stat-label"  text="Materials Shared" />
-            <Label styleClass="stat-value" fx:id="materialsCountLabel" text="0" />
+            <Label styleClass="stat-label" text="Materials Shared" />
+            <Label fx:id="materialsCountLabel" styleClass="value" text="0" />
         </VBox>
     </HBox>
    <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" vbarPolicy="NEVER">
       <content>
 
           <!-- Main Form -->
-          <VBox styleClass="form-container" maxWidth="1.7976931348623157E308" spacing="7.0" >
+          <VBox maxWidth="1.7976931348623157E308" spacing="7.0" styleClass="form-container">
               <!-- Material Name -->
               <VBox spacing="5">
                   <Label styleClass="form-label" text="Material Name" />
-                  <TextField styleClass="form-input" fx:id="materialNameField" promptText="Enter material name"  VBox.vgrow="ALWAYS" />
+                  <TextField fx:id="materialNameField" promptText="Enter material name" styleClass="form-input" VBox.vgrow="ALWAYS" />
               </VBox>
 
               <!-- Description -->
@@ -53,7 +53,7 @@
                           <Font name="System Bold" size="12.0" />
                       </font>
                   </Label>
-                  <TextArea styleClass="form-input" fx:id="descriptionField" prefRowCount="3" promptText="Enter material description" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <TextArea fx:id="descriptionField" prefRowCount="3" promptText="Enter material description" styleClass="form-input" wrapText="true" VBox.vgrow="ALWAYS" />
               </VBox>
               <VBox prefHeight="109.0" prefWidth="482.0" spacing="10.0">
                   <children>
@@ -63,11 +63,11 @@
                                   <Font name="System Bold" size="12.0" />
                               </font>
                           </Label>
-                          <TextField styleClass="form-input" fx:id="subjectField" maxWidth="1.7976931348623157E308" promptText="Enter subject" />
+                          <TextField fx:id="subjectField" maxWidth="1.7976931348623157E308" promptText="Enter subject" styleClass="form-input" />
                       </VBox>
                       <VBox spacing="5">
                           <Label styleClass="form-label" text="College" />
-                          <ComboBox styleClass="form-input" fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" >
+                          <ComboBox fx:id="collegeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" styleClass="form-input">
                               <cursor>
                                   <Cursor fx:constant="HAND" />
                               </cursor>
@@ -75,7 +75,7 @@
                       </VBox>
                       <VBox spacing="5">
                           <Label styleClass="form-label" text="Course" />
-                          <ComboBox styleClass="form-input" fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0">
+                          <ComboBox fx:id="courseComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" styleClass="form-input">
                               <cursor>
                                   <Cursor fx:constant="HAND" />
                               </cursor>
@@ -93,13 +93,10 @@
               <!-- File Selection -->
               <VBox prefHeight="158.0" prefWidth="482.0">
                   <!-- Drag and Drop Area -->
-                  <VBox styleClass="drop-area" fx:id="dropArea" onDragDropped="#handleDragDropped" onDragExited="#handleDragExited" onDragOver="#handleDragOver" >
+                  <VBox fx:id="dropArea" onDragDropped="#handleDragDropped" onDragExited="#handleDragExited" onDragOver="#handleDragOver" styleClass="drop-area">
                       <Label styleClass="drag-text" text="Drag and drop your file here" />
                       <Label styleClass="drag-text" text="or" />
-                      <Button fx:id="selectFileButton"
-                              styleClass="secondary-button"
-                              onAction="#handleFileSelection"
-                              text="Choose File">
+                      <Button fx:id="selectFileButton" onAction="#handleFileSelection" styleClass="secondary-button" text="Choose File">
                           <cursor>
                               <Cursor fx:constant="HAND" />
                           </cursor>
@@ -113,11 +110,7 @@
               </VBox>
 
               <!-- Upload Button -->
-              <Button fx:id="uploadButton"
-                      styleClass="primary-button"
-                      maxWidth="Infinity"
-                      onAction="#handleUpload"
-                      text="Upload Material">
+              <Button fx:id="uploadButton" maxWidth="Infinity" onAction="#handleUpload" styleClass="primary-button" text="Upload Material">
                   <cursor>
                       <Cursor fx:constant="HAND" />
                   </cursor>
