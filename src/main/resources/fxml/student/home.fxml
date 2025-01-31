@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,57 +13,85 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox spacing="20" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/home.css,@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.HomeController">
+<VBox spacing="15.0" style="-fx-background-color: #FEF9E1; -fx-background-radius: 30 0 0 0;" styleClass="content-panel" stylesheets="@../../styles/home.css,@../../styles/shared.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskonnect.controllers.HomeController">
 
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+   <BorderPane VBox.vgrow="ALWAYS">
+      <top>
 
-    <!-- Header Section -->
-    <VBox spacing="5">
-        <Text fx:id="dateText" fill="#666666" styleClass="homeText" text="date" VBox.vgrow="ALWAYS">
+          <!-- Header Section -->
+          <VBox spacing="5" BorderPane.alignment="CENTER">
+              <Text fx:id="dateText" fill="#666666" styleClass="homeText" text="date" VBox.vgrow="ALWAYS">
          </Text>
-        <Text fx:id="welcomeText" fill="#a31d1d" text="Hello, Isko" VBox.vgrow="ALWAYS">
+              <Text fx:id="welcomeText" fill="#a31d1d" text="Hello, Isko" VBox.vgrow="ALWAYS">
          </Text>
-        <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
-            <Text fx:id="greetingText" styleClass="greeting" text="Kumusta ang araw mo, " HBox.hgrow="ALWAYS">
+              <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                  <Text fx:id="greetingText" styleClass="greeting" text="Kumusta ang araw mo, " HBox.hgrow="ALWAYS">
             </Text>
-            <Text fx:id="firstNameText" styleClass="greeting" text="name" HBox.hgrow="ALWAYS">
+                  <Text fx:id="firstNameText" styleClass="greeting" text="name" HBox.hgrow="ALWAYS">
             </Text>
-            <Text fx:id="questionMark" styleClass="greeting" text="?" wrappingWidth="84.57893085479736" HBox.hgrow="ALWAYS">
+                  <Text fx:id="questionMark" styleClass="greeting" text="?" wrappingWidth="84.57893085479736" HBox.hgrow="ALWAYS">
             </Text>
-         <Region HBox.hgrow="ALWAYS" />
-   
-             <!-- Search Bar -->
-            <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="search-container">
-                <TextField fx:id="searchField" promptText="Ano ang hanap mo?" styleClass="search-field" />
-                <Button onAction="#handleSearch" styleClass="search-button" text="Search">
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-            </HBox>
-        </HBox>
-    </VBox>
+               <Region HBox.hgrow="ALWAYS" />
 
-    <!-- Materials Grid -->
-    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
-        <content>
-            <GridPane fx:id="materialsGrid" hgap="15" vgap="15">
-                <padding>
-                    <Insets bottom="10" left="10" right="10" top="10" />
-                </padding>
-                <columnConstraints>
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                    <ColumnConstraints percentWidth="25" />
-                </columnConstraints>
-            </GridPane>
-        </content>
-    </ScrollPane>
+                   <!-- Search Bar -->
+                  <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="search-container">
+                      <TextField fx:id="searchField" promptText="Ano ang hanap mo?" styleClass="search-field" />
+                      <Button onAction="#handleSearch" prefHeight="27.0" prefWidth="70.0" styleClass="search-button" text="Search">
+                          <cursor>
+                              <Cursor fx:constant="HAND" />
+                          </cursor>
+                      </Button>
+                  </HBox>
+              </HBox>
+          </VBox>
+      </top>
+      <center>
+         <VBox BorderPane.alignment="CENTER">
+            <children>
 
-    <!-- Pagination Container -->
-    <VBox fx:id="paginationContainer" alignment="CENTER" spacing="10" />
-
+                <!-- Materials Grid -->
+                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                    <content>
+                        <GridPane fx:id="materialsGrid" hgap="20" vgap="20">
+                            <padding>
+                                <Insets bottom="10" left="10" right="10" top="10" />
+                            </padding>
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="25" />
+                                <ColumnConstraints percentWidth="25" />
+                                <ColumnConstraints percentWidth="25" />
+                                <ColumnConstraints percentWidth="25" />
+                            </columnConstraints>
+                        </GridPane>
+                    </content>
+                </ScrollPane>
+            </children>
+         </VBox>
+      </center>
+      <bottom>
+         <VBox BorderPane.alignment="CENTER">
+            <children>
+                <!-- Pagination Container -->
+                <HBox fx:id="paginationContainer" alignment="CENTER" spacing="10">
+                    <Button fx:id="prevButton" onAction="#handlePrevPage" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Previous">
+                        <cursor>
+                            <Cursor fx:constant="HAND" />
+                        </cursor>
+                    </Button>
+                    <HBox alignment="CENTER" spacing="5">
+                        <Text fx:id="pageText" style="-fx-fill: #6D2323;" text="Page 1 of 1" />
+                    </HBox>
+                    <Button fx:id="nextButton" onAction="#handleNextPage" style="-fx-background-color: #A31D1D; -fx-text-fill: white; -fx-background-radius: 5;" text="Next">
+                        <cursor>
+                            <Cursor fx:constant="HAND" />
+                        </cursor>
+                    </Button>
+                </HBox>
+            </children>
+         </VBox>
+      </bottom>
+   </BorderPane>
 </VBox>
