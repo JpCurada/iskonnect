@@ -122,13 +122,16 @@ This inheritance setup makes our code cleaner and easier to maintain. When we wa
 ### Student View
 
 ### Contribute Reviewers
+<img src="demo\Contribute.gif" width="800" alt="Admin Animation">
 
 ### Download Materials
+<img src="demo\Download.gif" width="800" alt="Admin Animation">
 
 ### Bookmark Contents
+<img src="demo\Bookmark.gif" width="800" alt="Admin Animation">
 
 ### Report Irrelevant Materials
-
+<img src="demo\Report.gif" width="800" alt="Admin Animation">
 
 ### Admin View
 <img src="demo\Admin.gif" width="800" alt="Admin Animation">
