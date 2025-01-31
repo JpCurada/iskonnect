@@ -85,6 +85,7 @@ public class ContributeController {
             // Update the file name label and handle the file selection
             fileNameLabel.setText(file.getName());
             // You can also set the file to a variable for further processing
+            selectedFile = file;
             success = true;
         }
         event.setDropCompleted(success);
