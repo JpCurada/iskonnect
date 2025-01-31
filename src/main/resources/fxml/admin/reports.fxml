@@ -18,7 +18,7 @@
     </padding>
 
     <!-- Title -->
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #A31D1D;" styleClass="page-title" text="Reported Materials" />
+    <Label styleClass="page-title" text="Reported Materials" />
 
     <!-- Search Bar -->
     <HBox alignment="CENTER_LEFT" spacing="10">
@@ -28,7 +28,7 @@
     </HBox>
 
     <!-- Reports Table -->
-    <TableView fx:id="reportsTable" focusTraversable="false" style="-fx-background-radius: 7;" styleClass="report-table" VBox.vgrow="ALWAYS">
+    <TableView fx:id="reportsTable" focusTraversable="false" styleClass="report-table" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn id="materialTitle" fx:id="titleColumn" prefWidth="150" styleClass="column" text="Material Title" />
             <TableColumn id="description" fx:id="descriptionColumn" prefWidth="200" styleClass="column" text="Description" />
