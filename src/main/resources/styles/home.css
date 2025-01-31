@@ -1,5 +1,33 @@
 /* Path: src/main/resources/styles/home.css */
 
+/* Search Section */
+.search-container {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-padding: 3 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-padding: 5 12;
+    -fx-pref-width: 250;
+    -fx-prompt-text-fill: #999999;
+}
+
+.search-button {
+    -fx-background-color: #a31d1d;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 5 10;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: derive(#a31d1d, -10%);
+}
+
 /* Material Card Styles */
 .material-card {
     -fx-background-color: white;
