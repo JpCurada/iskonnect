@@ -84,7 +84,6 @@ public class ContributeController {
             File file = dragboard.getFiles().get(0);
             // Update the file name label and handle the file selection
             fileNameLabel.setText(file.getName());
-            selectedFile = file;
             // You can also set the file to a variable for further processing
             success = true;
         }
