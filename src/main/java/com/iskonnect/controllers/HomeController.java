@@ -77,6 +77,9 @@ public class HomeController {
             }
         });
 
+        prevButton.setText("<");
+        nextButton.setText(">");
+
         // Initialize pagination buttons
         prevButton.setOnAction(e -> handlePrevPage());
         nextButton.setOnAction(e -> handleNextPage());
