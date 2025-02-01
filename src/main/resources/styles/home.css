@@ -1,5 +1,33 @@
 /* Path: src/main/resources/styles/home.css */
 
+/* Search Section */
+.search-container {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-padding: 3 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-padding: 5 12;
+    -fx-pref-width: 250;
+    -fx-prompt-text-fill: #999999;
+}
+
+.search-button {
+    -fx-background-color: #a31d1d;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 5 10;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: derive(#a31d1d, -10%);
+}
+
 /* Material Card Styles */
 .material-card {
     -fx-background-color: white;
@@ -65,5 +93,34 @@
 }
 
 .vote-count {
+    -fx-font-weight: bold;
+}
+.scroll-pane{
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+/* Pagination styles */
+.pagination-container {
+    -fx-padding: 10 0;
+}
+
+.pagination {
+    -fx-page-information-visible: false;
+}
+
+.page-button:hover {
+    -fx-background-color: derive(#8A1A1A, -10%);
+}
+.page-text{
+    -fx-fill: #6D2323;
+}
+
+.page-button{
+    -fx-background-color: #A31D1D;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
     -fx-font-weight: bold;
 }
