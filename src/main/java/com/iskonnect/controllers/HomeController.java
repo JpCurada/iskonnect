@@ -1,4 +1,5 @@
 package com.iskonnect.controllers;
+
 import com.iskonnect.models.Material;
 import com.iskonnect.services.MaterialService;
 import com.iskonnect.services.VoteService;
@@ -27,12 +28,16 @@ public class HomeController {
     @FXML private Text welcomeText;
     @FXML private Text greetingText;
     @FXML private Text questionMark;
-    @FXML private VBox paginationContainer;
-    
+    @FXML private HBox paginationContainer;
+    @FXML private Button prevButton;
+    @FXML private Button nextButton;
+    @FXML private Text pageText;
+
     private MaterialService materialService;
     private VoteService voteService;
     private List<Material> allMaterials;
-    private PaginationController paginationController;
+    private int currentPage = 1;
+    private int totalPages = 1;
     private static final int ITEMS_PER_PAGE = 12; // 4 columns * 3 rows
 
     @FXML
@@ -65,22 +70,16 @@ public class HomeController {
         // Set user's first name
         firstNameText.setText(UserSession.getInstance().getFirstName());
 
-        // text responsive
+        // Make text responsive
         dateText.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 makeAllTextResponsive(newScene);
             }
         });
 
-        // Setup pagination
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/Pagination.fxml"));
-            paginationContainer.getChildren().add(loader.load());
-            paginationController = loader.getController();
-            paginationController.setCallback(this::loadPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Initialize pagination buttons
+        prevButton.setOnAction(e -> handlePrevPage());
+        nextButton.setOnAction(e -> handleNextPage());
 
         // Load materials
         loadMaterials();
@@ -123,9 +122,9 @@ public class HomeController {
         try {
             // Get total count first for pagination
             int totalItems = materialService.getTotalMaterialsCount();
-            int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
-            paginationController.setTotalPages(totalPages);
-            
+            totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+            updatePagination();
+
             // Load first page
             loadPage(1);
         } catch (Exception e) {
@@ -133,13 +132,15 @@ public class HomeController {
             e.printStackTrace();
         }
     }
-    
+
     private void loadPage(int page) {
         List<Material> pageItems = materialService.getAllMaterials(page, ITEMS_PER_PAGE);
         displayMaterials(pageItems);
     }
 
     private void displayMaterials(List<Material> materialsToDisplay) {
+        materialsGrid.getChildren().clear(); // Clear existing materials
+
         int column = 0;
         int row = 0;
 
@@ -149,14 +150,14 @@ public class HomeController {
                 VBox card = loader.load();
                 MaterialCardController cardController = loader.getController();
                 cardController.setMaterial(material);
-                
+
                 // Enable caching for each card
                 card.setCache(true);
                 card.setCacheHint(CacheHint.SPEED);
-                
+
                 GridPane.setConstraints(card, column, row);
                 materialsGrid.getChildren().add(card);
-                
+
                 column++;
                 if (column == 4) {
                     column = 0;
@@ -169,45 +170,25 @@ public class HomeController {
         }
     }
 
-    private VBox createMaterialCard(Material material) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/MaterialCard.fxml"));
-            VBox card = loader.load();
-            MaterialCardController cardController = loader.getController();
-            cardController.setMaterial(material);
-            return card;
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Failed to create material card");
-            return new VBox();
-        }
-    }
-
     private void filterMaterials(String searchText) {
         try {
             materialsGrid.getChildren().clear();
-            
+
             if (searchText == null || searchText.trim().isEmpty()) {
-                paginationController.reset();
-                loadPage(1);
+                currentPage = 1;
+                loadMaterials();
                 return;
             }
-    
+
             // Get total count of search results
             int totalItems = materialService.getSearchResultsCount(searchText);
-            int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
-            paginationController.setTotalPages(totalPages);
-    
+            totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+            updatePagination();
+
             // Load first page of search results
-            List<Material> searchResults = materialService.searchMaterials(searchText, 1, ITEMS_PER_PAGE);
+            List<Material> searchResults = materialService.searchMaterials(searchText, currentPage, ITEMS_PER_PAGE);
             displayMaterials(searchResults);
-            
-            // Update pagination callback to use search
-            paginationController.setCallback(page -> {
-                List<Material> pageResults = materialService.searchMaterials(searchText, page, ITEMS_PER_PAGE);
-                displayMaterials(pageResults);
-            });
-    
+
         } catch (Exception e) {
             showError("Error performing search");
             e.printStackTrace();
@@ -218,6 +199,30 @@ public class HomeController {
     private void handleSearch() {
         String searchText = searchField.getText();
         filterMaterials(searchText);
+    }
+
+    @FXML
+    private void handlePrevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePagination();
+            loadPage(currentPage);
+        }
+    }
+
+    @FXML
+    private void handleNextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination();
+            loadPage(currentPage);
+        }
+    }
+
+    private void updatePagination() {
+        pageText.setText(String.format("Page %d of %d", currentPage, totalPages));
+        prevButton.setDisable(currentPage <= 1);
+        nextButton.setDisable(currentPage >= totalPages);
     }
 
     @FXML
