@@ -120,6 +120,7 @@ This inheritance setup makes our code cleaner and easier to maintain. When we wa
 <div align="center">
 
 ### Student View
+<img src="demo\Student_Viewer.gif" width="800" alt="Admin Animation">
 
 ### Contribute Reviewers
 <img src="demo\Contribute.gif" width="800" alt="Admin Animation">
